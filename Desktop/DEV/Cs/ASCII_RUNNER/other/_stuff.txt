@@ -1,0 +1,432 @@
+while (j < CELL_BUFFER)
+            {
+                Cell c = grid->cells[j];
+                int b_i = grid->cells[j].buff_index;
+                if ((x == c.x_pos) && (y >= c.y_pos && y <= c.y_pos + c.height) && c.text[b_i])
+                {
+########  while (c.text[b_i] && c.text[b_i] != '\n')
+########  {
+########      buffer[i++] = c.text[b_i++];
+########      x++;
+########  }
+########  b_i++;
+                }
+                j++;
+            }
+
+
+
+
+
+
+
+
+
+
+            #include "header_phys.h"
+#include "ascii.h"
+
+Grid *gen_map1()
+{
+    Grid *grid = init_grid();
+    reset_text_indexes(grid);
+    int c_i = 0;
+    init_plrc(grid, &grid->cells[c_i++]);
+    int r_mob = rand_range(7, 11);
+    int mob_x_pos = 70;
+    for (int m = 0; m < r_mob; m++)
+    {
+        init_mob(&grid->cells[c_i++], mob_x_pos, GROUND_X - 5);
+        mob_x_pos += rand_range(mob_min_dist, mob_max_dist);
+    }
+    c_i += init_weather(grid);
+    
+
+    int ground_b_mod = 0;
+    int x = 0;
+    int y = 0;
+    int i = 0;
+    int is_GRASS_IC_map = 0;
+    char *buffer = malloc((map_hei * WIN_X_MAX + map_hei) + 1);
+    char *cl = clouds;
+    int cl_i = 0;
+    char *char_buff = plr_idle_down1;
+    int char_ind = 0;
+    char *char2_buff = plr_idle_left;
+    int char2_ind = 0;
+    char *tree_buff = tree1;
+    int tree_ind = 0;
+    char *house_buff = house_2;
+    int house_ind = 0;
+    char *block1 = get_rect(8, 5, ' ', '{', '}', '_', '_', 1);
+    int block1_index = 0;
+    char *block2 = get_rect(8, 5, ' ', '{', '}', '_', '_', 1);
+    int block2_index = 0;
+    char *stairs1 = get_rect(6, 13, '_', '(', '(', ' ', ' ', 1);
+    int stairs1_index = 0;
+    char *stairs2 = get_rect(6, 80, '_', '(', '(', ' ', ' ', 1);
+    int stairs2_index = 0;
+    char *stairs_house = get_rect(40, 1, ' ', ']', '[', '_', '_', 1);
+    int stairs_house_index = 0;
+
+    for (int y = 0; y < map_hei; y++)
+    {
+        if (i > strlen(buffer))
+            break;
+        int has_flocon = 0;
+        for (int x = 0; x < WIN_X_MAX; x++)
+        {
+            if (i > strlen(buffer))
+                break;
+            ground_b_mod = x >= 110 && x <= 140 ? 3 : 0;
+            int j = 0;
+
+            while (j < CELL_BUFFER)
+            {
+                int b_i = grid->cells[j].buff_index;
+                Cell *c = &grid->cells[j];
+                if (c->st != env)
+                {
+########  j++;
+########  continue;
+                }
+                if ((x == c->x_pos) && (y >= c->y_pos && y <= c->y_pos + c->height) && c->text[b_i])
+                {
+########  while (c->text[b_i] && c->text[b_i] != '\n')
+########  {
+########      buffer[i++] = c->text[b_i++];
+########      c->buff_index++;
+########      x++;
+########  }
+########  c->buff_index++;
+########  b_i++;
+                }
+                j++;
+            }
+
+            /*
+########      if (y >= SKY_X && cl[cl_i] && has_clouds && x == 0)
+########      {
+########          while (cl[cl_i] && cl[cl_i] != '\n')
+########          {
+########              buffer[i++] = cl[cl_i++];
+########              x++;
+########              if (x == 150)
+########              {
+################for (int iv = 0; iv < 6; iv++)
+################{
+################    buffer[i++] = stairs2[stairs2_index++];
+################    x++;
+################    cl_i++;
+################}
+################stairs2_index++;
+########              }
+########          }
+########          cl_i++;
+########      }
+########      else if (y >= GROUND_X + ground_b_mod - 6 && x == 20 && block1[block1_index])
+########      {
+########          while (block1[block1_index] && block1[block1_index] != '\n')
+########          {
+########              buffer[i++] = block1[block1_index++];
+########              x++;
+########          }
+########          block1_index++;
+########      }
+########      else if (y >= GROUND_X + ground_b_mod - 10 && x == 30 && block2[block2_index])
+########      {
+########          while (block2[block2_index] && block2[block2_index] != '\n')
+########          {
+########              buffer[i++] = block2[block2_index++];
+########              x++;
+########          }
+########          block2_index++;
+########      }
+
+########      else if (y >= GROUND_X + ground_b_mod - 11 && x == 60 && stairs_house[stairs_house_index])
+########      {
+########          while (stairs_house[stairs_house_index] && stairs_house[stairs_house_index] != '\n')
+########          {
+########              if (x == 92 || x == 94)
+################buffer[i++] = '|';
+########              else
+################buffer[i++] = stairs_house[stairs_house_index++];
+########              x++;
+########          }
+########          stairs_house_index++;
+########      }
+
+########      else if (y >= GROUND_X + ground_b_mod - 12 && x == 65 && stairs1[stairs1_index])
+########      {
+########          while (stairs1[stairs1_index] && stairs1[stairs1_index] != '\n')
+########          {
+########              buffer[i++] = stairs1[stairs1_index++];
+########              x++;
+########          }
+########          stairs1_index++;
+########      }
+
+########      else if (y >= GROUND_X + ground_b_mod - 70 && x == 150 && stairs2[stairs2_index] && y <= GROUND_X + ground_b_mod)
+########      {
+########          while (stairs2[stairs1_index] && stairs2[stairs2_index] != '\n')
+########          {
+########              buffer[i++] = stairs2[stairs2_index++];
+########              x++;
+########          }
+########          stairs2_index++;
+########      }
+
+########      else if (tree_buff[tree_ind] && y >= GROUND_X + ground_b_mod - 11 && y < GROUND_X + ground_b_mod && x == 160)
+########      {
+########          while (tree_buff[tree_ind] && tree_buff[tree_ind] != '\n')
+########          {
+
+########              buffer[i++] = tree_buff[tree_ind++];
+########              x++;
+########          }
+########          tree_ind++;
+########      }
+
+########      else if (char2_buff[char2_ind] && y >= GROUND_X + ground_b_mod - 15 && y < GROUND_X + ground_b_mod - 10 && x == 90)
+########      {
+########          while (char2_buff[char2_ind] && char2_buff[char2_ind] != '\n')
+########          {
+
+########              buffer[i++] = char2_buff[char2_ind] == '#' ? ' ' : char2_buff[char2_ind];
+########              char2_ind++;
+########              x++;
+########          }
+########          char2_ind++;
+########      }
+
+########      else if (char_buff[char_ind] && y >= PLR_Sky_cT_Y && y < PLR_Sky_cT_Y + 4 && x == 49 && buffer[i] == ' ')
+########      {
+########          while (char_buff[char_ind] && char_buff[char_ind] != '\n')
+########          {
+
+########              buffer[i++] = char_buff[char_ind] == '#' ? ' ' : char_buff[char_ind];
+########              char_ind++;
+########              x++;
+########          }
+########          char_ind++;
+########      }
+########      else if (x == 300 && y >= GROUND_X - 22 && house_buff[house_ind] && y <= GROUND_X + 1)
+########      {
+########          while (house_buff[house_ind] && house_buff[house_ind] != '\n')
+########          {
+########              buffer[i++] = house_buff[house_ind++];
+########              x++;
+########          }
+########          house_ind++;
+########      }
+########      */
+            if (y >= GROUND_X + 7 && ((x > 80 && x < 100) || (x > 30 && x < 40)))
+            {
+                if (y == GROUND_X + 7)
+########  buffer[i++] = COL_HOR_IC;
+
+                else
+########  buffer[i++] = rand() % 3 == 0 ? '~' : ' ';
+            }
+            else if (y == GROUND_X + 7 && x > 30 && x < 40)
+                buffer[i++] = '~';
+
+            else if ((y == GROUND_X + ground_b_mod) && (x <= 30 || (x >= 40 && x <= 80) || x >= 100))
+            {
+                if (y == GROUND_X + ground_b_mod)
+                {
+
+########  if (x == 51 || x == 53)
+########      buffer[i++] = COL_VERT_IC;
+
+########  else if (!is_GRASS_IC_map)
+########  {
+########      if (rand() % 10 == 0)
+########          is_GRASS_IC_map = rand() % 5 + 3;
+########      buffer[i++] = COL_HOR_IC;
+########  }
+########  else
+########  {
+########      buffer[i++] = '/';
+########      is_GRASS_IC_map--;
+########  }
+                }
+            }
+            else if (y == GROUND_X + ground_b_mod + 1)
+            {
+                if (x == 30 || x == 80)
+########  buffer[i++] = '\\';
+                else if (x == 40 || x == 100)
+########  buffer[i++] = '/';
+
+                else if ((x > 0 && x < 30) || (x > 40 && x < 80) || x > 140)
+                {
+########  if (rand() % 4 == 0)
+########      buffer[i++] = '-';
+########  else
+########      buffer[i++] = ' ';
+                }
+                else
+########  buffer[i++] = ' ';
+            }
+            else
+            {
+                if (y == GROUND_X + 1 && (x == 110) || y == GROUND_X + 2 && (x == 111))
+########  buffer[i++] = '\\';
+                else if (y == GROUND_X + 1 && (x == 140) || y == GROUND_X + 2 && (x == 139) || y == GROUND_X + 2 && (x == 138))
+########  buffer[i++] = '/';
+                else if (y == GROUND_X + 1 && y <= GROUND_X + ground_b_mod && (x == 110 || x == 140))
+########  buffer[i++] = COL_VERT_IC;
+                else if (x < 30 || (x > 40 && x < 80) || (x > 100))
+                {
+########  if (y >= GROUND_X + ground_b_mod + 2)
+########      buffer[i++] = '-';
+########  else
+########      buffer[i++] = ' ';
+                }
+                else if (y >= GROUND_X && (x == 30 || x == 40 || x == 80 || x == 100))
+########  buffer[i++] = COL_VERT_IC;
+                else if (y == GROUND_X + ground_b_mod + 1 || y == GROUND_X + ground_b_mod)
+########  buffer[i++] = COL_HOR_IC;
+                else
+########  buffer[i++] = ' ';
+            }
+        }
+        buffer[i++] = '\n';
+    }
+    while (i < (map_hei * WIN_X_MAX + map_hei) + 1)
+        buffer[i++] = '\0';
+
+    free(block1);
+    free(block2);
+    free(stairs1);
+
+    grid->txt = buffer;
+    return (grid);
+}
+
+
+
+
+
+
+// HANDLE
+			int j = 0;
+			int v = 0;
+			while (j - v < 30)
+			{
+				int b_i = grid->cells[j].buff_index;
+				Cell *c = &grid->cells[j];
+				if (c->st == env)
+				{
+					j++;
+					v++;
+					continue;
+				}
+				if ((x - xx >= c->x_pos && x - xx < c->x_pos + c->width / 2) && (y >= c->y_pos && y <= c->y_pos + c->height) && c->text[b_i])
+				{
+					while (c->text[b_i] && c->text[b_i] != '\n')
+					{
+						if (c->text[b_i] == '#')
+							printf(" ");
+						else if (c->text[b_i] == ' ')
+							printf("%c", map[i]);
+						else
+							printf("%c", c->text[b_i]);
+						i++;
+						x++;
+						b_i++;
+						c->buff_index++;
+						x++;
+						xx++;
+					}
+					c->buff_index++;
+					b_i++;
+				}
+				j++;
+			}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ for (int i = 0; i < SKY_BUFFER; i++)
+  {
+    if (game.time % 501 == 0)
+    {
+      if (grid->sky_c[i].c == STAR_IC)
+        set_sky(&grid->sky_c[i], RAIN_IC, down, RAIN_DUR);
+      else if (grid->sky_c[i].c == RAIN_IC)
+        set_sky(&grid->sky_c[i], STAR_IC, none, STAR_DUR);
+    }
+    grid->sky_c[i].lifetime--;
+
+    if (game.time % 2 == 0)
+    {
+      directions d = grid->sky_c[i].dir;
+      grid->sky_c[i].index += d == down ? WIN_X_MAX + 1 : d == left ? 1
+                                                      : d == right  ? -1
+                                                      : d == up     ? -WIN_X_MAX - 1
+                                                                    : 0;
+    }
+
+    if (grid->sky_c[i].lifetime == 0)
+    {
+      int str_ind = grid->sky_c[i].index;
+      grid->sky_c[i].lifetime = grid->sky_c[i].c == STAR_IC ? rand_range(STAR_DUR - STAR_DUR / 2, STAR_DUR + STAR_DUR / 2) : rand_range(RAIN_DUR - RAIN_DUR / 2, RAIN_DUR + RAIN_DUR / 2);
+      grid->sky_c[i].index = rand_range(0, WIN_X_MAX * WIN_Y_MAX - 1);
+    }
+    if (map[grid->sky_c[i].index] && map[grid->sky_c[i].index] == ' ') map[grid->sky_c[i].index] = map[grid->sky_c[i].index] = grid->sky_c[i].c;
+  }
+
+
+// GROUND LIANES MOVEMENT
+     if (grid->cells[i].c_type == ground && grid->cells[i].text[0] == '#')
+      {
+        int u = 0;
+        int st_ind = 0;
+        int end_ind = 0;
+        int range[30];
+        memset(range, -1, sizeof(range));
+        int r_ind = 0;
+        int st_row = 0;
+        int end_row = 0;
+
+        while (grid->cells[i].text[u])
+        {
+          if (grid->cells[i].text[u] == LIANE_START)
+          {
+            st_ind = u;
+            st_row = st_ind % grid->cells[i].width + 1;
+          }
+          if (grid->cells[i].text[u] == LIANE1 || grid->cells[i].text[u] == LIANE2)
+            range[r_ind++] = u;
+          if (grid->cells[i].text[u] == LIANE_END_ic)
+          {
+            end_ind = u;
+            end_row = end_ind % grid->cells[i].width + 1;
+          }
+          u++;
+        }
+
+        if (end_row != 0 && st_row != 0 && end_ind != 0 && st_ind != 0)
+        {
+          // grid->cells[i].text[end_ind] = grid->cells[i].text[end_ind - 1];
+          // grid->cells[i].text[end_ind - 1] = LIANE_END_ic;
+          grid->cells[i].text[4] = st_row + '0';
+          grid->cells[i].text[5] = end_row + '0';
+        }
+      }

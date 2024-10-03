@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "header_phys.h": "c",
+    "ascii.h": "c",
+    "header.h": "c"
+  },
+  "C_Cpp.errorSquiggles": "disabled"
+}

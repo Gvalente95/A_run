@@ -1,0 +1,641 @@
+
+#include "_header.h"
+#include "_ascii.h"
+
+useconds_t delay_microseconds = (useconds_t)(REF_SPEED * 2000000);
+
+int draw_player(Grid *grid, int ref_time, int player_x_pos, int player_y_pos, int x_cam_pos, int y_cam_pos, char *buffer, char *map, int mob_ind, int obst_dir, int time, char input)
+{
+
+	map = grid->txt;
+	system("clear");
+
+	reset_text_indexes(grid);
+
+	char *msg1 = _msg;
+	char *msg2 = _msg2;
+	int msg_index = 0;
+	int msg2_index = 0;
+	int i = 0;
+	int res = 1;
+
+	grid->cells[0].x_pos = player_x_pos;
+	grid->cells[0].y_pos = player_y_pos;
+	grid->cells[0].text = buffer;
+
+	if (ref_time % 2 == 0)
+		update_grid(grid, ref_time);
+
+	i += (WIN_X_MAX + 1) * y_cam_pos;
+
+	for (int y = y_cam_pos; y < WIN_Y_MAX + y_cam_pos; y++)
+	{
+		i += x_cam_pos;
+		int xx = 0;
+		for (int x = x_cam_pos; x < WIN_X_MAX + x_cam_pos; x++)
+		{
+			if (x - x_cam_pos > WIN_X_MAX)
+				break;
+
+			if (y > map_hei - 3 && time % 5 == 0)
+			{
+				if (map[i + 1] == '~')
+				{
+					if (map[i] == ' ')
+					{
+						map[i] = '~';
+						map[i + 1] = ' ';
+					}
+					else if (map[i] == '|')
+					{
+						int j = 0;
+						while (map[i + 1 + j] != '|')
+							j++;
+						map[i + 1] = ' ';
+						map[i + j - 1] = '~';
+					}
+				}
+			}
+			if ((time / 20) % 10 == 0 && (obst_dir == 1 && player_y_pos >= GROUND_X - 4 && y == PLR_Sky_cT_Y + 2 && x == mob_ind - 3))
+			{
+				if (map[i - 6] && map[i - 2] == ' ')
+					map[i - 6] = '<';
+			}
+			else if ((time / 5) % 2 == 0 && (obst_dir == 0 && player_y_pos >= GROUND_X - 4 && y == PLR_Sky_cT_Y + 2 && x == mob_ind + 5))
+			{
+				if (map[i + 6] && map[i + 6] == ' ')
+					map[i + 6] = '>';
+			}
+			else if (map[i] == '<' || map[i] == '>')
+			{
+				if (map[i] == '<' && map[i - 6] == ' ')
+					map[i - 6] = '<';
+				else if (map[i] == '>' && map[i + 2] == ' ')
+				{
+					map[i + 2] = proj1_l_long;
+				}
+				char c[2];
+				c[0] = '*';
+				c[1] = '\0';
+				print_colored_text(c, RED);
+				map[i] = ' ';
+				i++;
+				x++;
+			}
+			if (map[i] == proj1_l_long || map[i] == PRJ_LEFT)
+			{
+				char cur_car = map[i];
+				char c[2];
+				c[0] = '*';
+				c[1] = '\0';
+				map[i] = ' ';
+				int u = 0;
+				while (u < 6 && map[i + 1 + u] && (map[i + 1 + u] == ' ' || map[i + 1 + u] == SNOW_IC || map[i + 1 + u] == RAIN_IC))
+				{
+					if (u == 5 && cur_car == PRJ_LEFT)
+						map[i + 1 + u + (WIN_X_MAX + 4)] = 'x';
+
+					print_colored_text(c, RED);
+					i++;
+					x++;
+					u++;
+				}
+				if (map[i + 1] && (map[i + 1 + u] == ' ' || map[i + 1 + u] == SNOW_IC || map[i + 1 + u] == RAIN_IC))
+				{
+					printf("%c", map[i + 1]);
+					map[i + 1] = cur_car;
+					i++;
+					x++;
+				}
+				else if (cur_car == proj1_l_long && map[i + 1 + u] && (map[i + 1 + u] != ' '))
+				{
+					int y = 0;
+					for (int xx = i - 1 - WIN_X_MAX - 1; xx < i - 1 - WIN_X_MAX - 1 + 6; xx++)
+					{
+						int x = 0;
+						for (int ii = -1; ii < 4; ii++)
+						{
+							if ((x == 0 && y == 0) || (y == 5 && x == 6) || (x == 0 && y == 5) || (y == 5 && x == 0))
+								continue;
+							if (map[xx + ((WIN_X_MAX + 1) * ii)] && map[xx + ((WIN_X_MAX + 1) * ii)] == ' ')
+								map[xx + ((WIN_X_MAX + 1) * ii)] = 's';
+							x++;
+						}
+						y++;
+					}
+				}
+				print_colored_text(c, RED);
+				i++;
+				x++;
+			}
+
+			// HANDLE
+			int j = 0;
+			int v = 0;
+			while (j - v < 30)
+			{
+				int b_i = grid->cells[j].buff_index;
+				Cell *c = &grid->cells[j];
+				if (c->st == env)
+				{
+					j++;
+					v++;
+					continue;
+				}
+				if ((x - xx >= c->x_pos && x - xx < c->x_pos + c->width / 2) && (y >= c->y_pos && y <= c->y_pos + c->height) && c->text[b_i])
+				{
+					while (c->text[b_i] && c->text[b_i] != '\n')
+					{
+						if (c->text[b_i] == '#')
+							printf(" ");
+						else if (c->text[b_i] == ' ')
+							printf("%c", map[i]);
+						else
+							printf("%c", c->text[b_i]);
+						i++;
+						x++;
+						b_i++;
+						c->buff_index++;
+						x++;
+						xx++;
+					}
+					c->buff_index++;
+					b_i++;
+				}
+				j++;
+			}
+			if (y == GROUND_X - 14 && (x == 92 || x == 93))
+			{
+				if (player_y_pos <= GROUND_X - 20 && player_x_pos < 70)
+				{
+					if (x == 92)
+					{
+						printf(" ");
+						x++;
+						i++;
+						continue;
+					}
+					else
+					{
+						printf(".");
+						x++;
+						i++;
+						continue;
+					}
+				}
+			}
+			if (input == 'l')
+			{
+				if (x == 40 && y >= PLR_Sky_cT_Y - 5 && msg1[msg_index] && player_x_pos >= 45 && player_x_pos <= 55)
+				{
+					while (msg1[msg_index] && msg1[msg_index] != '\n')
+					{
+						printf("%c", msg1[msg_index++]);
+						i++;
+						x++;
+						if (x >= WIN_X_MAX + x_cam_pos - 1)
+							break;
+					}
+					if (x >= WIN_X_MAX + x_cam_pos - 1)
+						break;
+					msg_index++;
+				}
+				else if (x == 80 && y >= GROUND_X - 21 && player_x_pos > 70 && player_x_pos < 90 && msg2[msg2_index])
+				{
+					while (msg2[msg2_index] && msg2[msg2_index] != '\n')
+					{
+						printf("%c", msg2[msg2_index++]);
+						i++;
+						x++;
+						if (x >= WIN_X_MAX + x_cam_pos - 1)
+							break;
+					}
+					if (x >= WIN_X_MAX + x_cam_pos - 1)
+						break;
+					msg2_index++;
+				}
+			}
+			if (map[i] == 'f' && map[i - 1] != '\n')
+			{
+				map[i] = ' ';
+				if (x > 1 && x < WIN_X_MAX)
+				{
+					int dir[] = {
+						i + WIN_X_MAX + 1,
+						i + WIN_X_MAX,
+						i + WIN_X_MAX + 2,
+					};
+					char d_c[] = {
+						'|',
+						'/',
+						'\\',
+					};
+					int r = rand() % sizeof(dir) / sizeof(int);
+
+					int rr = rand() % 500;
+
+					if (rr == 0)
+					{
+						int ru = r + 1 > 2 ? r - 1 : r + 1;
+						if (map[dir[ru] - WIN_X_MAX * 3] && map[dir[ru] - (WIN_X_MAX * 3)] == ' ')
+							map[dir[ru] - (WIN_X_MAX * 3)] = 'f';
+					}
+					if (map[dir[r]] && map[dir[r]] == ' ')
+					{
+						char c[2];
+						int nxt_ind = rand() % thunder_len == 0 ? i : dir[r];
+						c[0] = nxt_ind == i ? '.' : d_c[r];
+						c[1] = '\0';
+						print_colored_text(c, YELLOW);
+						if (map[nxt_ind] == ' ')
+							map[nxt_ind] = 'f';
+						i++;
+						x++;
+					}
+					else if (map[dir[r] + 1] && map[dir[r] + 1] == ' ')
+					{
+						char c[2];
+						int nxt_ind = rand() % thunder_len == 0 ? i : dir[r] + 1;
+						c[0] = nxt_ind == i ? '.' : d_c[r];
+						c[1] = '\0';
+						print_colored_text(c, YELLOW);
+						if (map[nxt_ind] == ' ')
+							map[nxt_ind] = 'f';
+						i++;
+						x++;
+					}
+					else if (dir[r])
+						map[i] = 'x';
+				}
+			}
+			else if (map[i] == 'x')
+			{
+				for (int xx = i - 1 - WIN_X_MAX - 1; xx < i - 1 + 3 - WIN_X_MAX - 1; xx++)
+				{
+					for (int ii = -1; ii < 2; ii++)
+					{
+						if (map[xx + ((WIN_X_MAX + 1) * ii)] && map[xx + ((WIN_X_MAX + 1) * ii)] == ' ')
+							map[xx + ((WIN_X_MAX + 1) * ii)] = 's';
+					}
+				}
+				print_colored_text("*", RED);
+				map[i] = ' ';
+				i++;
+				x++;
+			}
+			if (map[i] == 's')
+			{
+				print_colored_text("*", RED);
+				map[i] = ' ';
+				i++;
+				x++;
+			}
+			if (((has_SNOW_IC || has_RAIN_IC) && map[i + 1] == ' ' && rand() % MET_FREQ == 0) && ((x == WIN_X_MAX + x_cam_pos - 4 && rand() % MET_FREQ == 0 && y < GROUND_X - 10) || (x >= 2 && x < WIN_X_MAX + x_cam_pos - 3 && y == SKY_X + 13)))
+				map[i + 1] = has_SNOW_IC ? SNOW_IC : RAIN_IC;
+			if (has_STAR_IC && (((y <= SKY_X - 3 || y >= SKY_X + 14) && y < GROUND_X - 10) && map[i] == ' ') && rand() % (MET_FREQ * 1000) == 0)
+			{
+				map[i] = STAR_IC;
+				printf(".");
+				i++;
+				x++;
+			}
+
+			if (map[i] == SNOW_IC || map[i] == RAIN_IC || map[i] == STAR_IC)
+			{
+				if (map[i] == STAR_IC)
+				{
+
+					char txt[2];
+					txt[0] = STAR_IC;
+					txt[1] = '\0';
+					if (rand() % 200 == 0)
+					{
+						map[i] = ' ';
+						printf(".");
+					}
+					else
+						print_colored_text(txt, ORANGE);
+					i++;
+					x++;
+				}
+				else
+				{
+					int ind = i + (WIN_X_MAX + (WIND_DIR + 1));
+					if (map[ind] == ' ' || map[ind] == STAR_IC)
+					{
+						map[ind] = (map[i] == SNOW_IC ? 'S' : 'R');
+						map[i] = ' ';
+
+						if (thunder_freq > 0)
+						{
+							int r = rand() % thunder_freq;
+							if (y <= SKY_X && r == 0 && i > 1 && map[i + 1] == ' ')
+								map[i + 1] = 'f';
+						}
+					}
+					else
+						map[i] = ' ';
+				}
+			}
+			if (map[i] == 'S' || map[i] == 'R')
+			{
+				char c = (map[i] == 'S' ? SNOW_IC : RAIN_IC);
+				int try = 1;
+				while (try < 6)
+				{
+					if (map[i + 1] == ' ')
+					{
+						if (y == player_y_pos && x + 1 >= player_x_pos && x + 1 <= player_x_pos + plr_xsize - 1)
+							break;
+						char cc[2];
+						cc[0] = c;
+						cc[1] = '\0';
+						print_colored_text(cc, BLUE);
+						map[i] = c;
+						i++;
+						x++;
+						break;
+					}
+					try++;
+				}
+				if (try == 6)
+					map[i] = ' ';
+			}
+
+			if (!map[i])
+				break;
+			if (map[i] != '\n' && map[i])
+			{
+				char c[2];
+				c[0] = map[i];
+				c[1] = '\0';
+
+				if (map[i] > '0' && map[i] <= '9')
+				{
+					char *c = "~\0";
+					map[i]--;
+					print_colored_text(c, map[i] <= '3' ? RED : YELLOW);
+					i++;
+					x++;
+					xx++;
+					continue;
+				}
+				else if (map[i] == '0')
+				{
+					char *c = "*\0";
+					map[i] = ' ';
+					print_colored_text(c, YELLOW);
+					i++;
+					x++;
+					continue;
+				}
+				else if (c[0] == '!')
+					printf(" ");
+				else if ((map[i] == '~' || map[i] == '_') && y >= GROUND_X + 5)
+					print_colored_text(c, BLUE);
+				else if (y >= GROUND_X && map[i] == '/')
+					print_colored_text(c, GREEN);
+				else
+					printf("%c", map[i]);
+			}
+			i++;
+		}
+		printf("\n");
+		while (map[i] != '\n')
+			i++;
+		i++;
+	}
+
+	return (res);
+}
+
+int update_game()
+{
+	int wait_time = 10;
+	int input = 0;
+	int last_move = 0;
+	int can_climb_up = 0;
+	int can_climb_down = 0;
+
+	int is_Sky_ct_menu = 1;
+
+	int last_input = 0;
+	int is_grounded = 0;
+	int is_jumping = 0;
+	int is_landing = 0;
+	int is_shifting = 0;
+	int res = 0;
+	int mob_ind = WIN_X_MAX + 2;
+	int is_paused = 0;
+
+	int time = 0;
+	int is_using_spell = 0;
+	int is_falling = 0;
+	int score = 0;
+
+	int x_pos = PLR_Sky_cT_X;
+	int y_pos = PLR_Sky_cT_Y;
+	int x_cam_pos = 0;
+	int y_cam_pos = 200;
+	int is_messagin = 0;
+	int obst_dir = 1;
+	int activate_moving_obst = 1;
+	Grid *grid = gen_map1();
+
+	char *map = grid->txt;
+	// char *map = get_from_file(map_file)
+
+	while (1)
+	{
+		time++;
+		if (time > map_hei - 1)
+			time = 0;
+		if (is_using_spell > 0)
+		{
+			is_using_spell--;
+			if (last_input == THUND_K)
+				time--;
+		}
+		else if (is_spell_key(last_input))
+			last_input = 0;
+
+		fd_set readfds;
+		struct timeval timeout;
+		int retval;
+
+		FD_ZERO(&readfds);
+		FD_SET(STDIN_FILENO, &readfds);
+		timeout.tv_sec = 0;
+		timeout.tv_usec = delay_microseconds;
+		retval = select(STDIN_FILENO + 1, &readfds, NULL, NULL, &timeout);
+		is_grounded = is_on_ground(x_pos, y_pos + 4, map);
+		can_climb_up = is_on_ground(x_pos, y_pos + 3, map);
+		can_climb_down = is_on_ground(x_pos, y_pos + 5, map);
+
+		if (res == 3)
+			x_pos -= 2;
+		if (activate_moving_obst)
+			mob_ind -= obst_dir ? 1 : -1;
+		if (mob_ind < 160)
+			obst_dir = 0;
+		else if (mob_ind > 190)
+			obst_dir = 1;
+
+		y_cam_pos = y_pos - 20;
+		if (y_cam_pos > 50)
+			y_cam_pos = 50;
+
+		if (!is_using_spell && !is_jumping && !is_grounded && y_pos < map_hei - 6)
+		{
+			is_falling = 1;
+			while (!is_on_ground(x_pos, y_pos + 4, map) && y_pos < map_hei - 6)
+			{
+				y_pos++;
+				int inp = getchar();
+				if (inp == ' ')
+					time = jmp(grid, &input, &last_input, &is_using_spell, &last_move, mob_ind, obst_dir, time, &is_jumping, &x_pos, &y_pos, &x_cam_pos, &y_cam_pos, &res, delay_microseconds, wait_time, map);
+				else if (is_move_key(inp))
+					last_move = inp;
+				else if (last_move == mv_left)
+					x_pos--;
+				else if (last_move == mv_right)
+					x_pos++;
+
+				usleep(REF_SPEED * delay_microseconds * 120);
+				res = draw_player(grid, wait_time, x_pos, y_pos, x_cam_pos, y_cam_pos, last_move == 'd' ? plr_jmp_right : last_move == 'a' ? plr_jmp_left
+																																		   : plr_jmp_down,
+								  map, mob_ind, obst_dir, time++, input);
+				print_debug_log(time++, score++, input, last_input, last_move, x_cam_pos, y_cam_pos, x_pos, y_pos, is_falling, is_using_spell, is_jumping, is_shifting, is_grounded);
+			}
+			is_falling = 0;
+		}
+		// NO INPUT
+		if (retval <= 0)
+		{
+			int move = last_move;
+			usleep(REF_SPEED * delay_microseconds * 30);
+			if (is_spell_key(last_input))
+				res = draw_player(grid, wait_time, x_pos, y_pos, x_cam_pos, y_cam_pos, last_move == 'd' ? plr_spell_right : last_move == 'a' ? plr_spell_left
+																																			 : plr_spell_up,
+								  map, mob_ind, obst_dir, time, input);
+			else
+			{
+				if ((can_climb_down && last_move == 's') || (can_climb_up && last_move == 'w'))
+					move -= 32;
+				res = draw_idling_player(grid, move, is_jumping || is_landing ? 1 : 0, wait_time, x_pos, y_pos, x_cam_pos, y_cam_pos, map, mob_ind, obst_dir, time++, input);
+			}
+			print_debug_log(time, score++, input, last_input, last_move, x_cam_pos, y_cam_pos, x_pos, y_pos, is_falling, is_using_spell, is_jumping, is_shifting, is_grounded);
+		}
+		// INPUT
+		else if (retval > 0)
+		{
+			if (!is_using_spell)
+				last_input = input;
+			input = getchar();
+			if (input == 'q')
+			{
+				system("clear");
+				exit(1);
+			}
+			if (input == 'R')
+			{
+				x_pos = 1;
+				y_pos = GROUND_X - 6;
+				x_cam_pos = 0;
+				y_cam_pos = 50;
+				is_shifting = 0;
+				is_using_spell = 0;
+			}
+			else if (input == 'l')
+				is_messagin = is_messagin ? 0 : 1;
+			if (input == DEB_GRID_KEY)
+			{
+				is_paused = !is_paused;
+
+				if (is_paused)
+				{
+					int page = 0;
+					system("clear");
+					print_grid_debug(grid, 0);
+					while (is_paused)
+					{
+						usleep(REF_SPEED * delay_microseconds * 50);
+						int inp = getchar();
+						if (inp == DEB_GRID_KEY)
+							is_paused = !is_paused;
+						if (inp == 'd' || inp == 'a')
+						{
+							page += inp == 'd' ? DEB_GRID_CONTENT_SIZE : -DEB_GRID_CONTENT_SIZE;
+							if (page < 0)
+								page = 0;
+							else if (page >= grid->cells_amnt - DEB_GRID_CONTENT_SIZE + 1)
+								page = grid->cells_amnt - DEB_GRID_CONTENT_SIZE + 1;
+							system("clear");
+							print_grid_debug(grid, page);
+						}
+					}
+					system("clear");
+				}
+			}
+
+			if (is_spell_key(input) && !is_using_spell)
+			{
+				usleep(REF_SPEED * delay_microseconds * 120);
+				char *anim = draw_spell(grid, input, &last_input, &is_using_spell, last_move, x_pos, y_pos, map);
+				res = draw_player(grid, wait_time, x_pos, y_pos, x_cam_pos, y_cam_pos, anim, map, mob_ind, obst_dir, time, input);
+				print_debug_log(time, score++, input, last_input, last_move, x_cam_pos, y_cam_pos, x_pos, y_pos, is_falling, is_using_spell, is_jumping, is_shifting, is_grounded);
+			}
+
+			else
+			{
+				if (is_using_spell)
+				{
+					usleep(REF_SPEED * delay_microseconds * 120);
+					is_using_spell--;
+					res = draw_player(grid, wait_time, x_pos, y_pos, x_cam_pos, y_cam_pos, last_move == 'd' ? plr_spell_right : last_move == 'a' ? plr_spell_left
+																																				 : plr_spell_up,
+									  map, mob_ind, obst_dir, time, input);
+					print_debug_log(time, score++, input, last_input, last_move, x_cam_pos, y_cam_pos, x_pos, y_pos, is_falling, is_using_spell, is_jumping, is_shifting, is_grounded);
+					continue;
+				}
+				if (is_move_key(input) || is_move_key(input + 32))
+				{
+					if (is_move_key(input))
+					{
+						last_move = input;
+						is_shifting = 1;
+						res = move(grid, &input, &last_input, &is_using_spell, &last_move, &is_shifting, mob_ind, obst_dir, time++, &is_jumping, &x_pos, &y_pos, &x_cam_pos, &y_cam_pos, &res, delay_microseconds, wait_time, map);
+					}
+					else
+						res = move(grid, &input, &last_input, &is_using_spell, &last_move, &is_shifting, mob_ind, obst_dir, time, &is_jumping, &x_pos, &y_pos, &x_cam_pos, &y_cam_pos, &res, delay_microseconds, wait_time, map);
+				}
+
+				if (input == ' ' && is_grounded)
+					time = jmp(grid, &input, &last_input, &is_using_spell, &last_move, mob_ind, obst_dir, time, &is_jumping, &x_pos, &y_pos, &x_cam_pos, &y_cam_pos, &res, delay_microseconds, wait_time, map);
+			}
+		}
+
+		if (!res || (y_pos > map_hei + 5 || is_grounded == 2))
+		{
+			score = 0;
+			last_input = 0;
+			last_move = 0;
+			input = 0;
+			system("clear");
+			x_pos = PLR_Sky_cT_X;
+			y_pos = PLR_Sky_cT_Y;
+		}
+	}
+
+	free(map);
+	return (0);
+}
+
+int main()
+{
+	set_nonblocking_mode(1);
+	srand(time(NULL));
+	print_Sky_ct_menu();
+	update_game();
+	return (1);
+}
