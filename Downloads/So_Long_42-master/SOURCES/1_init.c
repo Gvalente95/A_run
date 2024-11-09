@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:29:47 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/08 16:40:25 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/09 01:15:40 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	init_mlx_data(t_mlx_data *mlx_data)
 		return (printf("Error creating background image\n"), 0);
 	mlx_data->addr = mlx_get_data_addr(mlx_data->background_color, \
 		&mlx_data->bits_per_pixel, &mlx_data->line_length, &mlx_data->endian);
+	set_img_color(get_Vec2(mlx_data->size.x, mlx_data->size.y), mlx_data->background_color, COLOR_BLUE, 1);
 	mlx_data->god_mode = 0;
 	mlx_data->mouse_button = 0;
 	mlx_data->background_img = add_img(BACKGROUND_SPRITE_PATH, \
@@ -75,6 +76,7 @@ int	init_player(t_mlx_data *mlx_data, char *frames_path)
 	player = &mlx_data->player;
 	player->is_grounded = 1;
 	player->flip_x = 0;
+	player->jumps = 2;
 	player->jet_sky_timer = 0;
 	set_Vec3(&player->pos, WIN_W / 2, 0, 0);
 	set_Vec3(&player->movement, 0, 0, 0);
@@ -90,6 +92,7 @@ int	init_player(t_mlx_data *mlx_data, char *frames_path)
 
 int	init_env(t_mlx_data *mlx_data, int i, int r)
 {
+	int		z_pos;
 	t_ent	*e;
 	t_Vec2	size[4];
 	void	*imgs[4];
@@ -102,15 +105,21 @@ int	init_env(t_mlx_data *mlx_data, int i, int r)
 	i = -1;
 	while (++i < ENV_AMOUNT)
 	{
+		z_pos = rand_range(0, 5);
+		if (z_pos == 1)
+			z_pos = 0;
 		e = &mlx_data->env[i];
 		r = rand_range(0, 3);
 		set_Vec3(&e->pos, rand_range(0, WIN_W - size[r].x), \
-			rand_range(0, WIN_H - size[r].y), 0);
+			rand_range(0, WIN_H - size[r].y), z_pos);
 		set_Vec3(&e->movement, 0, 0, 0);
 		e->size = size[r];
 		e->jet_sky_timer = 0;
 		e->type = env;
-		e->cur_frame = imgs[r];
+		e->cur_frame = mlx_new_image(mlx_data->mlx, size[r].x, size[r].y);
+		copy_image_data(mlx_data, imgs[r], e->cur_frame, size[r]);
+		if (e->pos.z > 0)
+			set_brightness(e->size.x, e->size.y, e->cur_frame, .5 - (z_pos * 0.1));
 	}
 	free(frames);
 	return (1);

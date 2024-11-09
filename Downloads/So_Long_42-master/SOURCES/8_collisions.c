@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 05:47:08 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/08 16:59:53 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/09 02:03:58 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,23 +72,22 @@ void	handle_col(t_ent *e, int *col_dir)
 		e->movement.x = 0;
 }
 
-
 t_Vec2 get_collision_displacement(t_ent *entity1, t_ent *entity2)
 {
     t_Vec2 displacement = {0, 0};
+	int is_same_x;
+	int is_same_y;
 
-    if (entity1->pos.x < entity2->pos.x + entity2->size.x &&
-        entity1->pos.x + entity1->size.x > entity2->pos.x &&
-        entity1->pos.y < entity2->pos.y + entity2->size.y &&
-        entity1->pos.y + entity1->size.y > entity2->pos.y)
+	is_same_x = entity1->pos.x < entity2->pos.x + entity2->size.x &&
+        entity1->pos.x + entity1->size.x > entity2->pos.x;
+	is_same_y = entity1->pos.y < entity2->pos.y + entity2->size.y &&
+        entity1->pos.y + entity1->size.y > entity2->pos.y;
+    if (is_same_x && is_same_y)
     {
         int delta_left = (entity1->pos.x + entity1->size.x) - entity2->pos.x;
         int delta_right = (entity2->pos.x + entity2->size.x) - entity1->pos.x;
         int delta_top = (entity1->pos.y + entity1->size.y) - entity2->pos.y;
         int delta_bottom = (entity2->pos.y + entity2->size.y) - entity1->pos.y;
-		if (delta_top <= delta_bottom - 1 && delta_top < delta_left && delta_top < delta_right)
-			entity1->is_grounded = 1;
-
         if (delta_top < delta_bottom && delta_top < delta_left && delta_top < delta_right)
             displacement.y = -delta_top;
         else if (delta_bottom < delta_top && delta_bottom < delta_left && delta_bottom < delta_right)
@@ -98,6 +97,17 @@ t_Vec2 get_collision_displacement(t_ent *entity1, t_ent *entity2)
         else if (delta_right < delta_top && delta_right < delta_bottom)
             displacement.x = delta_right;
     }
+	int ground_margin = 10;
+
+    if (displacement.y == 0 && is_same_x && abs((entity1->pos.y + entity1->size.y) - entity2->pos.y) <= ground_margin)
+	{
+		entity1->is_grounded = 1;
+		if (!entity1->jump_timer && !entity1->jet_sky_timer)
+			entity1->pos.y = entity2->pos.y - entity1->size.y;
+	}
+	else if (displacement.y < 0)
+		entity1->is_grounded = 1;
+
     return displacement;
 }
 
@@ -110,7 +120,7 @@ t_Vec2 get_collisions(t_ent *e, t_mlx_data *mlx_data)
 
     for (i = 0; i < ENV_AMOUNT; i++)
     {
-        if (&mlx_data->env[i] == e) // Skip self-collision
+        if (&mlx_data->env[i] == e || mlx_data->env[i].pos.z > e->pos.z) // Skip self-collision
             continue;
         displacement = get_collision_displacement(e, &mlx_data->env[i]);
         // Accumulate displacement if a collision is detected

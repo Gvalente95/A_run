@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 16:08:31 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/08 16:58:37 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/09 01:58:34 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int	update_entity(t_ent *e, t_Vec3 frm_mv, int speed_x, int speed_y, t_mlx_data 
 		e->movement.y = 0;
 		frm_mv.y = 0;		
 	}
-	else if (!e->is_grounded && mlx->time % 4 == 0)
-		e->movement.y += 8;
+	else if (!e->is_grounded && (!e->jet_sky_timer || !mlx->key_state[UP_KEY]) && mlx->time % 4 == 0)
+		e->movement.y += 12;
 	if (e->jump_timer > 0)
 	{
 		e->jump_timer--;
@@ -108,7 +108,7 @@ int	update_entity(t_ent *e, t_Vec3 frm_mv, int speed_x, int speed_y, t_mlx_data 
 
 char *action_names[5] = {"WALK", "FALL", "IDLE", "JUMP"};
 
-int update_game_mobs(t_mlx_data *mlx_data)
+int update_mobs(t_mlx_data *mlx_data)
 {
 	t_Vec3	new_movement;
 	int			i;
@@ -135,13 +135,25 @@ int	update_player(t_mlx_data *mlx_data)
 		new_mv.x = -1;
 	else if (mlx_data->key_state[RIGHT_KEY] || mlx_data->key_state[D_KEY])
 		new_mv.x = 1;
-	else if (mlx_data->key_state[DOWN_KEY] || mlx_data->key_state[S_KEY])
+	if (mlx_data->key_state[DOWN_KEY] || mlx_data->key_state[S_KEY])
 		new_mv.y = 1;
-	if (mlx_data->key_state[SPACE_KEY] && mlx_data->player.jump_timer == 0 && mlx_data->player.action != FALL)
+	else if (mlx_data->key_state[UP_KEY] || mlx_data->key_state[W_KEY])
+	{
+		if (mlx_data->player.jet_sky_timer > 0)
+			mlx_data->player.jet_sky_timer--;
+		if (mlx_data->player.jet_sky_timer)
+			new_mv.y = (-mlx_data->player.jet_sky_timer / 150);
+	}
+	if (mlx_data->player.is_grounded && mlx_data->player.jet_sky_timer < 300)
+		mlx_data->player.jet_sky_timer++;
+	if (mlx_data->key_state[SPACE_KEY] && mlx_data->player.jumps)
 	{
 		mlx_data->player.jump_timer = 30;
-		new_mv.y = -2;
+		mlx_data->player.jumps--;
+		new_mv.y = -3;
 	}
+	if (mlx_data->player.is_grounded)
+		mlx_data->player.jumps = 5;
 	if (mlx_data->key_state[SHIFT_KEY])
 		move_speed[0] = PLAYER_SPEED * 3;
 	else
@@ -152,7 +164,8 @@ int	update_player(t_mlx_data *mlx_data)
 
 int	update(t_mlx_data *mlx_data)
 {
+	ft_printf("%d", mlx_data->player.is_grounded);
 	update_player(mlx_data);
-	update_game_mobs(mlx_data);
+	update_mobs(mlx_data);
 	return (1);
 }

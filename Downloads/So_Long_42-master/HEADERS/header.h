@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:32:42 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/08 16:44:25 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/09 02:14:46 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 
 # define GROUND_0 "RESSOURCES/PNG/TILES/GROUND_0"
 # define WALL_0 "RESSOURCES/PNG/TILES/WALL_0"
+# define TEST_IMG "ROADSTOPS.png"
 
 # define RESIZE 1.5
 # define WIN_W 	1980
@@ -45,14 +46,14 @@
 
 # define MOB_AMOUNT 	10
 # define COIN_AMOUNT 10
-# define ENV_AMOUNT 10
+# define ENV_AMOUNT 50
 
 # define GROUND_LEVEL 880
 
 # define MV_DUR 20
 # define MV_AM 2
 
-# define PLAYER_SPEED 6
+# define PLAYER_SPEED 2
 # define MOBS_SPD 2
 
 # define ANIM_REFRESH 5
@@ -110,6 +111,7 @@ typedef struct s_entity
 	int				idle_frame_amount;
 	int				hp;
 	int				is_grounded;
+	int				jumps;
 	int				flip_x;
 	int				jump_timer;
 	int				jet_sky_timer;
@@ -162,6 +164,8 @@ void	my_mlx_pixel_put(t_mlx_data *data, int x, int y, int color);
 int		set_entity_frames(t_mlx_data *d, t_ent *e, char **WLK_P, char **IDLE_P);
 void	set_img_color(t_Vec2 size, void *frame, int new_color, float intensity);
 void	copy_image_data(void *mlx, void *src, void *dest, t_Vec2 size);
+void 	*rescale_image(void *mlx, void *img, int *original_width, int *original_height, int new_width, int new_height);
+
 // INPUT
 int		handle_key_release(int keycode, t_mlx_data *mlx_data);
 int		handle_key_press(int keycode, t_mlx_data *mlx_data);
@@ -173,6 +177,8 @@ int		set_Vec3(t_Vec3 *Vec3, int x, int y, int z);
 char	print_Vec3(t_Vec3 Vec3);
 int		rand_range(int min, int max);
 t_Vec3	rand_Vec3(int min, int max);
+t_Vec2 	get_Vec2(int x, int y);
+t_Vec3 	get_Vec3(int x, int y, int z);
 void	*flip_image_x(void *mlx, void *img, int width, int height);
 
 //STUFF

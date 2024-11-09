@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 18:42:36 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/08 16:42:19 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/08 17:37:38 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	render_player(t_mlx_data *mlx_data)
 		frame_to_draw = player->cur_frame;
 	color_image = mlx_new_image(mlx_data->mlx, player->size.x, player->size.y);
 	copy_image_data(mlx_data, frame_to_draw, color_image, player->size);
-
 	mlx_put_image_to_window(mlx_data->mlx, mlx_data->win, \
 		color_image, player->pos.x, player->pos.y);
 }
@@ -54,6 +53,7 @@ void render_env(t_mlx_data *mlx_data)
 	t_ent *e;
 	int i;
 
+	sort_game_entities_by_z_pos(mlx_data->env, ENV_AMOUNT);
 	i = -1;
 	while (++i < ENV_AMOUNT)
 	{

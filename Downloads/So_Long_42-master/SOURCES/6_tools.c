@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:21:44 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/08 08:47:47 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/08 17:40:18 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,24 @@ int set_Vec3(t_Vec3 *Vec3, int x, int y, int z)
     return (1);
 }
 
+t_Vec2 get_Vec2(int x, int y)
+{
+	t_Vec2 res;
+
+	res.x = x;
+	res.y = y;
+	return res;
+}
+
+t_Vec3 get_Vec3(int x, int y, int z)
+{
+	t_Vec3 res;
+
+	res.x = x;
+	res.y = y;
+	res.z = z;
+	return (res);
+}
 char print_Vec3(t_Vec3 Vec3)
 {
     printf("%d %d %d", Vec3.x, Vec3.y, Vec3.z);

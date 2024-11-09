@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:23:39 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/08 15:30:30 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/09 02:25:13 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ int	update_and_render(t_mlx_data *mlx_data)
 	mlx_data->time++;
 	update(mlx_data);
 	render_images(mlx_data);
+
+	int testX = 0;
+	int testY = 0;
+	void *img = add_img(TEST_IMG, &testX, &testY, mlx_data);
+	mlx_put_image_to_window(&mlx_data, mlx_data->win, img, 0,0);
 	return (0);
 }
 
