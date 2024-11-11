@@ -6,13 +6,13 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:07:17 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/10 19:37:13 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/11 12:55:25 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../HEADERS/header.h"
 
-int set_Vec2(t_Vec2 *Vec2, int x, int y)
+int set_Vec2(t_vec2 *Vec2, int x, int y)
 {
     if (!Vec2)
         return (0);
@@ -21,7 +21,7 @@ int set_Vec2(t_Vec2 *Vec2, int x, int y)
     return (1);
 }
 
-int set_Vec3(t_Vec3 *Vec3, int x, int y, int z)
+int set_Vec3(t_vec3 *Vec3, int x, int y, int z)
 {
     if (!Vec3)
         return (0);
@@ -31,18 +31,18 @@ int set_Vec3(t_Vec3 *Vec3, int x, int y, int z)
     return (1);
 }
 
-t_Vec2 get_Vec2(int x, int y)
+t_vec2	get_Vec2(int x, int y)
 {
-	t_Vec2 res;
+	t_vec2	res;
 
 	res.x = x;
 	res.y = y;
 	return res;
 }
 
-t_Vec3 get_Vec3(int x, int y, int z)
+t_vec3	get_Vec3(int x, int y, int z)
 {
-	t_Vec3 res;
+	t_vec3	res;
 
 	res.x = x;
 	res.y = y;
@@ -50,7 +50,7 @@ t_Vec3 get_Vec3(int x, int y, int z)
 	return (res);
 }
 
-char print_Vec3(t_Vec3 Vec3)
+char print_Vec3(t_vec3 Vec3)
 {
     printf("%d %d %d", Vec3.x, Vec3.y, Vec3.z);
     return ('\n');

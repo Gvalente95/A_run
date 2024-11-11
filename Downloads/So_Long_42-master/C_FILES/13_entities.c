@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:03:00 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/10 19:38:47 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/11 12:55:17 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ t_ent *copy_ent(t_ent *e)
 int set_entity_frames(t_mlx_data *d, t_ent *e, char **WLK_P, char **IDLE_P)
 {
 	int	i;
-	int	rescaled_width = 40, rescaled_height = 40;
+	t_vec2 rescaled_size;
 
+	set_Vec2(&rescaled_size, 40, 40);
 	if (WLK_P != NULL)
 	{
 		for (i = 0; i < e->walk_frame_amount; i++)
@@ -37,11 +38,11 @@ int set_entity_frames(t_mlx_data *d, t_ent *e, char **WLK_P, char **IDLE_P)
 			{
 				e->wlk_frm[i] = add_img(WLK_P[i], &e->size.x, &e->size.y, d->mlx);
 				if (e->wlk_frm[i]) {					
-					void *rescaled_image = rescale_image(d->mlx, e->wlk_frm[i], &e->size.x, &e->size.y, rescaled_width, rescaled_height);
+					void *rescaled_image = rescale_image(d->mlx, e->wlk_frm[i], &e->size, rescaled_size);
 					if (rescaled_image) {
 						e->wlk_frm[i] = rescaled_image;
-						e->wlk_frm_x[i] = flip_image_x(d->mlx, e->wlk_frm[i], rescaled_width, rescaled_height);
-						mlx_put_image_to_window(d->mlx, d->win, e->wlk_frm[i], 100, 100 + i * rescaled_height);
+						e->wlk_frm_x[i] = flip_image_x(d->mlx, e->wlk_frm[i], rescaled_size.x, rescaled_size.y);
+						mlx_put_image_to_window(d->mlx, d->win, e->wlk_frm[i], 100, 100 + i * rescaled_size.x);
 					}
 				}
 			}
@@ -49,11 +50,11 @@ int set_entity_frames(t_mlx_data *d, t_ent *e, char **WLK_P, char **IDLE_P)
 			{
 				e->idl_frm[i] = add_img(IDLE_P[i], &e->size.x, &e->size.y, d->mlx);
 				if (e->idl_frm[i]) {
-					void *rescaled_image = rescale_image(d->mlx, e->idl_frm[i], &e->size.x, &e->size.y, rescaled_width, rescaled_height);
+					void *rescaled_image = rescale_image(d->mlx, e->idl_frm[i], &e->size, rescaled_size);
 					if (rescaled_image) {
 						e->idl_frm[i] = rescaled_image;
-						e->idl_frm_x[i] = flip_image_x(d->mlx, e->idl_frm[i], rescaled_width, rescaled_height);
-						mlx_put_image_to_window(d->mlx, d->win, e->idl_frm[i], 200, 100 + i * rescaled_height); // Adjust position for visibility
+						e->idl_frm_x[i] = flip_image_x(d->mlx, e->idl_frm[i], rescaled_size.x, rescaled_size.y);
+						mlx_put_image_to_window(d->mlx, d->win, e->idl_frm[i], 200, 100 + i * rescaled_size.y); // Adjust position for visibility
 					}
 				}
 			}

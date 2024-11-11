@@ -6,13 +6,13 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:29:47 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/11 05:48:59 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/11 12:55:17 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../HEADERS/header.h"
 
-int	init_mlx_data(t_mlx_data *mlx_data, t_Vec2 win_size)
+int	init_mlx_data(t_mlx_data *mlx_data, t_vec2 win_size)
 {
 	int	i;
 
@@ -76,7 +76,7 @@ int	init_game_mobs(t_mlx_data *mlx_data, char *frames_path, int ammount)
 	return (1);
 }
 
-// int	init_player(t_mlx_data *mlx_data, char *frames_path, t_Vec3 pos)
+// int	init_player(t_mlx_data *mlx_data, char *frames_path, t_vec3 pos)
 // {
 // 	char	**idle_frames;
 // 	char	**wlk_frm;

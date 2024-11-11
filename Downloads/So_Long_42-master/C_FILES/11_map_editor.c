@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 20:00:20 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/11 00:12:58 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/11 12:57:11 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void set_new_category(t_mlx_data *mlx_data, int new_cat, int cur_index)
 
 void handle_inputs(t_mlx_data *mlx_data)
 {
-	static t_Vec2 sel_size = {0};
+	static t_vec2 sel_size = {0};
 	static t_ent *sel = NULL;
 	static int	cur_index = 0;
 
@@ -82,7 +82,7 @@ void handle_inputs(t_mlx_data *mlx_data)
 	else if (mlx_data->last_key_pressed == A_KEY && mlx_data->cur_category > 0)
 		set_new_category(mlx_data, --mlx_data->cur_category, cur_index);
 	else if (mlx_data->last_key_pressed == D_KEY && 
-    mlx_data->cur_category < cat_count - 1 && 
+    mlx_data->cur_category < CAT_COUNT - 1 && 
     mlx_data->alll_images[mlx_data->cur_category + 1])
 		set_new_category(mlx_data, ++mlx_data->cur_category, cur_index);
 	else if (mlx_data->last_key_pressed == S_KEY && mlx_data->images_len > 0)
@@ -92,7 +92,7 @@ void handle_inputs(t_mlx_data *mlx_data)
 void check_test_img(t_mlx_data *mlx_data)
 {
 	static void *frame;
-	static t_Vec2 size = {0};
+	static t_vec2 size = {0};
 	if (mlx_data->time % 50 == 0)
 	{
 		void *image = add_img("RESSOURCES/PNG/BUSH/0.png", &size.x, &size.y, mlx_data);

@@ -40,7 +40,7 @@ valid_debug: $(NAME)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 debug: $(NAME)
-	$(CC) $(CFLAGS) -fsanitize=address -g $(INCLUDES) $(COMMON_SOURCES) C_FILES/0_main.c $(MLXFLAGS) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) -fsanitize=address -g $(INCLUDES) $(COMMON_SOURCES) $(VALID_SOURCE) $(MLXFLAGS) $(LIBFT) -o $(NAME)
 
 debug_map: $(NAME)
 	$(CC) $(CFLAGS) -fsanitize=address -g $(INCLUDES) $(COMMON_SOURCES) $(MAP_SOURCES) C_FILES/11_map_editor.c $(MLXFLAGS) $(LIBFT) -o $(NAME)

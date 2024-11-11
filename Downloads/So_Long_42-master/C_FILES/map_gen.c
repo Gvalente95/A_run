@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 02:04:14 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/11 06:28:46 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/11 07:06:45 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ void generate_map(int x_max, int y_max, int x_min, int y_min)
 				c = 'C';
 			else if (rand_range(0,2) == 0)
 				c = 'T';
+			else if (rand_range(0,3) == 0)
+				c = 'E';
 			else
 				c = '0';
 			buffer[i++] = c;

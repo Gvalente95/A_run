@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 18:42:36 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/11 00:05:16 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/11 07:55:40 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ void	render_game_mobs(t_mlx_data *mlx_data)
 	}
 }
 
-void 	render_env(t_mlx_data *mlx_data)
+void	render_env(t_mlx_data *mlx_data)
 {
-	t_ent *e;
-	int i;
+	t_ent	*e;
+	int		i;
 
 	sort_game_entities_by_z_pos(mlx_data->env, mlx_data->images_len);
 	i = -1;
@@ -67,24 +67,24 @@ void	render_images(t_mlx_data *mlx_data)
 	mlx_put_image_to_window(mlx_data->mlx, mlx_data->win, \
 	mlx_data->background_color, 0, 0);
 	if (mlx_data->background != NULL)
-		mlx_put_image_to_window(mlx_data, mlx_data->win, mlx_data->background->cur_frame, 0, 0);
-	// mlx_put_image_to_window(mlx_data->mlx, mlx_data->win, \
-	//  		mlx_data->background_img, 0,0);
+		mlx_put_image_to_window(mlx_data, mlx_data->win, \
+			mlx_data->background->cur_frame, 0, 0);
 	render_env(mlx_data);
-	//render_map_images(mlx_data);
 	render_game_mobs(mlx_data);
 	render_player(mlx_data);
 }
 
-int render_map_images(t_mlx_data *mlx_data)
+int	render_map_images(t_mlx_data *mlx_data)
 {
 	if (mlx_data->background != NULL)
-		mlx_put_image_to_window(mlx_data, mlx_data->win, mlx_data->background->cur_frame, 0, 0);
+		mlx_put_image_to_window(mlx_data, mlx_data->win, \
+			mlx_data->background->cur_frame, 0, 0);
 	if (mlx_data->images != NULL)
 	{
-		if (mlx_data->mouse_button == MOUSE_DPRESS || mlx_data->key_state[SPACE_KEY])
+		if (mlx_data->mouse_button == MOUSE_DPRESS || \
+			mlx_data->key_state[SPACE_KEY])
 			render_array(mlx_data, mlx_data->images, NULL);
-		else 
+		else
 			render_array(mlx_data, mlx_data->images, mlx_data->selected);
 	}
 	return (1);
