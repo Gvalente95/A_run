@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gvalente <gvalente@student.42.fr>          +#+  +:+       +#+        */
+/*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 19:40:03 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/06 18:11:56 by gvalente         ###   ########.fr       */
+/*   Updated: 2024/11/10 02:42:38 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,7 @@ int		ft_printf(const char *format, ...);
 char	*ft_itoa(int n);
 int		ft_putchar(char c);
 int		ft_putstr(char *str);
-char	*ft_strdup(const char	*s1);
-int		ft_strlen(const char *src);
 int		ft_putptr(void *ptr);
 char	*ft_utoa(unsigned int n);
-
 
 #endif

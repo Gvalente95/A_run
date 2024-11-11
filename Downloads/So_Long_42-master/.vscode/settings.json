@@ -12,6 +12,9 @@
 		"utility": "c",
 		"vector": "c",
 		"header.h": "c",
-		"__locale": "c"
+		"__locale": "c",
+		"colors.h": "c",
+		"stdio.h": "c",
+		"time.h": "c"
 	}
 }

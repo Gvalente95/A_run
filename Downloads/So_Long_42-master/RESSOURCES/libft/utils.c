@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 20:30:10 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/08 07:55:33 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/10 02:43:01 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,36 +28,6 @@ int	ft_putstr(char *str)
 		if (ft_putchar(str[len++]) == -1)
 			return (-1);
 	return (len);
-}
-
-int	ft_strlen(const char *src)
-{
-	int	i;
-
-	i = 0;
-	while (src[i])
-		i++;
-	return (i);
-}
-
-char	*ft_strdup(const char	*s1)
-{
-	char	*dst;
-	int		i;
-	int		len;
-
-	len = ft_strlen(s1);
-	dst = (char *)malloc(len + 1);
-	if (!dst)
-		return (NULL);
-	i = 0;
-	while (i < len)
-	{
-		dst[i] = s1[i];
-		i++;
-	}
-	dst[i] = '\0';
-	return (dst);
 }
 
 int	ft_putptr(void *ptr)

@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:49:05 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/08 16:06:59 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/09 22:32:31 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 # define MOUSE_NOPRESS 0
 # define MOUSE_PRESS 1
 # define MOUSE_DPRESS 2
-# define MOUSE_SCROLL 3
+# define MOUSE_SCROLL 5
+# define MOUSE_RELEASE 4
 
 # define KEY_PRESS 2
 # define KEY_RELEASE 3
