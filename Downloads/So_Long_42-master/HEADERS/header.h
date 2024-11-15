@@ -6,15 +6,17 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:32:42 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/11 13:06:59 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/15 23:17:39 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HEADER_H
 # define HEADER_H
 
+# include "../libft/libft.h"
+# include "colors.h"
+# include "audio.h"
 # include <mlx.h>
-# include "../RESSOURCES/libft/libft.h"
 # include "Keys.h"
 # include <stdio.h>
 # include <stdlib.h>
@@ -22,46 +24,34 @@
 # include <unistd.h>
 # include <time.h>
 # include <fcntl.h>
-# include "colors.h"
 
-# define BACKGROUND_SPRITE_PATH "RESSOURCES/PNG/BACKGROUND/"
+# define BACKGROUND_SPRITE_PATH "PNG/BACKGROUND/"
 
-# define WALL_SPRITES_PATH "RESSOURCES/PNG/WALL/"
-# define GROUND_SPRITES_PATH "RESSOURCES/PNG/GROUND/"
-# define BUSH_SPRITES_PATH "RESSOURCES/PNG/BUSH/"
-# define TREES_SPRITES_PATH "RESSOURCES/PNG/TREES/"
-# define ROAD_SPRITES_PATH "RESSOURCES/PNG/ROAD/"
-# define TILES_SPRITES_PATH "RESSOURCES/PNG/TILES/"
-# define COLLECTIBLES_SPRITES_PATH "RESSOURCES/PNG/COLLECTIBLES/"
-# define PORTAL_SPRITES_PATH "RESSOURCES/PNG/PORTAL/"
+# define PLAYER_SPR_PATH 		"PNG/ENTITIES/PLAYER/"
+# define MOB_SPR_PATH 			"PNG/ENTITIES/MOBS/"
 
-# define PLAYER_SPRITES_PATH "RESSOURCES/PNG/ENTITIES/PLAYER/"
-# define MOB_SPRITES_PATH "RESSOURCES/PNG/ENTITIES/MOBS/"
+# define WALL_SPR_PATH 			"PNG/WALL/"
+# define GROUND_SPR_PATH 		"PNG/GROUND/"
+# define BUSH_SPR_PATH 			"PNG/BUSH/"
+# define TREES_SPR_PATH 		"PNG/TREES/"
+# define ROAD_SPR_PATH 			"PNG/ROAD/"
+# define TILES_SPR_PATH 		"PNG/TILES/"
+# define COIN_SPR_PATH 			"PNG/COLLECTIBLES/COIN/"
+# define KEY_SPR_PATH 			"PNG/COLLECTIBLES/KEY/"
+# define PORTAL_SPR_PATH 		"PNG/PORTAL/"
+# define AXE_SPR_PATH 			"PNG/COLLECTIBLES/PICKAXE/"
 
-# define PLAYER_IDLE_0 "RESSOURCES/PNG/ENTITIES/PLAYER/IDLE_0.png"
-# define PLAYER_IDLE_1 "RESSOURCES/PNG/ENTITIES/PLAYER/IDLE_1"
-# define PLAYER_WALK_0 "RESSOURCES/PNG/ENTITIES/PLAYER/WALK_0"
-# define PLAYER_WALK_1 "RESSOURCES/PNG/ENTITIES/PLAYER/WALK_1"
-
-# define GROUND_0 "RESSOURCES/PNG/TILES/0"
-# define WALL_0 "RESSOURCES/PNG/TILES/0"
-# define TEST_IMG "RESSOURCES/PNG/BUSH/0.png"
-
-# define RESIZE 1.5
-# define WIN_W 	1980
-# define WIN_H 	1080
-# define MOB_AMOUNT 	10
-# define COIN_AMOUNT 10
-# define ENV_AMOUNT 50
-# define READ_BUFFER_SIZE 50
-# define GROUND_LEVEL 880
-# define MV_DUR 30
-# define MV_AM 2
-# define PLAYER_SPEED 2
-# define MOBS_SPD 2
-# define ANIM_REFRESH 5
-# define CAT_COUNT 7
-# define ARRAY_MAX 200
+# define WIN_W 				800
+# define WIN_H 				1200
+# define MOB_AMOUNT 		10
+# define COIN_AMOUNT 		10
+# define ENV_AMOUNT 		50
+# define READ_BUFFER_SIZE 	50
+# define MV_DUR 			30
+# define PLAYER_SPEED 		2
+# define MOBS_SPD 			2
+# define ANIM_REFRESH		5
+# define CAT_COUNT 			7
 
 typedef enum e_dir
 {
@@ -75,12 +65,15 @@ typedef enum e_dir
 
 typedef enum e_entity_types
 {
-	Player,
+	player,
 	mob,
 	coin,
-	exitance,
+	key,
+	door,
+	portal,
 	env,
 	wall,
+	axe,
 	ground,
 	background,
 	trees,
@@ -111,149 +104,207 @@ typedef struct s_Vector3
 	int	z;
 }	t_vec3;
 
+typedef struct s_map
+{
+	t_vec2	size;
+	t_vec3	pos;
+	char	*buffer;
+	int		len;
+	int		mob_max;
+	int		coin_max;
+	int		coins_amount;
+	int		tries_amount;
+}	t_map;
+
+typedef struct s_image_data
+{
+	t_vec2	pos;
+	t_vec2	size;
+	void	*dest;
+	double	x_ratio;
+	double	y_ratio;
+	int		*src_data;
+	int		*dst_data;
+	int		bpp;
+	int		len;
+	int		bps;
+	int		endian;
+	int		*scl_d;
+}	t_image;
+
 typedef struct s_entity
 {
+	t_ent_type		type;
+	t_ent_action	action;
+	t_dir			dir;
+	t_vec2			start_pos;
+	t_vec3			prv_pos;
+	t_vec3			base_pos;
+	t_vec3			pos;
+	t_vec2			size;
+	t_vec2			foll_ofs;
+	t_vec3			movement;
 	char			*frame_path;
 	void			*cur_frame;
 	void			*cur_frame_x;
 	void			**anim_frames;
-	void			*wlk_frm[3];
-	void			*idl_frm[3];
-	void			*wlk_frm_x[3];
-	void			*idl_frm_x[3];
+	void			**wlk_frm;
+	void			**idl_frm;
+	void			**fly_frm;
+	void			**wlk_frm_x;
+	void			**idl_frm_x;
+	void			**fly_frm_x;
+	int				hurt_timer;
+	int				is_active;
+	int				foll_spd;
 	int				walk_frame_amount;
 	int				idle_frame_amount;
 	int				frames_amount;
 	int				hp;
-	int				has_col;
 	int				is_grounded;
 	int				jumps;
-	int				flip_x;
 	int				jump_timer;
+	int				flip_x;
 	int				jet_sky_timer;
 	int				cur_frame_index;
-	t_ent_type		type;
-	t_ent_action	action;
-	t_dir			dir;
-	t_vec3			prv_pos;
-	t_vec3 			base_pos;
-	t_vec3			pos;
-	t_vec2			size;
-	t_vec2			follow_ofs;
-	t_vec3			movement;
 }	t_ent;
 
-typedef struct s_mlx_data
+typedef struct s_md
 {
-	t_vec3		size;
-	t_ent		*game_entities[ENV_AMOUNT];
-	t_ent		**env;
-	t_ent		**game_mobs;
-	t_ent		player;
-	t_ent		*selected;
-	t_ent		***alll_images;
+	t_map		map;
+	t_ent		*key;
+	t_ent		*pickaxe;
 	t_ent		*background;
 	t_ent		**images;
-	int			cur_array_size;
-	int			images_len;
-	int			cur_category;
-	int			clicked;
-	int			key_state[512];
-	int			last_key_pressed;
+	t_ent		plr;
+	t_ent		*exit;
+	t_vec3		ext_p;
+	pid_t		background_au;
+	char		**coin_paths;
+	char		**ftstp_paths;
 	void		*mlx;
+	void		*prt_img;
 	void		*win;
-	void		*background_color;
+	void		*bg_col;
 	void		*background_img;
-	void		*ground;
-	void		*tiles;
-	char		*addr;
-	int			mouse_prv;
-	int			mouse_button;
+	int			move_counter;
+	int			has_key;
+	int			ftstp_timer;
+	int			key_prs[512];
 	int			mouse_pos[2];
-	int			god_mode;
+	int			key_clicked;
+	int			mouse_pressed;
+	int			mouse_clicked;
+	int			coins_amount;
+	int			images_len;
+	int			t_len;
 	int			bits_per_pixel;
 	int			line_length;
 	int			endian;
 	int			time;
-}				t_mlx_data;
+	char		*addr;
+}	t_md;
 
 // INIT
-int		init_mlx_data(t_mlx_data *mlx_data, t_vec2 win_size);
-int		init_game_entities(t_mlx_data *mlx_data);
-int		init_player(t_mlx_data *mlx_data, char *frames_path, t_vec3 pos);
-t_ent	*init_entity(t_mlx_data *mlx_data, void *frames_path, t_vec3 pos, t_vec3 values);
+void	init_game(t_md *md);
+t_ent	*init_entity(t_md *md, void *frames_path, t_vec3 pos, t_vec3 values);
+int		init_player(t_md *md, char *frames_path, t_vec3 pos);
+int		init_mlx(t_md *md);
 // UPDATE
-int		update(t_mlx_data *mlx_data);
+int		update(t_md *md);
+void	update_env(t_md *md);
 // RENDER
-void	render_images(t_mlx_data *mlx_data);
-void	render_player(t_mlx_data *mlx_data);
-
+void	render_player(t_md *md);
+void	render(t_md *md);
+void	render_text(t_md *md, t_vec2 pos, const char *format, ...);
+// INPUT
+int		handle_key_release(int keycode, t_md *md);
+int		handle_key_press(int keycode, t_md *md);
+// LEVEL
+void	load_new_level(t_md *md);
+char	*generate_map(t_map *map, int max_try, int solvable);
 // IMAGE
 void	*add_img(char *relative_path, int *width, int *height, void *mlx);
-void	my_mlx_pixel_put(t_mlx_data *data, int x, int y, int color);
-int		set_entity_frames(t_mlx_data *d, t_ent *e, char **WLK_P, char **IDLE_P);
-void	set_img_color(t_vec2 size, void *frame, int new_color, float intensity);
-void	*get_image_copy(t_mlx_data *mlx_ptr, void *src, t_vec2 src_size);
-void	*rescale_image(void *mlx, void *img, t_vec2 *old_size, t_vec2 new_size);
-
-// INPUT
-int		handle_key_release(int keycode, t_mlx_data *mlx_data);
-int		handle_key_press(int keycode, t_mlx_data *mlx_data);
+void	my_mlx_pixel_put(t_md *data, int x, int y, int color);
+void	**get_images(t_md *d, t_ent *e, char **paths, t_vec2 size);
+void	*get_image_copy(t_md *mlx_ptr, void *src, t_vec2 src_size);
+void	*scale_img(void *mlx, void *img, t_vec2 *old_size, t_vec2 new_size);
 // TOOLS
-void 	sort_game_entities_by_z_pos(t_ent **game_entities, int count);
-char	**get_frames_paths(char *path, char *suffix, int amount);
-int		rand_range(int min, int max);
-void	*flip_image_x(void *mlx, void *img, int width, int height);
-void 	render_entity(t_mlx_data *mlx_data, t_ent *e);
-void 	render_array(t_mlx_data *mlx_data, t_ent **e, t_ent *selected);
-int 	get_array_size(void **array);
-
-//STUFF
-int		get_trgb(unsigned char t, unsigned char r, unsigned char g, \
-		unsigned char b);
-void 	set_brightness(int width, int height, void *frame, float factor);
-
+char	**get_paths(char *path, char *prefix, int amount, char *suffix);
+int		r_range(int min, int max);
+void	*flip_image_x(void *mlx, void *img, t_vec2 size);
+void	render_array(t_md *md, t_ent **e);
+int		get_array_size(void **array);
+void	relaunch_program(const char *arg);
+int		contain(char c, char *arg);
 // COLLISIONS
-t_vec2 	get_collision_displacement(t_ent *entity1, t_ent *entity2, int entity2_index);
-t_vec2 	get_collisions(t_ent *e, t_ent **col_ents);
-int 	is_in_pos(t_vec3 pos1, t_vec2 size1, t_vec3 pos2, t_vec2 size2);
-int 	delete_ents_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, int *ents_len);
-int 	delete_type(t_ent_type type, t_ent **ents, int *ents_len);
-
+t_vec2	get_collision_displacement(t_ent *e1, t_ent *e2, int e2_i, t_vec2 d);
+t_vec2	get_collisions(t_ent *e, t_ent **col_ents, t_vec2 displ);
+int		is_in_pos(t_vec3 pos1, t_vec2 size1, t_vec3 pos2, t_vec2 size2);
+// DELETE
+int		delete_ents_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, int *e_len);
+int		delete_type(t_ent_type type, t_ent **ents, int *ents_len);
+int		move_to(t_ent *e, t_vec3 target_pos, t_vec2 spd_limits, int range);
+int		is_in_pos(t_vec3 pos1, t_vec2 size1, t_vec3 pos2, t_vec2 size2);
 //VECTORS
-int		set_Vec2(t_vec2 *Vec2, int x, int y);
-int		set_Vec3(t_vec3 *Vec3, int x, int y, int z);
-char	print_Vec3(t_vec3 Vec3);
-t_vec3	rand_Vec3(int min, int max);
-t_vec2 	get_Vec2(int x, int y);
-t_vec3 	get_Vec3(int x, int y, int z);
-
+int		set_vec2(t_vec2 *Vec2, int x, int y);
+int		set_vec3(t_vec3 *Vec3, int x, int y, int z);
+t_vec2	get_vec2(int x, int y);
+t_vec3	get_vec3(int x, int y, int z);
+void	set_vec_to_dir(t_dir dir, t_vec3 *vec, int mv_am);
 // MOUSE
-void 	init_mouse(t_mlx_data *mlx_data);
-void	update_mouse(t_mlx_data *mlx_data);
-void 	set_ent_to_mouse(t_ent *ent, t_mlx_data *mlx_data);
-
-// MAP EDITOR
-void 	load_images(t_mlx_data *mlx_data);
-void 	set_new_category(t_mlx_data *mlx_data, int new_cat, int cur_index);
-int 	render_map_images(t_mlx_data *mlx_data);
+void	init_mouse(t_md *md);
+void	update_mouse(t_md *md);
+void	set_ent_to_mouse(t_ent *ent, t_md *md);
 // MLX
-void 	reset_mlx_values(t_mlx_data *mlx_data);
-
+void	reset_mlx_values(t_md *md);
 // ENTITIES
-t_ent 	*copy_ent(t_ent *e);
-t_ent 	**get_ents_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, int ents_len);
-void 	swap_game_entities(t_ent *a, t_ent *b);
+t_ent	*copy_ent(t_ent *e);
+t_ent	*get_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, int len);
+void	sort_ents_by_z(t_ent **game_entities, int count);
+void	swap_game_entities(t_ent *a, t_ent *b);
+void	increment_frame(t_ent *e);
+int		delete_at_index(int index, t_ent **ents, int len);
+// PARSING
+t_vec2	get_map_dimensions(char *map, int i, int current_width, t_vec2 res);
+t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale);
+t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale);
+void	load_valid_map(char *file_path, t_md *md, char *buffer, t_vec2	pos);
+void	get_ents_from_map(t_md *md, int i);
+char	*get_new_map(int width, int height, int solvable);
 char	*get_next_line(int fd);
-int 	delete_at_index(int index, t_ent **ents, int len);
-t_ent 	*get_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, int len);
+// MOVEMENT
+int		handle_movement(t_md *md, t_ent *e, t_vec2 base_speed, t_vec2 displ);
+int		move_to_simple(t_ent *e, t_vec3 targ_pos, int spd);
+// CHECKER
+t_vec2	get_map_dimensions(char *map, int i, int current_width, t_vec2 res);
+t_vec2	get_indexes(char *buffer);
+int		propagate_search(t_vec2 *indexes, char *buff, int line_width);
+int		check_neighbors(char *buff, int ind, int end_index, int wd);
+int		verify_map_borders(char *buffer, int width, int height);
+char	*get_map_buffer(int fd);
+int		close_and_quit(char *error_msg, int fd);
+// AUDIO
+pid_t	play_sound(const char *filename, int loop);
+void	stop_sound(pid_t pid);
+pid_t	play_random_sound(const char *path, int len, const char *format);
+int		is_audio_playing(pid_t pid);
 
-// PARSEFILE
-int load_from_file(t_mlx_data *mlx_data, char *file_path);
-int save_to_file(t_mlx_data *mlx_data, int len);
+void	update_coin_entity(t_ent *e, t_md *md, int range, int index);
 
-int render_map_images(t_mlx_data *mlx_data);
+// ENT TOOLS
+int		destroy_if_reached(t_ent *e, t_md *md, t_vec2 targ_size, t_vec3 p);
+void	update_circular_motion(t_ent *e, t_md *md);
+int		move_ent_towards(t_ent *e, t_md *md, t_vec3 p, int range);
+void	update_collectible(t_ent *e, t_md *md, int range, int index);
+int		has_ent_moved(t_ent e);
+t_ent	*get_ent_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, t_ent_type type);
+int		get_distance(t_ent a, t_ent b);
 
-int move_towards(t_ent *e, t_vec3 target_pos, int min_speed, int max_speed, int aggro_range);
+
+void	handle_entity_frames(t_md *md, t_ent *e, void *path, t_vec2 scale);
+void	init_player_frames(t_md *md, char *path, t_ent *e);
+
+int	check_path_format(char *path);
 
 #endif

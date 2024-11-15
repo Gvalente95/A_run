@@ -1,52 +1,67 @@
-NAME = so_long
-EDITOR_NAME = editor
-CC = gcc
-CFLAGS = -Wall -Werror -Wextra
-INCLUDES = -I RESSOURCES/mlx -I RESSOURCES/libft
-SOURCES = $(wildcard C_FILES/*.c)
-COMMON_SOURCES = $(filter-out C_FILES/map_gen.c C_FILES/0_main.c C_FILES/11_map_editor.c, $(wildcard C_FILES/*.c))
-VALID_SOURCE = $(wildcard C_FILES/valid_project/*.c)
+GAME_NAME = so_long
+GAME_SOURCE = C_FILES/so_long.c
+BONUS_SOURCE = BONUS/so_long.c
 
-OBJ = $(SOURCES:.c=.o)
-MLXFLAGS = -L RESSOURCES/mlx -lmlx -framework OpenGL -framework AppKit -lz
-LIBFTPATH = RESSOURCES/libft/
+EDITOR_NAME = editor
+EDITOR_SOURCES = C_FILES/old_stuff/*.c
+
+MAP_MAKER_NAME = rmap
+MAP_MAKER_SOURCES = C_FILES/MAKEMAP.c
+
+UTIL_SOURCES = \
+C_FILES/utils/8_delete.c C_FILES/utils/11_get_next_line.c C_FILES/utils/15_map_parser.c C_FILES/utils/2_update_player.c \
+C_FILES/utils/14_map_generator.c C_FILES/utils/5_input.c C_FILES/utils/1_init.c C_FILES/utils/10_Vectors.c \
+C_FILES/utils/6_mouse.c C_FILES/utils/6_tools.c C_FILES/utils/9_entities.c C_FILES/utils/8_collisions.c \
+C_FILES/utils/7_movement.c C_FILES/utils/4_images.c C_FILES/utils/2_update_env.c C_FILES/utils/13_map_checker2.c \
+C_FILES/utils/3_render.c C_FILES/utils/12_map_checker.c C_FILES/utils/0_level_loader.c C_FILES/utils/7_colors.c C_FILES/utils/16_audio.c \
+C_FILES/utils/2_update_collectibles.c C_FILES/utils/3_entity_tools.c C_FILES/utils/1_init_frames.c
+
+UTIL_BONUS_SOURCES = \
+BONUS/utils/8_delete.c BONUS/utils/11_get_next_line.c BONUS/utils/15_map_parser.c BONUS/utils/2_update_player.c \
+BONUS/utils/14_map_generator.c BONUS/utils/5_input.c BONUS/utils/1_init.c BONUS/utils/10_Vectors.c \
+BONUS/utils/6_mouse.c BONUS/utils/6_tools.c BONUS/utils/9_entities.c BONUS/utils/8_collisions.c \
+BONUS/utils/7_movement.c BONUS/utils/4_images.c BONUS/utils/2_update_env.c BONUS/utils/13_map_checker2.c \
+BONUS/utils/3_render.c BONUS/utils/12_map_checker.c BONUS/utils/0_level_loader.c BONUS/utils/7_colors.c BONUS/utils/16_audio.c \
+BONUS/utils/2_update_collectibles.c BONUS/utils/3_entity_tools.c BONUS/utils/1_init_frames.c
+
+INCLUDES = -I mlx -I libft
+MLXFLAGS = -L mlx -lmlx -framework OpenGL -framework AppKit -lz
+
+LIBFTPATH = libft/
 LIBFT = $(LIBFTPATH)libft.a
 
-GENMAP = rmap
+CC = gcc
+CFLAGS = -Wall -Werror -Wextra
 
-all: $(LIBFT) $(NAME)
+FSAN = -fsanitize=address -g
 
-gen:
-	CC C_FILES/map_gen.c $(INCLUDES) $(LIBFT) -o $(GENMAP)
+
+$(GAME_NAME): $(LIBFT)
+	$(CC) $(CFLAGS)  $(GAME_SOURCE) $(UTIL_SOURCES) $(INCLUDES) $(MLXFLAGS) $(LIBFT) -o $(GAME_NAME)
+
+bonus: $(GAME_NAME)
+	$(CC) $(CFLAGS) $(BONUS_SOURCE) $(UTIL_BONUS_SOURCES) $(INCLUDES) $(MLXFLAGS) $(LIBFT) -o $(GAME_NAME)
+
+all: $(GAME_NAME) 
 
 $(LIBFT):
 	make -C $(LIBFTPATH)
 
-$(NAME): $(LIBFT)
-	$(CC) $(CFLAGS) $(INCLUDES) $(COMMON_SOURCES) $(VALID_SOURCE) $(MLXFLAGS) $(LIBFT) -o $(NAME)
+debug:
+	$(CC) $(FSAN) $(GAME_SOURCE) $(UTIL_SOURCES) $(INCLUDES) $(MLXFLAGS) $(LIBFT) -o $(GAME_NAME)
 
-map: $(LIBFT)
-	$(CC) $(CFLAGS) $(INCLUDES) $(COMMON_SOURCES) C_FILES/11_map_editor.c $(MLXFLAGS) $(LIBFT) -o $(EDITOR_NAME)
+map: all
+	$(CC) $(MAP_MAKER_SOURCES) $(UTIL_SOURCES) $(INCLUDES) $(MLXFLAGS) $(LIBFT) -o $(MAP_MAKER_NAME)
 
-obj: $(OBJ)
-
-valid: $(LIBFT)
-	$(CC) $(CFLAGS) $(INCLUDES) $(COMMON_SOURCES) C_FILES/0_main.c $(MLXFLAGS) $(LIBFT) -o $(NAME)
-
-valid_debug: $(NAME)
-	$(CC) $(CFLAGS) -fsanitize=address -g $(INCLUDES) $(COMMON_SOURCES) $(VALID_SOURCE) $(MLXFLAGS) $(LIBFT) -o $(NAME)
+game:
+	$(CC) $(GAME_SOURCES) $(UTIL_SOURCES) $(INCLUDES) $(MLXFLAGS) $(LIBFT) -o $(GAME_NAME)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-debug: $(NAME)
-	$(CC) $(CFLAGS) -fsanitize=address -g $(INCLUDES) $(COMMON_SOURCES) $(VALID_SOURCE) $(MLXFLAGS) $(LIBFT) -o $(NAME)
-
-debug_map: $(NAME)
-	$(CC) $(CFLAGS) -fsanitize=address -g $(INCLUDES) $(COMMON_SOURCES) $(MAP_SOURCES) C_FILES/11_map_editor.c $(MLXFLAGS) $(LIBFT) -o $(NAME)
-
 clean:
-	rm -f $(OBJ)
+	rm -f $(GAME_NAME)
+	rm -f $(EDITOR_NAME)
 	make -C $(LIBFTPATH) clean
 
 fclean: clean

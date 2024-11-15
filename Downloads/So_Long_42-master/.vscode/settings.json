@@ -15,6 +15,10 @@
 		"__locale": "c",
 		"colors.h": "c",
 		"stdio.h": "c",
-		"time.h": "c"
+		"time.h": "c",
+		"stdlib.h": "c",
+		"libft.h": "c",
+		"ios": "c",
+		"variant": "c"
 	}
 }

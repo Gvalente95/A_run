@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:49:05 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/09 22:32:31 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/14 02:55:30 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@
 # include "header.h"
 
 # define MOUSE_NOPRESS 0
-# define MOUSE_PRESS 1
-# define MOUSE_DPRESS 2
-# define MOUSE_SCROLL 5
-# define MOUSE_RELEASE 4
+# define MOUSE_PRESS 	1
+# define MOUSE_DPRESS 	2
+# define MOUSE_SCROLL 	5
+# define MOUSE_RELEASE 	4
 
-# define KEY_PRESS 2
-# define KEY_RELEASE 3
-# define ESC_KEY 53
+# define KEY_PRESS 		2
+# define KEY_RELEASE 	3
+# define ESC_KEY		53
 # define LEFT_KEY       123
 # define RIGHT_KEY      124
 # define DOWN_KEY       125
