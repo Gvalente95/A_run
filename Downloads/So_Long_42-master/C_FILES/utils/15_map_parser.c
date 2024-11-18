@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 02:21:27 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/16 00:09:33 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/16 01:00:23 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,6 @@ t_ent	*parse_letter_b(t_md *md, t_vec3 pos, char c, int scale)
 		ent = init_entity(md, MOB_SPR_PATH, pos, get_vec3(scale * .8, mob, 8));
 	else if (c == 'P')
 		init_player(md, PLAYER_SPR_PATH, pos);
-	else if (c == 'F')
-	{
-		ent = init_entity(md, KEY_SPR_PATH, pos, get_vec3(scale * .5, key, 8));
-		md->key = ent;
-	}
-	else if (c == 'A')
-	{
-		ent = init_entity(md, AXE_SPR_PATH, pos, get_vec3(scale * .5, axe, 1));
-		md->pickaxe = ent;
-	}
 	return (ent);
 }
 
@@ -57,9 +47,6 @@ t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale)
 		set_vec3(&md->ext_p, ent->pos.x + (ent->size.x / 3), \
 			ent->pos.y + ent->size.y / 2, 0);
 	}
-	else if (c == 'T')
-		ent = init_entity(md, TILES_SPR_PATH, pos, \
-			get_vec3(scale / 2, tile, 11));
 	if (ent)
 		return (ent);
 	return (parse_letter_b(md, pos, c, scale));

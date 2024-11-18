@@ -6,27 +6,39 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 07:01:26 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/15 23:19:38 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/18 16:29:12 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../HEADERS/header.h"
 
-void	render_text(t_md *md, t_vec2 pos, const char *format, ...)
+void	*flip_image_x(void *mlx, void *img, t_vec2 size)
 {
-	char	buff[256];
-	int		of;
-	va_list	args;
+	t_vec2	pos;
+	int		prm[5];
+	void	*flipped_img;
+	char	*src_data;
+	char	*dest_data;
 
-	va_start(args, format);
-	vsnprintf(buff, sizeof(buff), format, args);
-	va_end(args);
-	of = 1;
-	mlx_string_put(md->mlx, md->win, pos.x - of, pos.y - of, COLOR_BLACK, buff);
-	mlx_string_put(md->mlx, md->win, pos.x + of, pos.y - of, COLOR_BLACK, buff);
-	mlx_string_put(md->mlx, md->win, pos.x - of, pos.y + of, COLOR_BLACK, buff);
-	mlx_string_put(md->mlx, md->win, pos.x + of, pos.y + of, COLOR_BLACK, buff);
-	mlx_string_put(md->mlx, md->win, pos.x, pos.y, COLOR_YELLOW, buff);
+	flipped_img = mlx_new_image(mlx, size.x, size.y);
+	if (!flipped_img)
+		return (NULL);
+	src_data = mlx_get_data_addr(img, &prm[0], &prm[1], &prm[2]);
+	dest_data = mlx_get_data_addr(flipped_img, &prm[0], &prm[1], &prm[2]);
+	if (!src_data || !dest_data)
+		return (NULL);
+	pos.y = -1;
+	while (++pos.y < size.y)
+	{
+		pos.x = -1;
+		while (++pos.x < size.x)
+		{
+			prm[3] = pos.y * prm[1] + (size.x - pos.x - 1) * (prm[0] / 8);
+			prm[4] = pos.y * prm[1] + pos.x * (prm[0] / 8);
+			ft_memcpy(dest_data + prm[4], src_data + prm[3], prm[0] / 8);
+		}
+	}
+	return (flipped_img);
 }
 
 void	render_player(t_md *md)
@@ -42,81 +54,47 @@ void	render_player(t_md *md)
 		copy, plr->pos.x, plr->pos.y);
 }
 
-void	render_array(t_md *md, t_ent **e)
+void	render_array(t_md *md, t_ent **e, int len)
 {
 	int	i;
 
+	(void)len;
 	i = 0;
-	sort_ents_by_z(md->images, md->images_len);
 	while (e[i])
 	{
 		if (e[i]->type == portal)
 		{
-			if (md->coins_amount)
-			{
-				i++;
-				continue ;
-			}
-			if (abs(e[i]->pos.x - md->plr.pos.x) < e[i]->size.x / 2 && \
-				abs(e[i]->pos.y - md->plr.pos.y) < e[i]->size.y / 2)
-				load_new_level(md);
+			i++;
+			continue ;
 		}
 		if (e[i]->is_active && e[i]->cur_frame != NULL)
 			mlx_put_image_to_window(md->mlx, md->win, \
 			e[i]->cur_frame, e[i]->pos.x, e[i]->pos.y);
 		i++;
 	}
-}
-
-void	render_game_values(t_md *md)
-{
-	int		i;
-	t_ent	*targ;
-	t_vec2	pos;
-
-	if (md->coins_amount == md->map.coin_max)
+	if (!md->coins_amount)
 	{
-		render_text(md, get_vec2(md->plr.pos.x + md->plr.size.x / 2, \
-		md->plr.pos.y - md->plr.size.y / 2), "%d", 0);
-		return ;
-	}
-	i = 0;
-	while (i < md->images_len)
-	{
-		if (md->images[i]->type == coin && !md->images[i]->hp)
-		{
-			targ = md->images[i];
-			set_vec2(&pos, targ->pos.x + targ->size.x / 2, \
-			targ->pos.y - targ->size.y * 2);
-			render_text(md, pos, "%d/%d", md->map.coins_amount \
-					- md->coins_amount, md->map.coins_amount);
-			break ;
-		}
-		i++;
+		mlx_put_image_to_window(md->mlx, md->win, \
+		md->exit->cur_frame, md->exit->pos.x, md->exit->pos.y);
+		if (abs(md->exit->pos.x - md->plr.pos.x) < md->exit->size.x / 2 && \
+				abs(md->exit->pos.y - md->plr.pos.y) < md->exit->size.y / 2)
+			exit(0);
 	}
 }
 
 void	render(t_md *md)
 {
 	t_vec2	tx_p;
+	char	*move_count_text;
 
 	mlx_put_image_to_window(md->mlx, md->win, \
 	md->bg_col, 0, 0);
-	if (md->background_img)
+	if (md->bgrnd_img)
 		mlx_put_image_to_window(md, md->win, \
-			md->background_img, 0, 0);
-	render_array(md, md->images);
+			md->bgrnd_img, 0, 0);
+	render_array(md, md->images, md->images_len);
 	set_vec2(&tx_p, md->t_len, md->t_len);
-	render_text(md, tx_p, "Move_count %d", md->move_counter);
-	// render_text(md, get_vec2(tx_p.x, tx_p.y + md->t_len / 3), "DIM[x%d,y%d]", \
-	// 	md->map.size.x, md->map.size.y);
-	// render_text(md, get_vec2(tx_p.x, tx_p.y + (md->t_len / 3) * 2), "PLR hp%d");
-	// render_text(md, get_vec2(tx_p.x, tx_p.y + (md->t_len / 3) * 3), \
-	// "Pos[x%d,y%d]", md->plr.pos.x, md->plr.pos.y);
-	// render_text(md, get_vec2(tx_p.x, tx_p.y + (md->t_len / 3) * 4), \
-	// "Mov[x%d,y%d]", md->plr.movement.x, md->plr.movement.y);
-	// render_text(md, get_vec2(tx_p.x, tx_p.y + (md->t_len / 3) * 5), \
-	// "MOUSE[click%d,press%d]", md->mouse_clicked, md->mouse_pressed);
-	render_game_values(md);
+	move_count_text = ft_itoa(md->move_counter);
+	mlx_string_put(md->mlx, md->win, 5, 5, COLOR_BLACK, move_count_text);
 	render_player(md);
 }

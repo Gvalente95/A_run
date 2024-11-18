@@ -6,25 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 16:08:31 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/16 00:19:06 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/18 16:22:58 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../HEADERS/header.h"
-
-t_ent	*is_ent_at_pos(t_vec2 pos, t_ent **ents)
-{
-	int	i;
-
-	i = 0;
-	while (ents[i])
-	{
-		if (ents[i]->pos.x == pos.x && ents[i]->pos.y == pos.y)
-			return (ents[i]);
-		i++;
-	}
-	return (NULL);
-}
 
 void	update_mob_entity(t_ent *e, t_md *md)
 {
@@ -41,16 +27,32 @@ void	update_mob_entity(t_ent *e, t_md *md)
 		if (e->dir == left)
 			new_pos.x -= md->t_len;
 		if (e->dir == right)
-			new_pos.x -= md->t_len;		
+			new_pos.x += md->t_len;
 	}
-	ent_at_pos = is_ent_at_pos(get_vec2(new_pos.x, new_pos.y), md->images);
-	if (!ent_at_pos)
+	ent_at_pos = get_ent_simple(get_vec2(new_pos.x, new_pos.y), \
+		md->images);
+	if (!ent_at_pos || ent_at_pos->type == coin)
 	{
 		set_vec3(&e->pos, new_pos.x, new_pos.y, e->pos.z);
-		increment_frame(e);	
+		increment_frame(e);
 	}
 	else
-		e->dir = r_range(0, 6);
+		e->dir = r_range(0, 4);
+}
+
+void	handle_player_collision(t_md *md, t_ent *plr, \
+	t_ent *col, t_vec2 new_pos)
+{
+	if (col->type != wall)
+		set_vec3(&plr->pos, new_pos.x, new_pos.y, plr->pos.z);
+	if (col->type == coin)
+	{
+		md->coins_amount--;
+		col->is_active = 0;
+		col->hp = 0;
+	}
+	if (col->type == mob)
+		exit(0);
 }
 
 int	update_player(t_md *md, t_ent *plr, t_vec2 new_pos)
@@ -66,16 +68,9 @@ int	update_player(t_md *md, t_ent *plr, t_vec2 new_pos)
 		new_pos.y += md->t_len;
 	else if ((md->key_clicked == UP_KEY || md->key_clicked == W_KEY))
 		new_pos.y -= md->t_len;
-	ent_at_new_pos = is_ent_at_pos(new_pos, md->images);
+	ent_at_new_pos = get_ent_simple(new_pos, md->images);
 	if (ent_at_new_pos != NULL)
-	{
-		if (ent_at_new_pos->type != wall)
-			set_vec3(&plr->pos, new_pos.x, new_pos.y, plr->pos.z);
-		if (ent_at_new_pos->type == coin)
-			md->coins_amount--;
-		if (ent_at_new_pos->type == mob)
-			exit(0);
-	}
+		handle_player_collision(md, plr, ent_at_new_pos, new_pos);
 	else
 		set_vec3(&plr->pos, new_pos.x, new_pos.y, plr->pos.z);
 	return (1);

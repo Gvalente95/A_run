@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 04:38:21 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/15 23:37:33 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/16 01:06:45 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,19 @@ t_vec2	get_collisions(t_ent *e, t_ent **col_ents, t_vec2 displ)
 		collisions.y += displacement.y;
 	}
 	return (collisions);
+}
+
+t_ent	*get_ent_simple(t_vec2 pos, t_ent **ents)
+{
+	int	i;
+
+	i = 0;
+	while (ents[i])
+	{
+		if (ents[i]->is_active && ents[i]->pos.x == pos.x && \
+			ents[i]->pos.y == pos.y)
+			return (ents[i]);
+		i++;
+	}
+	return (NULL);
 }

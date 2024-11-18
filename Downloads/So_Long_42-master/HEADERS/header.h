@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:32:42 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/15 23:17:39 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/18 16:43:09 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,22 @@
 # include <time.h>
 # include <fcntl.h>
 
-# define BACKGROUND_SPRITE_PATH "PNG/BACKGROUND/"
+# define BGR_SPRITE_PATH "PNG/BGRND/"
 
 # define PLAYER_SPR_PATH 		"PNG/ENTITIES/PLAYER/"
 # define MOB_SPR_PATH 			"PNG/ENTITIES/MOBS/"
 
 # define WALL_SPR_PATH 			"PNG/WALL/"
 # define GROUND_SPR_PATH 		"PNG/GROUND/"
+# define GROUND_TILESET_PATH	"PNG/GROUND/8_sliced/"
+
 # define BUSH_SPR_PATH 			"PNG/BUSH/"
 # define TREES_SPR_PATH 		"PNG/TREES/"
 # define ROAD_SPR_PATH 			"PNG/ROAD/"
 # define TILES_SPR_PATH 		"PNG/TILES/"
 # define COIN_SPR_PATH 			"PNG/COLLECTIBLES/COIN/"
 # define KEY_SPR_PATH 			"PNG/COLLECTIBLES/KEY/"
+# define DOOR_SPR_PATH 			"PNG/DOOR/"
 # define PORTAL_SPR_PATH 		"PNG/PORTAL/"
 # define AXE_SPR_PATH 			"PNG/COLLECTIBLES/PICKAXE/"
 
@@ -53,6 +56,16 @@
 # define ANIM_REFRESH		5
 # define CAT_COUNT 			7
 
+# define LEFT_UP			0
+# define UP 				1
+# define RIGHT_UP			2
+# define LEFT				3
+# define CENTER				4
+# define RIGHT				5
+# define DOWN_LEFT			6
+# define DOWN				7
+# define DOWN_RIGHT			8
+
 typedef enum e_dir
 {
 	up,
@@ -63,6 +76,8 @@ typedef enum e_dir
 	DIR_LEN
 }	t_dir;
 
+# define TYPESTR "PMCKDE1AGBTV"
+
 typedef enum e_entity_types
 {
 	player,
@@ -71,14 +86,12 @@ typedef enum e_entity_types
 	key,
 	door,
 	portal,
-	env,
 	wall,
 	axe,
 	ground,
-	background,
-	trees,
-	deco,
+	bgrnd,
 	tile,
+	env,
 	ENT_TYPE_LEN
 }	t_ent_type;
 
@@ -174,20 +187,26 @@ typedef struct s_md
 	t_map		map;
 	t_ent		*key;
 	t_ent		*pickaxe;
-	t_ent		*background;
+	t_ent		*bgrnd;
 	t_ent		**images;
+	t_ent		**bg_env;
 	t_ent		plr;
 	t_ent		*exit;
 	t_vec3		ext_p;
-	pid_t		background_au;
+	pid_t		bgrnd_au;
+	t_ent		*sel;
+	t_ent		*selected;
+	t_ent		***all_images;
 	char		**coin_paths;
 	char		**ftstp_paths;
 	void		*mlx;
-	void		*prt_img;
 	void		*win;
 	void		*bg_col;
-	void		*background_img;
+	void		*bgrnd_img;
+	void		**env_images;
+	int			index;
 	int			move_counter;
+	int			cur_category;
 	int			has_key;
 	int			ftstp_timer;
 	int			key_prs[512];
@@ -197,6 +216,7 @@ typedef struct s_md
 	int			mouse_clicked;
 	int			coins_amount;
 	int			images_len;
+	int			bg_env_len;
 	int			t_len;
 	int			bits_per_pixel;
 	int			line_length;
@@ -233,7 +253,7 @@ void	*scale_img(void *mlx, void *img, t_vec2 *old_size, t_vec2 new_size);
 char	**get_paths(char *path, char *prefix, int amount, char *suffix);
 int		r_range(int min, int max);
 void	*flip_image_x(void *mlx, void *img, t_vec2 size);
-void	render_array(t_md *md, t_ent **e);
+void	render_array(t_md *md, t_ent **e, int len);
 int		get_array_size(void **array);
 void	relaunch_program(const char *arg);
 int		contain(char c, char *arg);
@@ -242,7 +262,7 @@ t_vec2	get_collision_displacement(t_ent *e1, t_ent *e2, int e2_i, t_vec2 d);
 t_vec2	get_collisions(t_ent *e, t_ent **col_ents, t_vec2 displ);
 int		is_in_pos(t_vec3 pos1, t_vec2 size1, t_vec3 pos2, t_vec2 size2);
 // DELETE
-int		delete_ents_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, int *e_len);
+int		del_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, int *e_len);
 int		delete_type(t_ent_type type, t_ent **ents, int *ents_len);
 int		move_to(t_ent *e, t_vec3 target_pos, t_vec2 spd_limits, int range);
 int		is_in_pos(t_vec3 pos1, t_vec2 size1, t_vec3 pos2, t_vec2 size2);
@@ -301,10 +321,16 @@ int		has_ent_moved(t_ent e);
 t_ent	*get_ent_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, t_ent_type type);
 int		get_distance(t_ent a, t_ent b);
 
-
 void	handle_entity_frames(t_md *md, t_ent *e, void *path, t_vec2 scale);
 void	init_player_frames(t_md *md, char *path, t_ent *e);
 
-int	check_path_format(char *path);
+int		check_path_format(char *path);
+t_ent	*get_ent_simple(t_vec2 pos, t_ent **ents);
+
+void	remap_wall_entities(t_md *md, t_ent *e, char *png_path, t_vec3 pos);
+void	load_env_elements(t_md *md);
+void	free_array(t_ent **ents, int len, int i);
+void	load_images(t_md *md);
+int		save_to_file(t_md *md, int len, char *file_path);
 
 #endif

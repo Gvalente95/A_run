@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 20:39:27 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/15 20:44:52 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/16 01:04:13 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,29 @@ void	handle_entity_frames(t_md *md, t_ent *e, void *path, t_vec2 scale)
 			e->anim_frames[e->frames_amount], &e->size, scale);
 	}
 	free (frames);
+}
+
+void	**get_images(t_md *d, t_ent *e, char **paths, t_vec2 size)
+{
+	void	**hld;
+	int		i;
+	int		amount;
+
+	if (!paths)
+		return (NULL);
+	amount = 0;
+	while (paths[amount])
+		amount++;
+	hld = malloc(sizeof(void *) * (amount + 1));
+	if (!hld)
+		return (NULL);
+	i = 0;
+	while (i < amount)
+	{
+		hld[i] = add_img(paths[i], &e->size.x, &e->size.y, d->mlx);
+		hld[i] = scale_img(d->mlx, hld[i], &e->size, size);
+		i++;
+	}
+	hld[i] = NULL;
+	return (hld);
 }

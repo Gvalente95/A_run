@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:16:57 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/16 00:15:21 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/18 16:05:21 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	init_mlx(t_md *md)
 	while (++i < 512)
 		md->key_prs[i] = 0;
 	md->mlx = mlx_init();
-	md->background = NULL;
+	md->bgrnd = NULL;
 	md->key = NULL;
 	md->exit = NULL;
 	md->mouse_pressed = 0;
