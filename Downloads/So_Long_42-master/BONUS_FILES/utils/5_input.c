@@ -6,11 +6,38 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 18:33:59 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/18 16:05:21 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 05:30:12 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../HEADERS/header.h"
+
+char	map_keycode_to_char(int keycode)
+{
+	if (keycode == NUM_0_KEY)
+		return ('0');
+	if (keycode == NUM_1_KEY)
+		return ('1');
+	if (keycode == NUM_2_KEY)
+		return ('2');
+	if (keycode == NUM_3_KEY)
+		return ('3');
+	if (keycode == NUM_4_KEY)
+		return ('4');
+	if (keycode == NUM_5_KEY)
+		return ('5');
+	if (keycode == NUM_6_KEY)
+		return ('6');
+	if (keycode == NUM_7_KEY)
+		return ('7');
+	if (keycode == NUM_8_KEY)
+		return ('8');
+	if (keycode == NUM_9_KEY)
+		return ('9');
+	if (keycode == ESC_KEY)
+		return ('\0');
+	return ('Q');
+}
 
 int	handle_key_press(int keycode, t_md *md)
 {
@@ -20,6 +47,7 @@ int	handle_key_press(int keycode, t_md *md)
 		{
 			mlx_destroy_window(md->mlx, md->win);
 			stop_sound(md->bgrnd_au);
+			free_md(md);
 			exit(0);
 		}
 		md->key_prs[keycode] = 1;

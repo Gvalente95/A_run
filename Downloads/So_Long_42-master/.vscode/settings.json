@@ -19,6 +19,7 @@
 		"stdlib.h": "c",
 		"libft.h": "c",
 		"ios": "c",
-		"variant": "c"
+		"variant": "c",
+		"complex": "c"
 	}
 }

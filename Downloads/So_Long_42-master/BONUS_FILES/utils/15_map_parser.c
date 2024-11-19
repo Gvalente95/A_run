@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 02:21:27 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/18 14:11:14 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 06:08:07 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,12 @@ t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale)
 	return (parse_letter_b(md, pos, c, scale));
 }
 
-void	get_ents_from_map(t_md *md, int i)
+void	get_ents_from_map(t_md *md, int i, t_vec3 pos)
 {
-	t_vec3	pos;
 	t_ent	*e;
 
 	md->images = malloc(sizeof(t_ent *) * \
 		(md->map.size.x * md->map.size.y + 1));
-	set_vec3(&pos, 0, 0, 0);
 	while (pos.y <= md->map.size.y)
 	{
 		pos.x = 0;

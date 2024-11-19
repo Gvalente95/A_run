@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:07:17 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/15 19:26:10 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/18 23:16:53 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,12 @@ t_vec3	get_vec3(int x, int y, int z)
 	return (res);
 }
 
-void	set_vec_to_dir(t_dir dir, t_vec3 *vec, int mv_am)
+t_vec3	get_grid_pos(t_md *md, t_vec3 mouse_pos)
 {
-	if (dir == up)
-		vec->y = -mv_am;
-	if (dir == down)
-		vec->y = mv_am;
-	if (dir == left)
-		vec->x = -mv_am;
-	if (dir == right)
-		vec->x = mv_am;
+	t_vec3	grid_pos;
+
+	grid_pos.x = (mouse_pos.x / md->t_len) * md->t_len;
+	grid_pos.y = (mouse_pos.y / md->t_len) * md->t_len;
+	grid_pos.z = 0;
+	return (grid_pos);
 }

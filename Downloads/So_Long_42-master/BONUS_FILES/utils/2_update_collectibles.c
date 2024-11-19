@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 15:11:17 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/18 16:31:22 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/18 20:04:01 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,8 @@ void	update_coin_entity(t_ent *e, t_md *md, int range, int index)
 t_ent	*hit_block(t_md *md)
 {
 	t_ent	*block;
-	t_vec3	mouse_pos;
 
-	mouse_pos = get_vec3(md->mouse_pos[0], md->mouse_pos[1], 0);
-	block = get_ent_at_pos(mouse_pos, get_vec2(1, 1), md->images, wall);
+	block = get_ent_at_pos(md->mouse_pos, get_vec2(1, 1), md->images, wall);
 	if (block && get_distance(*block, md->plr) < (md->t_len * 2) - 1)
 	{
 		block->hp--;

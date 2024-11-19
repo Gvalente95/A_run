@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:03:00 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/14 17:43:00 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/18 21:13:12 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_ent	*copy_ent(t_ent *e)
 		return (NULL);
 	ft_memcpy(new_ent, e, sizeof(t_ent));
 	set_vec3(&new_ent->pos, e->pos.x, e->pos.y, e->pos.z);
+	new_ent->type = e->type;
 	return (new_ent);
 }
 
@@ -90,7 +91,7 @@ void	set_ent_to_mouse(t_ent *ent, t_md *md)
 {
 	ent->movement.x = 0;
 	ent->movement.y = 0;
-	ent->pos.x = md->mouse_pos[0] - (ent->size.x / 2);
-	ent->pos.y = md->mouse_pos[1] - (ent->size.y / 2);
+	ent->pos.x = md->mouse_pos.x - (ent->size.x / 2);
+	ent->pos.y = md->mouse_pos.y - (ent->size.y / 2);
 	ent->base_pos = ent->pos;
 }

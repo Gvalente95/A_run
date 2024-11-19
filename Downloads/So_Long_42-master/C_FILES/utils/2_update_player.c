@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 16:08:31 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/18 16:22:58 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 04:22:34 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	update_mob_entity(t_ent *e, t_md *md)
 	t_vec3	new_pos;
 
 	new_pos = e->pos;
-	if (md->time % 50 == 0)
 	{
 		if (e->dir == up)
 			new_pos.y -= md->t_len;
@@ -31,7 +30,7 @@ void	update_mob_entity(t_ent *e, t_md *md)
 	}
 	ent_at_pos = get_ent_simple(get_vec2(new_pos.x, new_pos.y), \
 		md->images);
-	if (!ent_at_pos || ent_at_pos->type == coin)
+	if (!ent_at_pos)
 	{
 		set_vec3(&e->pos, new_pos.x, new_pos.y, e->pos.z);
 		increment_frame(e);
@@ -89,18 +88,19 @@ int	update(t_md *md)
 {
 	t_ent	*e;
 	int		i;
+	int		has_moved;
 
 	md->plr.prv_pos = md->plr.pos;
 	update_player(md, &md->plr, get_vec2(0, 0));
-	if (abs(md->plr.pos.x - md->plr.prv_pos.x) > 1 || \
-		abs(md->plr.pos.y - md->plr.prv_pos.y) > 1)
-		md->move_counter++;
+	has_moved = (abs(md->plr.pos.x - md->plr.prv_pos.x) > 1 || \
+		abs(md->plr.pos.y - md->plr.prv_pos.y) > 1);
+	md->move_counter += has_moved;
 	i = 0;
 	while (md->images[i])
 	{
 		e = md->images[i];
 		e->prv_pos = e->pos;
-		if (e->type == mob)
+		if (e->type == mob && has_moved)
 			update_mob_entity(e, md);
 		if (!e->is_active)
 		{

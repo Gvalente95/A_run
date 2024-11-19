@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 07:01:26 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/18 16:05:21 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/18 23:21:01 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	render_player(t_md *md)
 		copy, plr->pos.x, plr->pos.y);
 }
 
-void	render_array(t_md *md, t_ent **e, int len)
+void	render_array(t_md *md, t_ent **e, int len, int show_portal)
 {
 	int	i;
 
@@ -50,7 +50,7 @@ void	render_array(t_md *md, t_ent **e, int len)
 	sort_ents_by_z(md->images, len);
 	while (e[i])
 	{
-		if (e[i]->type == portal)
+		if (e[i]->type == portal && !show_portal)
 		{
 			if (md->coins_amount)
 			{
@@ -116,10 +116,10 @@ void	render(t_md *md)
 	if (md->bgrnd_img)
 		mlx_put_image_to_window(md, md->win, \
 			md->bgrnd_img, 0, 0);
-	render_array(md, md->images, md->images_len);
+	render_array(md, md->images, md->images_len, 0);
 	set_vec2(&tx_p, md->t_len, md->t_len);
 	render_text(md, tx_p, "Move_count %d", md->move_counter);
 	render_game_values(md);
 	render_player(md);
-	render_array(md, md->bg_env, md->bg_env_len);
+	render_array(md, md->bg_env, md->bg_env_len, 0);
 }

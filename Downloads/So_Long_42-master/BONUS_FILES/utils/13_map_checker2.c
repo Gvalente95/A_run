@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 04:15:24 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/14 04:42:13 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/18 19:23:20 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_vec2	get_map_dimensions(char *map, int i, int current_width, t_vec2 res)
 	return (res);
 }
 
-char	*get_map_buffer(int fd)
+char	*get_map_buffer(int fd, int check_for_error)
 {
 	char	*buffer;
 	char	*line;
@@ -84,12 +84,12 @@ char	*get_map_buffer(int fd)
 	buffer = ft_strdup("");
 	line = get_next_line(fd);
 	if (!line)
-		close_and_quit("Error\nmpty map", fd);
+		close_and_quit("Error\nEmpty map", fd);
 	while (line != NULL)
 	{
 		temp = buffer;
 		len = ft_strlen(line);
-		if (line[len - 2] != '1')
+		if (check_for_error && line[len - 2] != '1')
 			close_and_quit("Error\nunclosed map", -1);
 		buffer = ft_strjoin(buffer, line);
 		free(temp);

@@ -6,11 +6,28 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 07:01:26 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/18 16:29:12 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 04:21:39 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../HEADERS/header.h"
+
+void	render_text(t_md *md, t_vec2 pos, const char *format, ...)
+{
+	char	buff[256];
+	int		of;
+	va_list	args;
+
+	va_start(args, format);
+	vsnprintf(buff, sizeof(buff), format, args);
+	va_end(args);
+	of = 1;
+	mlx_string_put(md->mlx, md->win, pos.x - of, pos.y - of, COLOR_BLACK, buff);
+	mlx_string_put(md->mlx, md->win, pos.x + of, pos.y - of, COLOR_BLACK, buff);
+	mlx_string_put(md->mlx, md->win, pos.x - of, pos.y + of, COLOR_BLACK, buff);
+	mlx_string_put(md->mlx, md->win, pos.x + of, pos.y + of, COLOR_BLACK, buff);
+	mlx_string_put(md->mlx, md->win, pos.x, pos.y, COLOR_YELLOW, buff);
+}
 
 void	*flip_image_x(void *mlx, void *img, t_vec2 size)
 {
@@ -54,7 +71,7 @@ void	render_player(t_md *md)
 		copy, plr->pos.x, plr->pos.y);
 }
 
-void	render_array(t_md *md, t_ent **e, int len)
+void	render_array(t_md *md, t_ent **e, int len, int show_portal)
 {
 	int	i;
 
@@ -62,7 +79,7 @@ void	render_array(t_md *md, t_ent **e, int len)
 	i = 0;
 	while (e[i])
 	{
-		if (e[i]->type == portal)
+		if (!show_portal && e[i]->type == portal)
 		{
 			i++;
 			continue ;
@@ -72,7 +89,7 @@ void	render_array(t_md *md, t_ent **e, int len)
 			e[i]->cur_frame, e[i]->pos.x, e[i]->pos.y);
 		i++;
 	}
-	if (!md->coins_amount)
+	if (!md->coins_amount && !show_portal)
 	{
 		mlx_put_image_to_window(md->mlx, md->win, \
 		md->exit->cur_frame, md->exit->pos.x, md->exit->pos.y);
@@ -85,16 +102,15 @@ void	render_array(t_md *md, t_ent **e, int len)
 void	render(t_md *md)
 {
 	t_vec2	tx_p;
-	char	*move_count_text;
 
 	mlx_put_image_to_window(md->mlx, md->win, \
 	md->bg_col, 0, 0);
 	if (md->bgrnd_img)
 		mlx_put_image_to_window(md, md->win, \
 			md->bgrnd_img, 0, 0);
-	render_array(md, md->images, md->images_len);
+	render_array(md, md->images, md->images_len, 0);
 	set_vec2(&tx_p, md->t_len, md->t_len);
-	move_count_text = ft_itoa(md->move_counter);
-	mlx_string_put(md->mlx, md->win, 5, 5, COLOR_BLACK, move_count_text);
+	render_text(md, get_vec2(md->plr.pos.x + md->plr.size.x / 2, \
+		md->plr.pos.y - 5), "%d", md->move_counter);
 	render_player(md);
 }

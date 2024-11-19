@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:17:38 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/18 16:16:17 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/18 19:23:53 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void	load_valid_map(char *file_path, t_md *md, char *buffer, t_vec2	pos)
 	fd = open(file_path, O_RDONLY);
 	if (fd == -1)
 		close_and_quit("Error\nEmpty file.", fd);
-	buffer = get_map_buffer(fd);
+	buffer = get_map_buffer(fd, 1);
 	if (contain('P', buffer) != 1 || contain('E', buffer) != 1)
 		close_and_quit("Error\nWrong 'P'/'E' amount.", fd);
 	if (contain('C', buffer) < 1)

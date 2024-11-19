@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:58:33 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/13 21:51:31 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 01:47:35 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	adjust_x_movement(t_ent *e, int base_speed_x)
 	int	adjusted_speed;
 
 	adjusted_speed = base_speed_x * (abs(e->movement.x) / \
-		(float)(base_speed_x * 10));
+		(float)(base_speed_x * 14));
 	if (e->movement.x > 0)
 	{
 		e->movement.x--;
@@ -41,7 +41,8 @@ void	adjust_y_movement(t_ent *e, int base_speed_y)
 {
 	int	adjusted_speed;
 
-	adjusted_speed = base_speed_y * (abs(e->movement.y) / (float)MV_DUR);
+	adjusted_speed = base_speed_y * (abs(e->movement.y) / \
+		(float)(base_speed_y * 20));
 	if (e->movement.y > 0)
 	{
 		e->movement.y--;

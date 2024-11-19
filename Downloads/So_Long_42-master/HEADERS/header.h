@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:32:42 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/18 16:43:09 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 05:04:08 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@
 # define PORTAL_SPR_PATH 		"PNG/PORTAL/"
 # define AXE_SPR_PATH 			"PNG/COLLECTIBLES/PICKAXE/"
 
-# define WIN_W 				800
-# define WIN_H 				1200
+# define WIN_W 				1400
+# define WIN_H 				1000
 # define MOB_AMOUNT 		10
 # define COIN_AMOUNT 		10
 # define ENV_AMOUNT 		50
@@ -117,11 +117,18 @@ typedef struct s_Vector3
 	int	z;
 }	t_vec3;
 
+typedef struct s_input
+{
+	char	*buffer;
+	int		index;
+}	t_input;
+
 typedef struct s_map
 {
 	t_vec2	size;
 	t_vec3	pos;
 	char	*buffer;
+	char	*name;
 	int		len;
 	int		mob_max;
 	int		coin_max;
@@ -196,7 +203,8 @@ typedef struct s_md
 	pid_t		bgrnd_au;
 	t_ent		*sel;
 	t_ent		*selected;
-	t_ent		***all_images;
+	t_ent		**all_images;
+	t_vec3		mouse_pos;
 	char		**coin_paths;
 	char		**ftstp_paths;
 	void		*mlx;
@@ -210,7 +218,6 @@ typedef struct s_md
 	int			has_key;
 	int			ftstp_timer;
 	int			key_prs[512];
-	int			mouse_pos[2];
 	int			key_clicked;
 	int			mouse_pressed;
 	int			mouse_clicked;
@@ -222,6 +229,7 @@ typedef struct s_md
 	int			line_length;
 	int			endian;
 	int			time;
+	int			save_mode;
 	char		*addr;
 }	t_md;
 
@@ -253,7 +261,7 @@ void	*scale_img(void *mlx, void *img, t_vec2 *old_size, t_vec2 new_size);
 char	**get_paths(char *path, char *prefix, int amount, char *suffix);
 int		r_range(int min, int max);
 void	*flip_image_x(void *mlx, void *img, t_vec2 size);
-void	render_array(t_md *md, t_ent **e, int len);
+void	render_array(t_md *md, t_ent **e, int len, int show_portal);
 int		get_array_size(void **array);
 void	relaunch_program(const char *arg);
 int		contain(char c, char *arg);
@@ -261,6 +269,7 @@ int		contain(char c, char *arg);
 t_vec2	get_collision_displacement(t_ent *e1, t_ent *e2, int e2_i, t_vec2 d);
 t_vec2	get_collisions(t_ent *e, t_ent **col_ents, t_vec2 displ);
 int		is_in_pos(t_vec3 pos1, t_vec2 size1, t_vec3 pos2, t_vec2 size2);
+void	set_vec_to_dir(t_dir dir, t_vec3 *vec, int mv_am);
 // DELETE
 int		del_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, int *e_len);
 int		delete_type(t_ent_type type, t_ent **ents, int *ents_len);
@@ -271,7 +280,7 @@ int		set_vec2(t_vec2 *Vec2, int x, int y);
 int		set_vec3(t_vec3 *Vec3, int x, int y, int z);
 t_vec2	get_vec2(int x, int y);
 t_vec3	get_vec3(int x, int y, int z);
-void	set_vec_to_dir(t_dir dir, t_vec3 *vec, int mv_am);
+t_vec3	get_grid_pos(t_md *md, t_vec3 p);
 // MOUSE
 void	init_mouse(t_md *md);
 void	update_mouse(t_md *md);
@@ -290,7 +299,7 @@ t_vec2	get_map_dimensions(char *map, int i, int current_width, t_vec2 res);
 t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale);
 t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale);
 void	load_valid_map(char *file_path, t_md *md, char *buffer, t_vec2	pos);
-void	get_ents_from_map(t_md *md, int i);
+void	get_ents_from_map(t_md *md, int i, t_vec3 pos);
 char	*get_new_map(int width, int height, int solvable);
 char	*get_next_line(int fd);
 // MOVEMENT
@@ -302,7 +311,7 @@ t_vec2	get_indexes(char *buffer);
 int		propagate_search(t_vec2 *indexes, char *buff, int line_width);
 int		check_neighbors(char *buff, int ind, int end_index, int wd);
 int		verify_map_borders(char *buffer, int width, int height);
-char	*get_map_buffer(int fd);
+char	*get_map_buffer(int fd, int check_for_errors);
 int		close_and_quit(char *error_msg, int fd);
 // AUDIO
 pid_t	play_sound(const char *filename, int loop);
@@ -331,6 +340,11 @@ void	remap_wall_entities(t_md *md, t_ent *e, char *png_path, t_vec3 pos);
 void	load_env_elements(t_md *md);
 void	free_array(t_ent **ents, int len, int i);
 void	load_images(t_md *md);
-int		save_to_file(t_md *md, int len, char *file_path);
-
+int		save_to_file(t_md *md);
+int		update_editor(t_md *md);
+char	map_keycode_to_char(int keycode);
+char	*store_map_name(t_md *md, char key);
+int		free_md(t_md *md);
+int		free_void(void *elem);
+int		free_void_array(void **elements, int i);
 #endif

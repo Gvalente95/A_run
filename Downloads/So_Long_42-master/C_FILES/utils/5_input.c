@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 18:33:59 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/16 00:32:12 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 04:52:41 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	handle_key_press(int keycode, t_md *md)
 		if (keycode == ESC_KEY)
 		{
 			mlx_destroy_window(md->mlx, md->win);
+			free_md(md);
 			exit(0);
 		}
 		md->key_prs[keycode] = 1;

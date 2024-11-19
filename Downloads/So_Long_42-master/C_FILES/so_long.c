@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 21:37:46 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/18 17:10:46 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/18 18:20:52 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	init_game(t_md *md)
 	md->win = mlx_new_window(md->mlx, win_width, \
 	md->t_len * md->map.size.y, "g");
 	init_bgrnd(md, md->map.size);
-	get_ents_from_map(md, 0);
+	get_ents_from_map(md, 0, get_vec3(0, 0, 0));
 	md->map.coins_amount = md->coins_amount;
 	md->plr.hp = 5;
 	md->has_key = 0;

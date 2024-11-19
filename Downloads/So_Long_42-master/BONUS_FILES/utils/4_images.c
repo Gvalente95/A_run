@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:31:53 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/18 05:04:25 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 05:56:17 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ void	*scale_img(void *mlx, void *img, t_vec2 *old_size, t_vec2 new_size)
 		}
 		q.pos.y++;
 	}
-	set_vec2(old_size, new_size.x, new_size.y);
-	return (q.dest);
+	mlx_destroy_image(mlx, img);
+	return (set_vec2(old_size, new_size.x, new_size.y), q.dest);
 }
 
 void	*get_image_copy(t_md *mlx_ptr, void *src, t_vec2 src_size)

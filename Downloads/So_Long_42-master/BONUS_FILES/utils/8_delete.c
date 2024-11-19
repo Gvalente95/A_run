@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 05:47:08 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/18 15:24:39 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/18 20:22:29 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_ent	*get_ent_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, t_ent_type type)
 	{
 		if (ents[i]->is_active && \
 			is_in_pos(pos, size, ents[i]->pos, ents[i]->size) \
-			&& ents[i]->type == type)
+			&& (ents[i]->type == type || (int)type == -1))
 			return (ents[i]);
 		i++;
 	}
@@ -60,7 +60,7 @@ int	del_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, int *ents_len)
 		while (++i < *ents_len)
 		{
 			if (ents[i] != NULL && is_in_pos(pos, size, ents[i]->pos, \
-				ents[i]->size))
+					ents[i]->size))
 				*ents_len = delete_at_index(i, ents, *ents_len);
 		}
 	}
@@ -90,7 +90,7 @@ t_ent	*get_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, int len)
 	while (++i < len)
 	{
 		if (ents[i] != NULL && is_in_pos(pos, size, ents[i]->pos, \
-			ents[i]->size))
+				ents[i]->size))
 			return (ents[i]);
 	}
 	return (NULL);

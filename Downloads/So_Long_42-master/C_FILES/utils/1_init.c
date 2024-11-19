@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:16:57 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/18 16:05:21 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 04:55:39 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ int	init_mlx(t_md *md)
 	md->bgrnd = NULL;
 	md->key = NULL;
 	md->exit = NULL;
+	md->all_images = NULL;
+	md->env_images = NULL;
 	md->mouse_pressed = 0;
 	md->mouse_clicked = 0;
 	md->key_clicked = -1;

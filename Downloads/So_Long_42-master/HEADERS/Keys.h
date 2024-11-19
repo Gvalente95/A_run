@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:49:05 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/14 02:55:30 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 00:48:50 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 # define KEYS_H
 
 # include "header.h"
+
+# define NUM_1_KEY		18
+# define NUM_2_KEY		19
+# define NUM_3_KEY		20
+# define NUM_4_KEY		21
+# define NUM_5_KEY		23
+# define NUM_6_KEY		22
+# define NUM_7_KEY		26
+# define NUM_8_KEY		28
+# define NUM_9_KEY		25
+# define NUM_0_KEY		29
 
 # define MOUSE_NOPRESS 0
 # define MOUSE_PRESS 	1

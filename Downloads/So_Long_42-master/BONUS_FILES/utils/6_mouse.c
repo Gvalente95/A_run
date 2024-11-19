@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 15:57:28 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/14 17:06:36 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/18 20:04:42 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int	mouse_event_handler(int button, int x, int y, void *param)
 
 	md = (t_md *)param;
 	md->mouse_pressed = button;
-	md->mouse_pos[0] = x;
-	md->mouse_pos[1] = y;
+	md->mouse_pos.x = x;
+	md->mouse_pos.y = y;
 	return (0);
 }
 
@@ -41,8 +41,8 @@ int	mouse_motion_handler(int x, int y, void *param)
 	t_md	*md;
 
 	md = (t_md *)param;
-	md->mouse_pos[0] = x;
-	md->mouse_pos[1] = y;
+	md->mouse_pos.x = x;
+	md->mouse_pos.y = y;
 	return (0);
 }
 

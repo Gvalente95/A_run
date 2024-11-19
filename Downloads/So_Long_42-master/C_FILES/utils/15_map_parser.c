@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 02:21:27 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/16 01:00:23 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/18 18:58:54 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,8 @@ t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale)
 	return (parse_letter_b(md, pos, c, scale));
 }
 
-void	get_ents_from_map(t_md *md, int i)
+void	get_ents_from_map(t_md *md, int i, t_vec3 pos)
 {
-	t_vec3	pos;
 	t_ent	*e;
 
 	md->images = malloc(sizeof(t_ent *) * \

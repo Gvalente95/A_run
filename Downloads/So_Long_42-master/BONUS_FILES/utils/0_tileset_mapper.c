@@ -6,46 +6,60 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 03:45:29 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/18 16:30:27 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 05:27:22 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../HEADERS/header.h"
 
-void    **get_tiles_for_pos(t_md *md, char *png_path, char *suffix, int amount)
+char	*generate_tile_path(char *base_path, char *suffix, int index)
 {
-	t_vec2	size;
-	char	*full_path;
 	char	*index_str;
+	char	*path_with_suffix;
 	char	*complete_path;
-	char	*path_with_format;
-	void	**tiles;
-	int		i;
 
-	tiles = malloc(amount * sizeof(void *));
-	if (!tiles)
+	index_str = ft_itoa(index);
+	if (!index_str)
 		return (NULL);
-	full_path = ft_strjoin(png_path, suffix);
-	if (!full_path)
+	path_with_suffix = ft_strjoin(base_path, suffix);
+	if (!path_with_suffix)
 	{
-		free(tiles);
+		free(index_str);
 		return (NULL);
 	}
+	complete_path = ft_strjoin(path_with_suffix, index_str);
+	free(index_str);
+	free(path_with_suffix);
+	if (!complete_path)
+		return (NULL);
+	return (ft_strjoin(complete_path, ".png"));
+}
+
+void	**get_tiles_for_pos(t_md *md, char *base_path, char *suffix, int amount)
+{
+	t_vec2	size;
+	char	*complete_path;
+	void	**tils;
+	int		i;
+
+	tils = malloc(amount * sizeof(void *));
+	if (!tils)
+		return (NULL);
 	i = 0;
 	while (i < amount)
 	{
-		index_str = ft_itoa(i);
-		complete_path = ft_strjoin(full_path, index_str);
-		path_with_format = ft_strjoin(complete_path, ".png");
-		free(index_str);
+		complete_path = generate_tile_path(base_path, suffix, i);
+		if (!complete_path)
+		{
+			free(tils);
+			return (NULL);
+		}
+		tils[i] = mlx_png_file_to_image(md, complete_path, &size.x, &size.y);
+		tils[i] = scale_img(md, tils[i], &size, get_vec2(md->t_len, md->t_len));
 		free(complete_path);
-		tiles[i] = mlx_png_file_to_image(md, path_with_format, &size.x, &size.y);
-		tiles[i] = scale_img(md, tiles[i], &size, get_vec2(md->t_len, md->t_len));
-		free(path_with_format);
 		i++;
 	}
-	free(full_path);
-	return (tiles);
+	return (tils);
 }
 
 void	***get_tiles_images(t_md *md, char *path, int set_width)
@@ -75,8 +89,8 @@ void	assign_tile(t_md *md, t_ent *e, void ***images, t_vec3 pos)
 	int		max_y;
 
 	max = 2;
-	max_x = pos.x > max ? max : pos.x;
-	max_y = pos.y > max ? max : pos.y;
+	max_x = r_range(0, 2);
+	max_y = r_range(0, 2);
 	correct_tile = images[CENTER][r_range(0, max)];
 	if (pos.x == 0 && pos.y == 0)
 		correct_tile = images[LEFT_UP][0];
@@ -98,14 +112,13 @@ void	assign_tile(t_md *md, t_ent *e, void ***images, t_vec3 pos)
 
 void	remap_wall_entities(t_md *md, t_ent *e, char *png_path, t_vec3 pos)
 {
-	(void)pos;
 	void	***tile_images;
 
+	(void)pos;
 	if (e->type != wall)
 		return ;
 	tile_images = NULL;
 	tile_images = get_tiles_images(md, png_path, 3);
-
 	assign_tile(md, e, tile_images, pos);
 	free(tile_images);
 }

@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 04:38:21 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/18 16:29:33 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/18 19:54:41 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,4 +107,16 @@ t_vec2	get_collisions(t_ent *e, t_ent **col_ents, t_vec2 displ)
 		collisions.y += displacement.y;
 	}
 	return (collisions);
+}
+
+void	set_vec_to_dir(t_dir dir, t_vec3 *vec, int mv_am)
+{
+	if (dir == up)
+		vec->y = -mv_am;
+	if (dir == down)
+		vec->y = mv_am;
+	if (dir == left)
+		vec->x = -mv_am;
+	if (dir == right)
+		vec->x = mv_am;
 }

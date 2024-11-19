@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:16 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/18 16:05:21 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 05:52:04 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,12 @@ void	relaunch_program(const char *arg)
 	char	**args;
 
 	args = malloc(sizeof(char *) * 3);
-	args[0] = ft_strdup("./so_long");
+	args[0] = ft_strdup("./bonus");
 	args[1] = ft_strdup((char *)arg);
 	args[2] = NULL;
+	ft_printf("launching\n%s %s\n", args[0], args[1]);
 	execvp(args[0], args);
+	free_void_array((void **)args, 0);
 	perror("execvp failed");
 	exit(1);
 }
@@ -57,7 +59,7 @@ void	load_new_level(t_md *md)
 
 	get_new_map_ratio(&md->map, 1);
 	map = get_new_map(md->map.size.x, md->map.size.y, 1);
-	printf("%s", map);
+	ft_printf("%s", map);
 	if (!map)
 	{
 		perror("Error while generating new map\n");
