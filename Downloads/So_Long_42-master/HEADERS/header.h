@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:32:42 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/19 05:04:08 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 06:23:48 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,7 +343,7 @@ void	load_images(t_md *md);
 int		save_to_file(t_md *md);
 int		update_editor(t_md *md);
 char	map_keycode_to_char(int keycode);
-char	*store_map_name(t_md *md, char key);
+char	*store_map_name(t_md *md);
 int		free_md(t_md *md);
 int		free_void(void *elem);
 int		free_void_array(void **elements, int i);

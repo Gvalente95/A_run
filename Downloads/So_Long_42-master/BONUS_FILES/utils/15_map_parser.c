@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 02:21:27 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 06:08:07 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 06:35:11 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,13 @@ void	get_ents_from_map(t_md *md, int i, t_vec3 pos)
 
 	md->images = malloc(sizeof(t_ent *) * \
 		(md->map.size.x * md->map.size.y + 1));
+	i = 0;
 	while (pos.y <= md->map.size.y)
 	{
 		pos.x = 0;
 		while (pos.x <= md->map.size.x)
 		{
-			if (i >= md->map.len)
+			if (!md->map.buffer[i] || i >= md->map.size.x * md->map.size.y + 1)
 				break ;
 			e = parse_letter(md, pos, md->map.buffer[i++], md->t_len);
 			if (e != NULL)
