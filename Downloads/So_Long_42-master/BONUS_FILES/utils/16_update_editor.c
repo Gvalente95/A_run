@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 21:31:17 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 15:07:38 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 16:38:15 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ void	handle_keys(t_md *md, t_vec2 lk_size)
 		md->selected = md->all_images[++md->index];
 	else if (md->key_clicked == S_KEY && md->images_len > 0 && md->images)
 		save_to_file(md);
-	else if (md->key_clicked == ENTER_KEY && md->map.name)
-		relaunch_program(md->map.name);
 }
 
 int	handle_inputs(t_md *md, t_vec2 lk_size)
@@ -80,6 +78,11 @@ int	handle_inputs(t_md *md, t_vec2 lk_size)
 		md->selected->pos.x += 20;
 	}
 	handle_keys(md, lk_size);
+	if (md->key_clicked == ENTER_KEY && md->map.name)
+	{
+		free_md(md);
+		relaunch_program(md->map.name);
+	}
 	return (ent_at_mouse != NULL);
 }
 

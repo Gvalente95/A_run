@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 04:32:24 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 14:43:58 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 16:04:01 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	free_void_array(void **elements, int i)
 		i++;
 	}
 	free(elements);
+	ft_printf("%d void element successfully freed\n", free_count + 1);
 	return (free_count + 1);
 }
 
@@ -52,7 +53,7 @@ int	free_ent(t_ent *ent)
 		free_count += free_void(ent->fly_frm);
 		free(ent);
 		ent = NULL;
-		return (free_count + 1);
+		return (free_count);
 	}
 	return (0);
 }
@@ -74,7 +75,9 @@ int	free_ents(t_ent **ents)
 	}
 	free(ents);
 	ents = NULL;
-	return (freed_count + 1);
+	ft_printf("%d entities and %d images \
+		successfully freed\n", freed_count);
+	return (freed_count + i + 1);
 }
 
 int	free_md(t_md *md)

@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:31:50 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/15 22:17:12 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 16:41:34 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,17 @@ char	*generate_map(t_map *map, int max_try, int solvable)
 	if (map->tries_amount > max_try)
 		return (NULL);
 	map->buffer = malloc(map->size.y * (map->size.x + 1) + 1);
-	map->len = map->size.y * (map->size.x + 1) + 1;
-	map->pos.z = 0;
-	map->pos.y = -1;
-	while (++map->pos.y < map->size.y)
+	map->pos = get_vec3(0, 0, 0);
+	while (map->pos.y < map->size.y)
 	{
-		map->pos.x = -1;
-		while (++map->pos.x < map->size.x)
+		map->pos.x = 0;
+		while (map->pos.x < map->size.x)
+		{
 			map->buffer[map->pos.z++] = set_char(map, solvable);
+			map->pos.x++;
+		}
 		map->buffer[map->pos.z++] = '\n';
+		map->pos.y++;
 	}
 	map->buffer[map->pos.z] = '\0';
 	if (!(contain('P', map->buffer) && contain('E', map->buffer) && \
@@ -80,6 +82,7 @@ char	*generate_map(t_map *map, int max_try, int solvable)
 	{
 		map->tries_amount++;
 		free(map->buffer);
+		map->buffer = NULL;
 		return (generate_map(map, max_try, solvable));
 	}
 	return (map->buffer);
@@ -94,12 +97,13 @@ char	*get_new_map(int width, int height, int solvable)
 	srand(time(0));
 	map.size.x = width;
 	map.size.y = height;
+	map.len = map.size.y * (map.size.x + 1) + 1;
 	map.coin_max = 50;
 	map.mob_max = 50;
 	map.tries_amount = 0;
 	map.buffer = generate_map(&map, 500, solvable);
 	if (!map.buffer || ft_strlen(map.buffer) <= 5)
-		close_and_quit("Unable to make valid map", -1);
+		close_and_quit("Error\nUnable to make valid map", -1);
 	indexes = get_indexes(map.buffer);
 	map_check = ft_strdup(map.buffer);
 	if (!propagate_search(&indexes, map_check, width + 1) && solvable)

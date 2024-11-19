@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 16:08:31 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/19 04:22:34 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 15:57:14 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,10 @@ void	handle_player_collision(t_md *md, t_ent *plr, \
 		col->hp = 0;
 	}
 	if (col->type == mob)
+	{
+		free_md(md);
 		exit(0);
+	}
 }
 
 int	update_player(t_md *md, t_ent *plr, t_vec2 new_pos)

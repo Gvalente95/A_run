@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 04:32:24 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 14:50:55 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 16:19:54 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,6 @@ int	free_md(t_md *md)
 	free_count += free_void_array(md->plr.wlk_frm, 0);
 	free_count += free_void_array(md->plr.idl_frm, 0);
 	free_count += free_void(md->mlx);
-	ft_printf("Freed: %d elements", free_count);
+	ft_printf("Freed: %d elements\n", free_count);
 	return (free_count);
 }

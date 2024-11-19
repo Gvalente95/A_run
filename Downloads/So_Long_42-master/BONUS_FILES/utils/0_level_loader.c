@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:16 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 05:52:04 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 16:35:24 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,12 @@ void	relaunch_program(const char *arg)
 
 	args = malloc(sizeof(char *) * 3);
 	args[0] = ft_strdup("./bonus");
-	args[1] = ft_strdup((char *)arg);
+	args[1] = ft_strdup(arg);
 	args[2] = NULL;
 	ft_printf("launching\n%s %s\n", args[0], args[1]);
 	execvp(args[0], args);
-	free_void_array((void **)args, 0);
+	free(args[0]);
+	free(args[1]);
 	perror("execvp failed");
 	exit(1);
 }
@@ -59,19 +60,19 @@ void	load_new_level(t_md *md)
 
 	get_new_map_ratio(&md->map, 1);
 	map = get_new_map(md->map.size.x, md->map.size.y, 1);
-	ft_printf("%s", map);
 	if (!map)
 	{
 		perror("Error while generating new map\n");
 		exit(0);
 	}
+	ft_printf("%s", map);
 	usleep(500);
 	map_file = fopen("randomap.ber", "w");
 	fprintf(map_file, "%s", map);
 	fclose(map_file);
-	free_array(md->images, md->images_len, 0);
-	md->images = NULL;
 	stop_sound(md->bgrnd_au);
+	free(map);
+	free_array(md->images, md->images_len, 0);
 	relaunch_program("randomap.ber");
 	exit(0);
 }

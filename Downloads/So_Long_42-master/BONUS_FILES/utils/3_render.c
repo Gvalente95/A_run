@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 07:01:26 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 15:34:38 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 16:29:41 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,17 +102,6 @@ void	render_game_values(t_md *md)
 	}
 }
 
-// render_text(md, get_vec2(tx_p.x, tx_p.y + md->t_len / 3), \
-//	"DIM[x%d,y%d]", \
-// 	md->map.size.x, md->map.size.y);
-// render_text(md, get_vec2(tx_p.x, tx_p.y + (md->t_len / 3) * 2), \
-//	"PLR hp%d");
-// render_text(md, get_vec2(tx_p.x, tx_p.y + (md->t_len / 3) * 3), \
-// "Pos[x%d,y%d]", md->plr.pos.x, md->plr.pos.y);
-// render_text(md, get_vec2(tx_p.x, tx_p.y + (md->t_len / 3) * 4), \
-// "Mov[x%d,y%d]", md->plr.movement.x, md->plr.movement.y);
-// render_text(md, get_vec2(tx_p.x, tx_p.y + (md->t_len / 3) * 5), \
-// "MOUSE[click%d,press%d]", md->mouse_clicked, md->mouse_pressed);
 void	render(t_md *md)
 {
 	int		i;
