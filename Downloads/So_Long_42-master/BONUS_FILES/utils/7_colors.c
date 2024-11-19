@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 15:59:44 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/13 18:13:02 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 int	get_trgb(unsigned char t, unsigned char r, unsigned char g, unsigned char b)
 {

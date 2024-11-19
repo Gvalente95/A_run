@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 02:04:14 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 05:51:05 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 17:03:56 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../HEADERS/header.h"
+#include "HEADERS/header.h"
 
 char	*get_empty_map(t_vec2 map_size)
 {

@@ -20,6 +20,7 @@
 		"libft.h": "c",
 		"ios": "c",
 		"variant": "c",
-		"complex": "c"
+		"complex": "c",
+		"math.h": "c"
 	}
 }

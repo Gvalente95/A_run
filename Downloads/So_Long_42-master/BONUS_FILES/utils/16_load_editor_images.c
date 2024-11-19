@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 19:57:04 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 06:44:01 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 t_ent	*set_new_image(t_md *md, t_ent_type type, char *path, t_vec2 size)
 {

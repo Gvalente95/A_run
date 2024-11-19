@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 16:08:31 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/19 15:57:14 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 16:48:45 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 void	update_mob_entity(t_ent *e, t_md *md)
 {

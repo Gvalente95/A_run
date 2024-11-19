@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 03:45:29 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 14:18:44 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 17:04:14 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 char	*generate_tile_path(char *base_path, char *suffix, int index)
 {

@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 20:39:27 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 14:45:27 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 16:48:37 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 void	init_player_frames(t_md *md, char *path, t_ent *e)
 {

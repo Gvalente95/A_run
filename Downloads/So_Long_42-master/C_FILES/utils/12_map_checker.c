@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:17:38 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/18 19:23:29 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 16:49:06 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 //UP LEFT DOWN RIGHT
 

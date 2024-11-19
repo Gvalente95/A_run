@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:31:53 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/19 06:43:47 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 char	**get_paths(char *path, char *prefix, int amount, char *suffix)
 {

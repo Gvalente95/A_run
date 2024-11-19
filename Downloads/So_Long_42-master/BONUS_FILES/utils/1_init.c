@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:16:57 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 14:29:10 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 void	set_type_values(t_md *md, t_ent *e, t_ent_type type)
 {

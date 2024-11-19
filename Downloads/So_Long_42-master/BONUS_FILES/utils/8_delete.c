@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 05:47:08 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/18 20:22:29 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 t_ent	*get_ent_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, t_ent_type type)
 {

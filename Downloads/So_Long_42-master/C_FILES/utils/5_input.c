@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 18:33:59 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/19 04:52:41 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 16:48:53 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 int	handle_key_press(int keycode, t_md *md)
 {

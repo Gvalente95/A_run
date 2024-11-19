@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 04:38:21 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/16 01:06:45 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 16:48:57 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 void	handle_col(t_ent *e, int *col_dir)
 {

@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 21:37:46 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 15:43:16 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 17:04:02 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../HEADERS/header.h"
+#include "HEADERS/header.h"
 #include <signal.h>
 
 int	update_and_render(t_md *md)

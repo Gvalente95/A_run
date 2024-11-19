@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:16:57 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 14:44:47 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 16:53:19 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 void	set_type_values(t_md *md, t_ent *e, t_ent_type type)
 {
@@ -92,7 +92,7 @@ int	init_mlx(t_md *md)
 	md->move_counter = 0;
 	md->ftstp_timer = 0;
 	md->coins_amount = 0;
-	md->coin_paths = get_paths(AU_COINS, "", 4, ".mp3");
-	md->ftstp_paths = get_paths(AU_FOOTSTEPS, "", 4, ".wav");
+	md->coin_paths = NULL;
+	md->ftstp_paths = NULL;
 	return (1);
 }

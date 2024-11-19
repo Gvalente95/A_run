@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 21:37:46 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 06:44:03 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 16:50:57 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../HEADERS/header.h"
+#include "HEADERS/header.h"
 #include <signal.h>
 
 int	r_range(int min, int max)

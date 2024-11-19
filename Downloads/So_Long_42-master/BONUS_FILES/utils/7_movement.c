@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:58:33 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 01:47:35 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 int	is_in_pos(t_vec3 pos1, t_vec2 size1, t_vec3 pos2, t_vec2 size2)
 {

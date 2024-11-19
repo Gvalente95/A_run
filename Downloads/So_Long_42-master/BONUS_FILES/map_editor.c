@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 20:00:20 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 15:42:48 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 17:04:00 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../HEADERS/header.h"
+#include "HEADERS/header.h"
 
 int	load_map(char *file_path, t_md *md, char *buffer)
 {

@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 02:21:27 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 14:23:53 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 // VALUES: scale | type | z pos
 t_ent	*parse_letter_b(t_md *md, t_vec3 pos, char c, int scale)

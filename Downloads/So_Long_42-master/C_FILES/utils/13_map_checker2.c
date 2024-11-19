@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 04:15:24 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/18 19:25:30 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 16:49:09 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 int	close_and_quit(char *error_msg, int fd)
 {

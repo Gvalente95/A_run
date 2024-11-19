@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:32:42 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/19 13:00:09 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 17:02:52 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "../libft/libft.h"
 # include "colors.h"
-# include "audio.h"
 # include <mlx.h>
 # include "Keys.h"
 # include <stdio.h>
@@ -76,8 +75,6 @@ typedef enum e_dir
 	DIR_LEN
 }	t_dir;
 
-# define TYPESTR "PMCKDE1AGBTV"
-
 typedef enum e_entity_types
 {
 	player,
@@ -116,12 +113,6 @@ typedef struct s_Vector3
 	int	y;
 	int	z;
 }	t_vec3;
-
-typedef struct s_input
-{
-	char	*buffer;
-	int		index;
-}	t_input;
 
 typedef struct s_map
 {
@@ -240,7 +231,6 @@ int		init_player(t_md *md, char *frames_path, t_vec3 pos);
 int		init_mlx(t_md *md);
 // UPDATE
 int		update(t_md *md);
-void	update_env(t_md *md);
 // RENDER
 void	render_player(t_md *md);
 void	render(t_md *md);
@@ -249,51 +239,33 @@ void	render_text(t_md *md, t_vec2 pos, const char *format, ...);
 int		handle_key_release(int keycode, t_md *md);
 int		handle_key_press(int keycode, t_md *md);
 // LEVEL
-void	load_new_level(t_md *md);
 char	*generate_map(t_map *map, int max_try, int solvable);
 // IMAGE
 void	*add_img(char *relative_path, int *width, int *height, void *mlx);
-void	my_mlx_pixel_put(t_md *data, int x, int y, int color);
 void	**get_images(t_md *d, t_ent *e, char **paths, t_vec2 size);
-void	*get_image_copy(t_md *mlx_ptr, void *src, t_vec2 src_size);
 void	*scale_img(void *mlx, void *img, t_vec2 *old_size, t_vec2 new_size);
 // TOOLS
 char	**get_paths(char *path, char *prefix, int amount, char *suffix);
 int		r_range(int min, int max);
-void	*flip_image_x(void *mlx, void *img, t_vec2 size);
 void	render_array(t_md *md, t_ent **e, int len, int show_portal);
-int		get_array_size(void **array);
-void	relaunch_program(const char *arg);
 int		contain(char c, char *arg);
-// COLLISIONS
-t_vec2	get_collision_displacement(t_ent *e1, t_ent *e2, int e2_i, t_vec2 d);
-t_vec2	get_collisions(t_ent *e, t_ent **col_ents, t_vec2 displ);
-int		is_in_pos(t_vec3 pos1, t_vec2 size1, t_vec3 pos2, t_vec2 size2);
-void	set_vec_to_dir(t_dir dir, t_vec3 *vec, int mv_am);
-// DELETE
-int		del_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, int *e_len);
-int		delete_type(t_ent_type type, t_ent **ents, int *ents_len);
-int		move_to(t_ent *e, t_vec3 target_pos, t_vec2 spd_limits, int range);
-int		is_in_pos(t_vec3 pos1, t_vec2 size1, t_vec3 pos2, t_vec2 size2);
 //VECTORS
 int		set_vec2(t_vec2 *Vec2, int x, int y);
 int		set_vec3(t_vec3 *Vec3, int x, int y, int z);
 t_vec2	get_vec2(int x, int y);
 t_vec3	get_vec3(int x, int y, int z);
-t_vec3	get_grid_pos(t_md *md, t_vec3 p);
 // MOUSE
 void	init_mouse(t_md *md);
 void	update_mouse(t_md *md);
-void	set_ent_to_mouse(t_ent *ent, t_md *md);
 // MLX
 void	reset_mlx_values(t_md *md);
+int		free_md(t_md *md);
 // ENTITIES
-t_ent	*copy_ent(t_ent *e);
-t_ent	*get_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, int len);
-void	sort_ents_by_z(t_ent **game_entities, int count);
-void	swap_game_entities(t_ent *a, t_ent *b);
+t_ent	*get_ent_simple(t_vec2 pos, t_ent **ents);
 void	increment_frame(t_ent *e);
-int		delete_at_index(int index, t_ent **ents, int len);
+void	handle_entity_frames(t_md *md, t_ent *e, void *path, t_vec2 scale);
+void	init_player_frames(t_md *md, char *path, t_ent *e);
+int		has_ent_moved(t_ent e);
 // PARSING
 t_vec2	get_map_dimensions(char *map, int i, int current_width, t_vec2 res);
 t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale);
@@ -302,9 +274,6 @@ void	load_valid_map(char *file_path, t_md *md, char *buffer, t_vec2	pos);
 void	get_ents_from_map(t_md *md, int i, t_vec3 pos);
 char	*get_new_map(int width, int height, int solvable);
 char	*get_next_line(int fd);
-// MOVEMENT
-int		handle_movement(t_md *md, t_ent *e, t_vec2 base_speed, t_vec2 displ);
-int		move_to_simple(t_ent *e, t_vec3 targ_pos, int spd);
 // CHECKER
 t_vec2	get_map_dimensions(char *map, int i, int current_width, t_vec2 res);
 t_vec2	get_indexes(char *buffer);
@@ -313,38 +282,5 @@ int		check_neighbors(char *buff, int ind, int end_index, int wd);
 int		verify_map_borders(char *buffer, int width, int height);
 char	*get_map_buffer(int fd, int check_for_errors);
 int		close_and_quit(char *error_msg, int fd);
-// AUDIO
-pid_t	play_sound(const char *filename, int loop);
-void	stop_sound(pid_t pid);
-pid_t	play_random_sound(const char *path, int len, const char *format);
-int		is_audio_playing(pid_t pid);
-
-void	update_coin_entity(t_ent *e, t_md *md, int range, int index);
-
-// ENT TOOLS
-int		destroy_if_reached(t_ent *e, t_md *md, t_vec2 targ_size, t_vec3 p);
-void	update_circular_motion(t_ent *e, t_md *md);
-int		move_ent_towards(t_ent *e, t_md *md, t_vec3 p, int range);
-void	update_collectible(t_ent *e, t_md *md, int range, int index);
-int		has_ent_moved(t_ent e);
-t_ent	*get_ent_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, t_ent_type type);
-int		get_distance(t_ent a, t_ent b);
-
-void	handle_entity_frames(t_md *md, t_ent *e, void *path, t_vec2 scale);
-void	init_player_frames(t_md *md, char *path, t_ent *e);
-
 int		check_path_format(char *path);
-t_ent	*get_ent_simple(t_vec2 pos, t_ent **ents);
-
-void	remap_wall_entities(t_md *md, t_ent *e, char *png_path, t_vec3 pos);
-void	load_env_elements(t_md *md);
-void	free_array(t_ent **ents, int len, int i);
-void	load_images(t_md *md);
-int		save_to_file(t_md *md);
-int		update_editor(t_md *md);
-char	map_keycode_to_char(int keycode);
-char	*store_map_name(t_md *md);
-int		free_md(t_md *md);
-int		free_void(void *elem);
-int		free_void_array(void **elements, int i);
 #endif

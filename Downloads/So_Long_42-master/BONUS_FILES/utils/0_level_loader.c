@@ -6,11 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:16 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 16:35:24 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 17:04:08 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 void	free_entity(t_ent *ent)
 {

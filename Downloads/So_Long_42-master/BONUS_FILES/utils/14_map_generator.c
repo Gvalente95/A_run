@@ -6,14 +6,14 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:31:50 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 16:41:34 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "stdio.h"
 #include "unistd.h"
 #include <time.h>
-#include "../../HEADERS/header.h"
+#include "../HEADERS/header.h"
 
 int	contain(char c, char *arg)
 {
