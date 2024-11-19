@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 20:39:27 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/16 01:04:13 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 14:45:27 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,12 @@ void	handle_entity_frames(t_md *md, t_ent *e, void *path, t_vec2 scale)
 	char	**frames;
 	int		frames_amount;
 
+	e->anim_frames = NULL;
+	e->fly_frm = NULL;
+	e->idl_frm = NULL;
+	e->wlk_frm = NULL;
+	e->cur_frame = NULL;
+	e->frame_path = NULL;
 	frames_amount = e->frames_amount;
 	frames = get_paths(path, "", frames_amount, ".png");
 	e->anim_frames = malloc(sizeof(void *) * (frames_amount + 1));

@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 05:36:59 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/15 20:32:54 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 15:40:27 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,11 @@ void	increment_frame(t_ent *e)
 void	update_mob_entity(t_ent *e, t_md *md, t_ent *plr)
 {
 	if (is_in_pos(e->pos, e->size, plr->pos, plr->size) && \
-		!plr->is_grounded)
+		!plr->is_grounded && !plr->hurt_timer)
+	{
 		plr->hp--;
+		plr->hurt_timer = 200;
+	}
 	if (!(move_to(e, get_vec3(plr->prv_pos.x + (plr->size.x / 2) - \
 e->foll_ofs.x, plr->prv_pos.y - e->foll_ofs.y - 3, 0), get_vec2(1, 3), 200)))
 	{
@@ -39,11 +42,6 @@ e->foll_ofs.x, plr->prv_pos.y - e->foll_ofs.y - 3, 0), get_vec2(1, 3), 200)))
 	if ((e->prv_pos.x != e->pos.x || e->prv_pos.y != e->pos.y) \
 		&& md->time % 5 == 0)
 		increment_frame(e);
-}
-
-void	update_wall(t_ent *e)
-{
-	(void)e;
 }
 
 void	update_entity_position(t_ent *e, t_md *md, int i)
@@ -60,8 +58,6 @@ void	update_entity_position(t_ent *e, t_md *md, int i)
 			else if (md->coins_amount)
 				update_mob_entity(e, md, &md->plr);
 		}
-		if (e->type == wall)
-			update_wall(e);
 		if (!e->hp)
 			e->is_active = 0;
 	}
@@ -81,6 +77,7 @@ void	update_env(t_md *md)
 		{
 			play_sound(AU_HURT2, 0);
 			md->plr.movement.y = -100;
+			md->plr.hurt_timer = 5;
 			md->plr.is_grounded = 0;
 			e->is_active = 0;
 		}

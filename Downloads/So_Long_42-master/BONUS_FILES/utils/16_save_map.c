@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 19:11:18 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 06:23:30 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 15:15:06 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,46 +113,29 @@ void	write_to_file(t_md *md, t_vec3 *positions, int len, FILE *file)
 	free(characters);
 }
 
-char	*store_map_name(t_md *md)
-{
-	char	*x_size;
-	char	*y_size;
-	char	*size;
-	char	*size_part_0;
-
-	x_size = ft_itoa(md->map.size.x);
-	y_size = ft_itoa(md->map.size.y);
-	size_part_0 = ft_strjoin(x_size, "x");
-	size = ft_strjoin(size_part_0, y_size);
-	free(x_size);
-	free(y_size);
-	free(size_part_0);
-	return (size);
-}
 int	save_to_file(t_md *md)
 {
 	t_vec3		*positions;
 	FILE		*file;
 	char		*name;
 	char		*with_ber;
-	char		*with_folder_name;
 
 	name = store_map_name(md);
 	if (!name)
 		return (0);
 	with_ber = ft_strjoin(name, ".ber");
-	with_folder_name = ft_strjoin("saved_maps/", with_ber);
+	ft_printf("%s\n", with_ber);
 	positions = get_coordinates(md, md->images, md->images_len);
 	if (!positions)
 		return (-1);
-	file = fopen(with_folder_name, "w");
+	file = fopen(with_ber, "w");
 	if (!file)
 	{
 		free(positions);
 		return (-1);
 	}
 	write_to_file(md, positions, md->images_len, file);
-	ft_printf("map successfully saved to %s\n", with_folder_name);
-	md->map.name = ft_strdup(with_folder_name);
-	return (fclose(file), free(positions), free(with_folder_name), 0);
+	ft_printf("SAVED MAP >> %s\n", with_ber);
+	md->map.name = ft_strdup(with_ber);
+	return (fclose(file), free(positions), free(with_ber), 0);
 }

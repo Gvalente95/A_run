@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:16:57 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 05:38:43 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 14:29:10 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	init_player(t_md *md, char *path, t_vec3 pos)
 	plr->jet_sky_timer = 0;
 	plr->jumps = 2;
 	plr->is_active = 1;
+	plr->hurt_timer = 0;
 	plr->cur_frame_index = 0;
 	set_vec3(&plr->pos, pos.x * md->t_len, pos.y * md->t_len, 0);
 	set_vec2(&plr->start_pos, pos.x * md->t_len, pos.y * md->t_len);

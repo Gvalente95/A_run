@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 03:45:29 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 05:27:22 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 14:18:44 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,10 @@ void	***get_tiles_images(t_md *md, char *path, int set_width)
 void	assign_tile(t_md *md, t_ent *e, void ***images, t_vec3 pos)
 {
 	void	*correct_tile;
-	int		max;
-	int		max_x;
-	int		max_y;
+	t_vec2	max;
 
-	max = 2;
-	max_x = r_range(0, 2);
-	max_y = r_range(0, 2);
-	correct_tile = images[CENTER][r_range(0, max)];
+	max = get_vec2(r_range(0, 2), r_range(0, 2));
+	correct_tile = NULL;
 	if (pos.x == 0 && pos.y == 0)
 		correct_tile = images[LEFT_UP][0];
 	else if (pos.x == md->map.size.x - 1 && pos.y == 0)
@@ -99,13 +95,17 @@ void	assign_tile(t_md *md, t_ent *e, void ***images, t_vec3 pos)
 	else if (pos.x == md->map.size.x - 1 && pos.y == md->map.size.y - 1)
 		correct_tile = images[DOWN_RIGHT][0];
 	else if (pos.x == md->map.size.x - 1)
-		correct_tile = images[RIGHT][r_range(0, max_y)];
+		correct_tile = images[RIGHT][r_range(0, max.x)];
 	else if (pos.x == 0)
-		correct_tile = images[LEFT][r_range(0, max_y)];
+		correct_tile = images[LEFT][r_range(0, max.x)];
 	else if (pos.y == 0)
-		correct_tile = images[UP][r_range(0, max_x)];
+		correct_tile = images[UP][r_range(0, max.y)];
 	else if (pos.y == md->map.size.y - 1)
-		correct_tile = images[DOWN][r_range(0, max_x)];
+		correct_tile = images[DOWN][r_range(0, max.y)];
+	else if (pos.x < md->map.size.x / 10 || pos.y < md->map.size.y / 10 \
+		|| pos.y > md->map.size.y - md->map.size.y / 10 || pos.x > \
+			md->map.size.x - md->map.size.x / 10)
+		correct_tile = images[CENTER][r_range(0, max.y)];
 	if (correct_tile != NULL)
 		e->cur_frame = correct_tile;
 }
@@ -114,7 +114,6 @@ void	remap_wall_entities(t_md *md, t_ent *e, char *png_path, t_vec3 pos)
 {
 	void	***tile_images;
 
-	(void)pos;
 	if (e->type != wall)
 		return ;
 	tile_images = NULL;

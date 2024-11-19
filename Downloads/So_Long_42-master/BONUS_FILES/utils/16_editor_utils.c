@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 19:57:04 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 05:54:13 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 15:37:11 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_vec3	set_env_pos(t_md *md, t_vec2 size, int i)
 	t_vec3	pos;
 
 	set_vec3(&pos, r_range(md->t_len, (md->map.size.x *(md->t_len - 1))), \
-		-size.y + 10 + (md->t_len * (md->map.size.y - 1)), 1);
+		-size.y + size.y / 10 + (md->t_len * (md->map.size.y - 1)), 1);
 	while (i < md->images_len && md->images[i])
 	{
 		m = md->images[i];

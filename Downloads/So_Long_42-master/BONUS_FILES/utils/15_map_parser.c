@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 02:21:27 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 06:35:11 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 14:23:53 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,29 +72,30 @@ t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale)
 void	get_ents_from_map(t_md *md, int i, t_vec3 pos)
 {
 	t_ent	*e;
+	int		len;
 
-	md->images = malloc(sizeof(t_ent *) * \
-		(md->map.size.x * md->map.size.y + 1));
+	len = (md->map.size.x) * (md->map.size.y) + 1;
+	md->images = malloc(sizeof(t_ent *) * len);
 	i = 0;
-	while (pos.y <= md->map.size.y)
+	pos.y = 0;
+	while (pos.y < md->map.size.y)
 	{
 		pos.x = 0;
-		while (pos.x <= md->map.size.x)
+		while (pos.x < md->map.size.x)
 		{
-			if (!md->map.buffer[i] || i >= md->map.size.x * md->map.size.y + 1)
-				break ;
-			e = parse_letter(md, pos, md->map.buffer[i++], md->t_len);
-			if (e != NULL)
+			e = parse_letter(md, pos, md->map.buffer[i], md->t_len);
+			if (e)
 			{
 				md->images[md->images_len++] = e;
 				remap_wall_entities(md, e, GROUND_TILESET_PATH, pos);
 			}
+			i++;
 			pos.x++;
 		}
 		pos.y++;
+		i++;
 	}
-	if (md->images_len < md->map.size.x * md->map.size.y + 1)
-		md->images[md->images_len] = NULL;
+	md->images[md->images_len] = NULL;
 }
 
 int	check_path_format(char *path)
@@ -112,4 +113,21 @@ int	check_path_format(char *path)
 		i--;
 	}
 	return (ft_strncmp(path_check, "reb.", 4));
+}
+
+char	*store_map_name(t_md *md)
+{
+	char	*x_size;
+	char	*y_size;
+	char	*size;
+	char	*size_part_0;
+
+	x_size = ft_itoa(md->map.size.x);
+	y_size = ft_itoa(md->map.size.y);
+	size_part_0 = ft_strjoin(x_size, "x");
+	size = ft_strjoin(size_part_0, y_size);
+	free(x_size);
+	free(y_size);
+	free(size_part_0);
+	return (size);
 }

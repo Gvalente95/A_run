@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 07:01:26 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/18 23:21:01 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 15:34:38 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,12 @@ void	render_player(t_md *md)
 	void	*copy;
 
 	plr = &md->plr;
+	if (plr->hurt_timer)
+	{
+		plr->hurt_timer--;
+		if ((md->time / 10) % 2 == 0)
+			return ;
+	}
 	copy = plr->cur_frame;
 	if (plr->flip_x)
 		copy = flip_image_x(md, copy, plr->size);
@@ -109,6 +115,7 @@ void	render_game_values(t_md *md)
 // "MOUSE[click%d,press%d]", md->mouse_clicked, md->mouse_pressed);
 void	render(t_md *md)
 {
+	int		i;
 	t_vec2	tx_p;
 
 	mlx_put_image_to_window(md->mlx, md->win, \
@@ -116,10 +123,16 @@ void	render(t_md *md)
 	if (md->bgrnd_img)
 		mlx_put_image_to_window(md, md->win, \
 			md->bgrnd_img, 0, 0);
+	i = -1;
+	while (++i < md->bg_env_len / 2)
+		mlx_put_image_to_window(md, md->win, md->bg_env[i]->cur_frame, \
+			md->bg_env[i]->pos.x, md->bg_env[i]->pos.y);
 	render_array(md, md->images, md->images_len, 0);
 	set_vec2(&tx_p, md->t_len, md->t_len);
 	render_text(md, tx_p, "Move_count %d", md->move_counter);
 	render_game_values(md);
 	render_player(md);
-	render_array(md, md->bg_env, md->bg_env_len, 0);
+	while (++i < md->bg_env_len)
+		mlx_put_image_to_window(md, md->win, md->bg_env[i]->cur_frame, \
+			md->bg_env[i]->pos.x, md->bg_env[i]->pos.y);
 }

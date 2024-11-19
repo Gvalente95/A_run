@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   16_get_next_line.c                                 :+:      :+:    :+:   */
+/*   11_get_next_line.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 02:35:19 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/13 02:26:55 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 15:44:48 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../HEADERS/header.h"
 
-static char	*function_name(int fd, char *buf, char *backup)
+static char	*read_line(int fd, char *buf, char *backup)
 {
 	int		read_line;
 	char	*char_temp;
@@ -37,7 +37,7 @@ static char	*function_name(int fd, char *buf, char *backup)
 	return (backup);
 }
 
-static char	*extract(char *line)
+static char	*extract_line(char *line)
 {
 	size_t	count;
 	char	*backup;
@@ -45,7 +45,7 @@ static char	*extract(char *line)
 	count = 0;
 	while (line[count] != '\n' && line[count] != '\0')
 		count++;
-	if (line[count] == '\0')
+	if (!line[count])
 		return (NULL);
 	backup = ft_substr(line, count + 1, ft_strlen(line) - count);
 	if (*backup == '\0')
@@ -68,11 +68,11 @@ char	*get_next_line(int fd)
 	buf = (char *)malloc(sizeof(char) * (READ_BUFFER_SIZE + 1));
 	if (!buf)
 		return (NULL);
-	line = function_name(fd, buf, backup);
+	line = read_line(fd, buf, backup);
 	free(buf);
 	if (!line)
 		return (NULL);
-	backup = extract(line);
+	backup = extract_line(line);
 	if (line[0] == '\0')
 	{
 		free(line);

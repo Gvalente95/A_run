@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 20:00:20 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 04:29:03 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 15:42:48 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,18 @@ int	load_map(char *file_path, t_md *md, char *buffer)
 
 void	rescale_coin_images(t_md *md)
 {
-	int	i;
+	int		i;
 
 	i = 0;
-	while (i < md->images_len)
+	while (md->images[i] && i < md->images_len)
 	{
 		if (md->images[i]->type == coin)
-			md->images[i]->cur_frame = scale_img(&md, \
-				md->images[i]->cur_frame, &md->images[i]->size, \
-					get_vec2(md->t_len, md->t_len));
+		{
+			md->images[i]->cur_frame = \
+				md->all_images[(int)md->images[i]->type]->cur_frame;
+			md->images[i]->pos = get_grid_pos(md, md->images[i]->pos);
+			md->images[i]->size = get_vec2(md->t_len, md->t_len);
+		}
 		i++;
 	}
 }
@@ -56,6 +59,9 @@ int	main(int argc, char **argv)
 		argv[1] = ft_strdup("maps/default.ber");
 	load_map(argv[1], &md, NULL);
 	md.map.name = ft_strdup(argv[1]);
+	md.plr.fly_frm = NULL;
+	md.plr.idl_frm = NULL;
+	md.plr.wlk_frm = NULL;
 	init_game(&md);
 	load_images(&md);
 	if (md.images && md.images_len)

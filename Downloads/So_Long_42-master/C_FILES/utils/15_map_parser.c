@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 02:21:27 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/18 18:58:54 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/19 14:23:02 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,29 +55,27 @@ t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale)
 void	get_ents_from_map(t_md *md, int i, t_vec3 pos)
 {
 	t_ent	*e;
+	int		len;
 
-	md->images = malloc(sizeof(t_ent *) * \
-		(md->map.size.x * md->map.size.y + 1));
-	if (!md->images)
-		return ;
-	set_vec3(&pos, -1, -1, 0);
+	len = (md->map.size.x) * (md->map.size.y) + 1;
+	md->images = malloc(sizeof(t_ent *) * len);
+	i = 0;
 	pos.y = 0;
-	while (pos.y <= md->map.size.y)
+	while (pos.y < md->map.size.y)
 	{
 		pos.x = 0;
-		while (pos.x <= md->map.size.x)
+		while (pos.x < md->map.size.x)
 		{
-			if (i >= md->map.len)
-				break ;
-			e = parse_letter(md, pos, md->map.buffer[i++], md->t_len);
-			if (e != NULL)
+			e = parse_letter(md, pos, md->map.buffer[i], md->t_len);
+			if (e)
 				md->images[md->images_len++] = e;
+			i++;
 			pos.x++;
 		}
 		pos.y++;
+		i++;
 	}
-	if (md->images_len < md->map.size.x * md->map.size.y + 1)
-		md->images[md->images_len] = NULL;
+	md->images[md->images_len] = NULL;
 }
 
 int	check_path_format(char *path)
