@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:58:33 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/20 22:52:53 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,16 @@ int	handle_movement(t_md *md, t_ent *e, t_vec2 base_speed, t_vec2 displ)
 {
 	t_vec2	col_dir;
 
-	col_dir = get_collisions(e, md->images, displ);
-	if (col_dir.x != 0)
-		e->pos.x += col_dir.x;
-	if (col_dir.y != 0)
-		e->pos.y += col_dir.y;
+	if (e->type == particle)
+		col_dir = get_vec2(0, 0);
+	else
+	{
+		col_dir = get_collisions(md, e, md->images, displ);
+		if (col_dir.x != 0)
+			e->pos.x += col_dir.x;
+		if (col_dir.y != 0)
+			e->pos.y += col_dir.y;
+	}
 	if (e->movement.x != 0)
 		adjust_x_movement(e, base_speed.x);
 	if (e->movement.y != 0)

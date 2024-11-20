@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 07:01:26 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/20 23:27:49 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,14 @@ void	render_player(t_md *md)
 
 void	render_array(t_md *md, t_ent **e, int len, int show_portal)
 {
-	int	i;
+	int		i;
+	t_vec2	offs;
 
 	i = 0;
 	sort_ents_by_z(md->images, len);
 	while (e[i])
 	{
+		offs = get_vec2(0, 0);
 		if (e[i]->type == portal && !show_portal)
 		{
 			if (md->coins_amount)
@@ -68,8 +70,12 @@ void	render_array(t_md *md, t_ent **e, int len, int show_portal)
 				load_new_level(md);
 		}
 		if (e[i]->is_active && e[i]->cur_frame != NULL)
-			mlx_put_image_to_window(md->mlx, md->win, \
-			e[i]->cur_frame, e[i]->pos.x, e[i]->pos.y);
+		{
+			if (e[i]->hurt_timer)
+				offs = get_vec2(r_range(-5, 5), r_range(-5, 5));
+			mlx_put_image_to_window(md->mlx, md->win, e[i]->cur_frame, \
+				e[i]->pos.x + offs.x, e[i]->pos.y + offs.y);
+		}
 		i++;
 	}
 }
@@ -111,7 +117,7 @@ void	render(t_md *md)
 	md->bg_col, 0, 0);
 	if (md->bgrnd_img)
 		mlx_put_image_to_window(md, md->win, \
-			md->bgrnd_img, 0, 0);
+			md->bgrnd_img, md->t_len, md->t_len);
 	i = -1;
 	while (++i < md->bg_env_len / 2)
 		mlx_put_image_to_window(md, md->win, md->bg_env[i]->cur_frame, \
@@ -124,4 +130,15 @@ void	render(t_md *md)
 	while (++i < md->bg_env_len)
 		mlx_put_image_to_window(md, md->win, md->bg_env[i]->cur_frame, \
 			md->bg_env[i]->pos.x, md->bg_env[i]->pos.y);
+
+	if (!md->particles || !md->particles_alive)
+		return ;
+	i = 0;
+	while (md->particles[i] && i < md->particles_alive && i < PRT_AMOUNT)
+	{
+		if (md->particles[i]->is_active)
+			mlx_put_image_to_window(md, md->win, md->particles[i]->cur_frame, \
+				md->particles[i]->pos.x, md->particles[i]->pos.y);
+		i++;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 21:37:46 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 17:04:02 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/20 21:48:23 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 
 int	update_and_render(t_md *md)
 {
+	if (!is_audio_playing(md->bgrnd_au))
+		md->bgrnd_au = play_sound("BONUS_FILES/audio_files/bgrnd.mp3", 1);
 	render(md);
 	if (md->key_clicked == M_KEY)
 		load_new_level(md);
 	update_mouse(md);
 	update(md);
 	reset_mlx_values(md);
-	if (!is_audio_playing(md->bgrnd_au))
-		md->bgrnd_au = play_sound("audio_files/.mp3", 1);
 	md->time++;
 	return (0);
 }
@@ -39,7 +39,7 @@ int	main(int argc, char **argv)
 	load_valid_map(argv[1], &md, NULL, get_vec2(0, 0));
 	init_game(&md);
 	load_env_elements(&md);
-	md.bgrnd_au = play_sound("audio_files/bgrnd.mp3", 1);
+	md.bgrnd_au = play_sound("BONUS_FILES/audio_files/bgrnd.mp3", 1);
 	mlx_hook(md.win, KEY_PRESS, 0, handle_key_press, &md);
 	mlx_hook(md.win, KEY_RELEASE, 0, handle_key_release, &md);
 	mlx_loop_hook(md.mlx, (int (*)())update_and_render, &md);

@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 15:32:45 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 00:37:32 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,20 @@ e->foll_ofs.y - 3, 0), get_vec2(e->foll_spd - 3, e->foll_spd), range) && e->hp)
 	return (0);
 }
 
-int	has_ent_moved(t_ent e)
+int	hurt_entity(t_md *md, t_ent *e, char *hit_path, char *kill_path)
 {
-	return (abs(e.pos.x - e.prv_pos.x) > 15 || \
-		abs(e.pos.y - e.prv_pos.y) > 15);
+	e->hp--;
+	if (e->hp == 0)
+	{
+		play_random_sound(kill_path, 3, ".mp3");
+		set_particles(md, r_range(30, 35), e->pos, 20);
+		e->hurt_timer = 30;
+	}
+	else
+	{
+		play_random_sound(hit_path, 6, ".mp3");
+		set_particles(md, r_range(3, 6), e->pos, 20);
+		e->hurt_timer = 10;
+	}
+	return (e->hp);
 }

@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 15:11:17 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 00:37:22 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,15 @@ void	update_coin_entity(t_ent *e, t_md *md, int range, int index)
 		range = 9000;
 	if (!md->coins_amount && destroy_if_reached(e, md, target_size, p))
 	{
-		play_sound(md->coin_paths[r_range(0, 4)], 0);
+		play_random_sound(AU_COINS, 4, ".mp3");
 		return ;
 	}
 	update_circular_motion(e, md);
 	if (move_ent_towards(e, md, p, range))
 	{
-		play_sound(md->coin_paths[r_range(0, 4)], 0);
+		if (md->coins_amount == 1)
+			play_sound(AU_LEVELUP, 0);
+		play_random_sound(AU_COINS, 4, ".mp3");
 		md->coins_amount--;
 		e->hp--;
 	}
@@ -53,19 +55,12 @@ void	update_coin_entity(t_ent *e, t_md *md, int range, int index)
 
 t_ent	*hit_block(t_md *md)
 {
-	t_ent	*block;
+	t_ent	*blk;
 
-	block = get_ent_at_pos(md->mouse_pos, get_vec2(1, 1), md->images, wall);
-	if (block && get_distance(*block, md->plr) < (md->t_len * 2) - 1)
-	{
-		block->hp--;
-		if (block->hp == 0)
-			play_random_sound(AU_AXE_BREAK, 3, ".wav");
-		else
-			play_random_sound(AU_AXE, 6, ".wav");
-		block->hurt_timer = 10;
-	}
-	return (block);
+	blk = get_ent_at_pos(md->mouse_pos, get_vec2(1, 1), md->images, wall);
+	if (blk && blk->hp && get_distance(*blk, md->plr) < (md->t_len * 2) - 1)
+		hurt_entity(md, blk, AU_AXE, AU_AXE_BREAK);
+	return (blk);
 }
 
 void	update_axe_entity(t_ent *e, t_md *md, int range)
@@ -89,7 +84,7 @@ void	update_axe_entity(t_ent *e, t_md *md, int range)
 	}
 	if (move_ent_towards(e, md, p, range))
 	{
-		play_random_sound(AU_AXE, 4, ".wav");
+		play_random_sound(AU_AXE, 4, ".mp3");
 		e->hp--;
 	}
 }
@@ -116,7 +111,7 @@ void	update_collectible(t_ent *e, t_md *md, int range, int index)
 		}
 		if (move_ent_towards(e, md, md->plr.pos, range))
 		{
-			play_random_sound(AU_AXE, 4, ".wav");
+			play_random_sound(AU_AXE, 4, ".mp3");
 			e->hp = 0;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 04:54:44 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/20 21:56:55 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,19 @@ pid_t	play_sound(const char *filename, int loop)
 {
 	pid_t	pid;
 
+	(void)loop;
 	pid = fork();
 	if (pid == 0)
 	{
-		if (loop)
-			execlp("afplay", "afplay", "-t", "9999", filename, (char *) NULL);
-		else
-			execlp("afplay", "afplay", filename, (char *) NULL);
-		perror("execlp failed");
-		exit(EXIT_FAILURE);
+		if (execlp("afplay", "afplay", filename, (char *) NULL) == -1)
+		{
+			perror("execlp failed");
+			exit(EXIT_FAILURE);
+		}
 	}
 	return (pid);
 }
+
 
 void	stop_sound(pid_t pid)
 {
@@ -62,8 +63,9 @@ void	stop_sound(pid_t pid)
 
 int	is_audio_playing(pid_t pid)
 {
-	if (kill(pid, 0) == 0)
+	int	status;
+
+	if (waitpid(pid, &status, WNOHANG) == 0)
 		return (1);
-	else
-		return (0);
+	return (0);
 }

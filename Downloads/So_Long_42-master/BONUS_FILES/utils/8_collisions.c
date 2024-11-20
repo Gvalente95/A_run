@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 04:38:21 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/20 20:48:15 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ t_vec2	get_collision_displacement(t_ent *e1, t_ent *e2, \
 		e1->size.y) - e2->pos.y + displ.y) <= 1)
 	{
 		e1->is_grounded = e2_index;
-		if (!e1->jump_timer && !e1->jet_sky_timer)
+		if (!e1->jump_timer)
 			e1->pos.y = e2->pos.y - e1->size.y;
 	}
 	else if (displacement.y < 0)
@@ -81,7 +81,7 @@ t_vec2	get_collision_displacement(t_ent *e1, t_ent *e2, \
 	return (displacement);
 }
 
-t_vec2	get_collisions(t_ent *e, t_ent **col_ents, t_vec2 displ)
+t_vec2	get_collisions(t_md *md, t_ent *e, t_ent **col_ents, t_vec2 displ)
 {
 	t_vec2	collisions;
 	t_vec2	displacement;
@@ -96,7 +96,7 @@ t_vec2	get_collisions(t_ent *e, t_ent **col_ents, t_vec2 displ)
 	{
 		if (col_ents[i] == e || !col_ents[i]->is_active)
 			continue ;
-		if (col_ents[i]->type == mob && e->type == mob)
+		if (col_ents[i]->type == mob && (e->type == mob || !md->coins_amount))
 			continue ;
 		if ((e->type == coin && col_ents[i]->type != coin) || \
 		(col_ents[i]->type != wall && col_ents[i]->type != tile && \

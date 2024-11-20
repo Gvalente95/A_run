@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:32:42 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/19 17:02:52 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 00:20:57 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,6 @@ typedef struct s_md
 	t_ent		*selected;
 	t_ent		**all_images;
 	t_vec3		mouse_pos;
-	char		**coin_paths;
 	char		**ftstp_paths;
 	void		*mlx;
 	void		*win;
@@ -265,7 +264,6 @@ t_ent	*get_ent_simple(t_vec2 pos, t_ent **ents);
 void	increment_frame(t_ent *e);
 void	handle_entity_frames(t_md *md, t_ent *e, void *path, t_vec2 scale);
 void	init_player_frames(t_md *md, char *path, t_ent *e);
-int		has_ent_moved(t_ent e);
 // PARSING
 t_vec2	get_map_dimensions(char *map, int i, int current_width, t_vec2 res);
 t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale);

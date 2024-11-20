@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 20:39:27 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 17:04:17 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/20 23:33:32 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,23 @@ void	handle_entity_frames(t_md *md, t_ent *e, void *path, t_vec2 scale)
 void	init_bgrnd(t_md *md, t_vec2 size)
 {
 	t_vec2		bg_size;
+	char		*path;
+	char		*full_path;
+	int			rand_bg;
 
 	set_vec2(&bg_size, 0, 0);
 	md->bg_col = mlx_new_image(md->mlx, size.x * md->t_len, size.y * md->t_len);
+	rand_bg = r_range(0, 2);
+	path = ft_strjoin("PNG/bgrnd/", ft_itoa(rand_bg));
+	full_path = ft_strjoin(path, ".png");
 	md->bgrnd_img = mlx_png_file_to_image(md->mlx, \
-		"PNG/bgrnd/2.png", &bg_size.x, &bg_size.y);
+		full_path, &bg_size.x, &bg_size.y);
 	md->bgrnd_img = scale_img(md->mlx, md->bgrnd_img, &bg_size, \
 		get_vec2(size.x * md->t_len, (size.y + 1) * md->t_len));
 	md->addr = mlx_get_data_addr(md->bg_col, &md->bits_per_pixel, \
 		&md->line_length, &md->endian);
+	free(path);
+	free(full_path);
 }
 
 void	init_game(t_md *md)

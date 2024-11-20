@@ -29,7 +29,7 @@ BONUS_FILES/utils/6_tools.c BONUS_FILES/utils/7_colors.c BONUS_FILES/utils/9_ent
 BONUS_FILES/utils/16_save_map.c BONUS_FILES/utils/16_update_editor.c BONUS_FILES/utils/7_movement.c BONUS_FILES/utils/4_images.c \
 BONUS_FILES/utils/2_update_env.c BONUS_FILES/utils/13_map_checker2.c BONUS_FILES/utils/16_load_editor_images.c \
 BONUS_FILES/utils/1_init_frames.c BONUS_FILES/utils/2_update_collectibles.c BONUS_FILES/utils/3_render.c \
-BONUS_FILES/utils/12_map_checker.c BONUS_FILES/utils/18_free_md.c
+BONUS_FILES/utils/12_map_checker.c BONUS_FILES/utils/18_free_md.c BONUS_FILES/utils/0_particles.c
 
 # Includes and libraries
 INCLUDES = -I mlx -I libft

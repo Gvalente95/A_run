@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:32:42 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/19 17:06:09 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 00:50:44 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define PLAYER_SPR_PATH 		"PNG/ENTITIES/PLAYER/"
 # define MOB_SPR_PATH 			"PNG/ENTITIES/MOBS/"
 
+# define PARTICLE_SPR_PATH		"PNG/PARTICLES/"
 # define WALL_SPR_PATH 			"PNG/WALL/"
 # define GROUND_SPR_PATH 		"PNG/GROUND/"
 # define GROUND_TILESET_PATH	"PNG/GROUND/8_sliced/"
@@ -65,6 +66,8 @@
 # define DOWN_LEFT			6
 # define DOWN				7
 # define DOWN_RIGHT			8
+# define PRT_PNGs_LEN		16
+# define PRT_AMOUNT			50
 
 typedef enum e_dir
 {
@@ -92,6 +95,7 @@ typedef enum e_entity_types
 	bgrnd,
 	tile,
 	env,
+	particle,
 	ENT_TYPE_LEN
 }	t_ent_type;
 
@@ -103,6 +107,25 @@ typedef enum e_entity_action
 	JUMP,
 	ENT_ACTION_LEN
 }	t_ent_action;
+
+typedef enum e_particle_tpes
+{
+	projectile,
+	random,
+}	t_particle_type;
+
+typedef struct s_particle
+{
+	t_vec2	pos;
+	t_vec2	*target_pos;
+	t_vec2	movement;
+	t_dir	dir;
+	void	*cur_frame;
+	int		is_grounded;
+	int		lifetime;
+	int		is_active;
+	int		speed;
+}	t_prt;
 
 typedef struct s_Vector2
 {
@@ -191,6 +214,7 @@ typedef struct s_entity
 
 typedef struct s_md
 {
+	t_prt		**particles;
 	t_map		map;
 	t_ent		*key;
 	t_ent		*pickaxe;
@@ -205,13 +229,13 @@ typedef struct s_md
 	t_ent		*selected;
 	t_ent		**all_images;
 	t_vec3		mouse_pos;
-	char		**coin_paths;
 	char		**ftstp_paths;
 	void		*mlx;
 	void		*win;
 	void		*bg_col;
 	void		*bgrnd_img;
 	void		**env_images;
+	int			particles_alive;
 	int			index;
 	int			move_counter;
 	int			cur_category;
@@ -233,6 +257,13 @@ typedef struct s_md
 	char		*addr;
 }	t_md;
 
+//PARTICLES
+int		init_particles(t_md *md);
+int		reset_particle(t_md *md, t_ent *p);
+int		activate_particle(t_md *md, t_ent *e, t_vec3 pos, int dur);
+int		set_particles(t_md *md, int amount, t_vec3 pos, int dur);
+int		update_particle(t_md *md, t_ent *e);
+void	update_particles(t_md *md);
 // INIT
 void	init_game(t_md *md);
 t_ent	*init_entity(t_md *md, void *frames_path, t_vec3 pos, t_vec3 values);
@@ -267,7 +298,7 @@ void	relaunch_program(const char *arg);
 int		contain(char c, char *arg);
 // COLLISIONS
 t_vec2	get_collision_displacement(t_ent *e1, t_ent *e2, int e2_i, t_vec2 d);
-t_vec2	get_collisions(t_ent *e, t_ent **col_ents, t_vec2 displ);
+t_vec2	get_collisions(t_md *md, t_ent *e, t_ent **col_ents, t_vec2 displ);
 int		is_in_pos(t_vec3 pos1, t_vec2 size1, t_vec3 pos2, t_vec2 size2);
 void	set_vec_to_dir(t_dir dir, t_vec3 *vec, int mv_am);
 // DELETE
@@ -318,15 +349,14 @@ pid_t	play_sound(const char *filename, int loop);
 void	stop_sound(pid_t pid);
 pid_t	play_random_sound(const char *path, int len, const char *format);
 int		is_audio_playing(pid_t pid);
-
-void	update_coin_entity(t_ent *e, t_md *md, int range, int index);
-
+// HP
 // ENT TOOLS
+void	update_coin_entity(t_ent *e, t_md *md, int range, int index);
+int		hurt_entity(t_md *md, t_ent *e, char *hit_path, char *kill_path);
 int		destroy_if_reached(t_ent *e, t_md *md, t_vec2 targ_size, t_vec3 p);
 void	update_circular_motion(t_ent *e, t_md *md);
 int		move_ent_towards(t_ent *e, t_md *md, t_vec3 p, int range);
 void	update_collectible(t_ent *e, t_md *md, int range, int index);
-int		has_ent_moved(t_ent e);
 t_ent	*get_ent_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, t_ent_type type);
 int		get_distance(t_ent a, t_ent b);
 
@@ -347,4 +377,6 @@ char	*store_map_name(t_md *md);
 int		free_md(t_md *md);
 int		free_void(void *elem);
 int		free_void_array(void **elements, int i);
+
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:31:50 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/20 19:18:08 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,13 @@ char	set_char(t_map *map, int solvable)
 	else if (map->pos.y == map->size.y - 2 && \
 		!contain('E', map->buffer))
 		return ('E');
-	else if (r_range(0, 3) == 0 && contain('C', map->buffer) < map->coin_max)
+	else if (contain('C', map->buffer) < map->coin_max && r_range(0, 3) == 0)
 		return ('C');
-	else if (r_range(0, 9) == 0 && contain('M', map->buffer) < map->mob_max)
+	else if (contain('M', map->buffer) < map->mob_max && r_range(0, 9) == 0)
 		return ('M');
-	else if (r_range(0, 9) == 0 && contain('T', map->buffer) < 1)
+	else if (contain('T', map->buffer) < 1 && r_range(0, 9) == 0)
 		return ('T');
-	else if (!contain('A', map->buffer))
+	else if (!contain('A', map->buffer) && r_range(0, 50) == 0)
 		return ('A');
 	return ('0');
 }

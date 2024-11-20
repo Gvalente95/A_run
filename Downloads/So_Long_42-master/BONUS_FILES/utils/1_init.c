@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:16:57 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/20 23:43:24 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	set_type_values(t_md *md, t_ent *e, t_ent_type type)
 	}
 }
 
+// VALUES: scale | type | z pos
 t_ent	*init_entity(t_md *md, void *path, t_vec3 pos, \
 	t_vec3 values)
 {
@@ -100,7 +101,36 @@ int	init_mlx(t_md *md)
 	md->move_counter = 0;
 	md->ftstp_timer = 0;
 	md->coins_amount = 0;
-	md->coin_paths = get_paths(AU_COINS, "", 4, ".mp3");
-	md->ftstp_paths = get_paths(AU_FOOTSTEPS, "", 4, ".wav");
+	md->particles = NULL;
+	init_particles(md);
 	return (1);
+}
+
+int	init_particles(t_md *md)
+{
+	char	**paths;
+	int		i;
+	t_vec2	size;
+
+	paths = get_paths(PARTICLE_SPR_PATH, "", PRT_PNGs_LEN, ".png");
+	if (!paths)
+		return (0);
+	md->particles = malloc(sizeof(t_ent *) * (PRT_AMOUNT + 1));
+	i = 0;
+	while (i < PRT_AMOUNT)
+	{
+		md->particles[i] = malloc(sizeof(t_ent));
+		md->particles[i]->cur_frame = mlx_png_file_to_image(md->mlx, \
+			paths[r_range(0, PRT_PNGs_LEN - 1)], &size.x, &size.y);
+		md->particles[i]->jet_sky_timer = 0;
+		md->particles[i]->is_active = 0;
+		md->particles[i]->is_grounded = 0;
+		md->particles[i]->idl_frm = NULL;
+		md->particles[i]->wlk_frm = NULL;
+		md->particles[i]->fly_frm = NULL;
+		md->particles[i]->anim_frames = NULL;
+		md->particles[i]->frame_path = NULL;
+		i++;
+	}
+	return (md->particles[i] = NULL, free(paths), md->particles_alive = 0, i);
 }
