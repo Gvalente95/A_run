@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 04:58:30 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 00:24:12 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 17:24:13 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # define AU_LEVELUP "BONUS_FILES/audio_files/level_up.mp3"
 # define AU_COINS "BONUS_FILES/audio_files/fx/coins/"
 # define AU_FOOTSTEPS "BONUS_FILES/audio_files/footsteps/"
+# define AU_PARTICLES "BONUS_FILES/audio_files/particles/"
 
 # define AU_BG_MUSIC "BONUS_FILES/audio_files/music/bg_house.mp3"
 # define AU_AXE "BONUS_FILES/audio_files/axe/"

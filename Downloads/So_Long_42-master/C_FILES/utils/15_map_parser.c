@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 02:21:27 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 16:49:18 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 16:17:57 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale)
 	return (parse_letter_b(md, pos, c, scale));
 }
 
-void	get_ents_from_map(t_md *md, int i, t_vec3 pos)
+void	load_ents(t_md *md, int i, t_vec3 pos)
 {
 	t_ent	*e;
 	int		len;

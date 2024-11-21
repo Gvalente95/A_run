@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:32:42 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/21 00:20:57 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 16:17:57 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,7 +246,7 @@ void	*scale_img(void *mlx, void *img, t_vec2 *old_size, t_vec2 new_size);
 // TOOLS
 char	**get_paths(char *path, char *prefix, int amount, char *suffix);
 int		r_range(int min, int max);
-void	render_array(t_md *md, t_ent **e, int len, int show_portal);
+void	render_array(t_md *md, t_ent **e, int show_portal, int i);
 int		contain(char c, char *arg);
 //VECTORS
 int		set_vec2(t_vec2 *Vec2, int x, int y);
@@ -269,7 +269,7 @@ t_vec2	get_map_dimensions(char *map, int i, int current_width, t_vec2 res);
 t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale);
 t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale);
 void	load_valid_map(char *file_path, t_md *md, char *buffer, t_vec2	pos);
-void	get_ents_from_map(t_md *md, int i, t_vec3 pos);
+void	load_ents(t_md *md, int i, t_vec3 pos);
 char	*get_new_map(int width, int height, int solvable);
 char	*get_next_line(int fd);
 // CHECKER

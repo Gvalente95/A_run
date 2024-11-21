@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 04:54:44 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/20 21:56:55 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 03:00:31 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ pid_t	play_sound(const char *filename, int loop)
 	}
 	return (pid);
 }
-
 
 void	stop_sound(pid_t pid)
 {

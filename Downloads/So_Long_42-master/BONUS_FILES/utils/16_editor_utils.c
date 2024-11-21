@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 19:57:04 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/20 19:06:50 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 02:46:35 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ t_vec3	set_env_pos(t_md *md, t_vec2 size)
 	int		grid_y;
 
 	grid_x = r_range(1, md->map.size.x - 1) * md->t_len;
-	grid_y = ((md->map.size.y) * (md->t_len - 1)) - md->t_len - size.y + md->t_len / 3;
+	grid_y = ((md->map.size.y) * (md->t_len - 1)) - md->t_len - \
+		size.y + md->t_len / 3;
 	grid_x += r_range(-md->t_len / 4, md->t_len / 4);
 	if (grid_x < 0)
 		grid_x = 0;

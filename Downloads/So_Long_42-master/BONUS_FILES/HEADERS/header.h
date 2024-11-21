@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:32:42 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/21 00:50:44 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 18:44:05 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@
 # define DOWN_LEFT			6
 # define DOWN				7
 # define DOWN_RIGHT			8
-# define PRT_PNGs_LEN		16
+# define PRT_PNGS_LEN		16
 # define PRT_AMOUNT			50
 
 typedef enum e_dir
@@ -110,22 +110,13 @@ typedef enum e_entity_action
 
 typedef enum e_particle_tpes
 {
-	projectile,
-	random,
-}	t_particle_type;
-
-typedef struct s_particle
-{
-	t_vec2	pos;
-	t_vec2	*target_pos;
-	t_vec2	movement;
-	t_dir	dir;
-	void	*cur_frame;
-	int		is_grounded;
-	int		lifetime;
-	int		is_active;
-	int		speed;
-}	t_prt;
+	proj,
+	splat,
+	fly,
+	target,
+	circle,
+	trail,
+}	t_prt_type;
 
 typedef struct s_Vector2
 {
@@ -175,6 +166,22 @@ typedef struct s_image_data
 	int		*scl_d;
 }	t_image;
 
+typedef struct s_particle
+{
+	t_prt_type	type;
+	t_vec2		foll_ofs;
+	t_vec2		pos;
+	t_vec2		size;
+	t_vec2		movement;
+	t_vec2		*target_pos;
+	t_dir		dir;
+	void		*cur_frame;
+	int			is_grounded;
+	int			lifetime;
+	int			is_active;
+	int			speed;
+}	t_prt;
+
 typedef struct s_entity
 {
 	t_ent_type		type;
@@ -187,6 +194,7 @@ typedef struct s_entity
 	t_vec2			size;
 	t_vec2			foll_ofs;
 	t_vec3			movement;
+	t_prt_type		prt_type;
 	char			*frame_path;
 	void			*cur_frame;
 	void			*cur_frame_x;
@@ -229,7 +237,7 @@ typedef struct s_md
 	t_ent		*selected;
 	t_ent		**all_images;
 	t_vec3		mouse_pos;
-	char		**ftstp_paths;
+	int			coin_au_timer;
 	void		*mlx;
 	void		*win;
 	void		*bg_col;
@@ -258,12 +266,15 @@ typedef struct s_md
 }	t_md;
 
 //PARTICLES
-int		init_particles(t_md *md);
-int		reset_particle(t_md *md, t_ent *p);
-int		activate_particle(t_md *md, t_ent *e, t_vec3 pos, int dur);
-int		set_particles(t_md *md, int amount, t_vec3 pos, int dur);
-int		update_particle(t_md *md, t_ent *e);
+int		init_particles(t_md *md, int i, t_vec2 size, t_prt *p);
+int		reset_particle(t_md *md, t_prt *p, int index);
+int		activate_particle(t_md *md, t_prt *p, t_vec3 pos, t_prt_type type);
+int		set_particles(t_md *md, int amount, t_vec3 pos, t_prt_type type);
+int		update_particle(t_md *md, t_prt *p, int index);
 void	update_particles(t_md *md);
+int		handle_prt_movement(t_md *md, t_prt *p, t_vec2 cols);
+t_vec2	set_prt_movement(t_vec3 pos, t_vec3 target, t_prt *prt);
+
 // INIT
 void	init_game(t_md *md);
 t_ent	*init_entity(t_md *md, void *frames_path, t_vec3 pos, t_vec3 values);
@@ -271,11 +282,12 @@ int		init_player(t_md *md, char *frames_path, t_vec3 pos);
 int		init_mlx(t_md *md);
 // UPDATE
 int		update(t_md *md);
-void	update_env(t_md *md);
+void	update_env(t_md *md, int i);
 // RENDER
 void	render_player(t_md *md);
 void	render(t_md *md);
 void	render_text(t_md *md, t_vec2 pos, const char *format, ...);
+void	render_game_values(t_md *md);
 // INPUT
 int		handle_key_release(int keycode, t_md *md);
 int		handle_key_press(int keycode, t_md *md);
@@ -292,7 +304,7 @@ void	*scale_img(void *mlx, void *img, t_vec2 *old_size, t_vec2 new_size);
 char	**get_paths(char *path, char *prefix, int amount, char *suffix);
 int		r_range(int min, int max);
 void	*flip_image_x(void *mlx, void *img, t_vec2 size);
-void	render_array(t_md *md, t_ent **e, int len, int show_portal);
+void	render_array(t_md *md, t_ent **e, int show_portal, int i);
 int		get_array_size(void **array);
 void	relaunch_program(const char *arg);
 int		contain(char c, char *arg);
@@ -330,11 +342,11 @@ t_vec2	get_map_dimensions(char *map, int i, int current_width, t_vec2 res);
 t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale);
 t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale);
 void	load_valid_map(char *file_path, t_md *md, char *buffer, t_vec2	pos);
-void	get_ents_from_map(t_md *md, int i, t_vec3 pos);
+void	load_ents(t_md *md, int i, t_vec3 pos);
 char	*get_new_map(int width, int height, int solvable);
 char	*get_next_line(int fd);
 // MOVEMENT
-int		handle_movement(t_md *md, t_ent *e, t_vec2 base_speed, t_vec2 displ);
+t_vec2	handle_movement(t_md *md, t_ent *e, t_vec2 base_speed, t_vec2 displ);
 int		move_to_simple(t_ent *e, t_vec3 targ_pos, int spd);
 // CHECKER
 t_vec2	get_map_dimensions(char *map, int i, int current_width, t_vec2 res);
@@ -351,14 +363,13 @@ pid_t	play_random_sound(const char *path, int len, const char *format);
 int		is_audio_playing(pid_t pid);
 // HP
 // ENT TOOLS
-void	update_coin_entity(t_ent *e, t_md *md, int range, int index);
+void	update_coin_entity(t_ent *e, t_md *md, int range);
 int		hurt_entity(t_md *md, t_ent *e, char *hit_path, char *kill_path);
-int		destroy_if_reached(t_ent *e, t_md *md, t_vec2 targ_size, t_vec3 p);
 void	update_circular_motion(t_ent *e, t_md *md);
 int		move_ent_towards(t_ent *e, t_md *md, t_vec3 p, int range);
 void	update_collectible(t_ent *e, t_md *md, int range, int index);
 t_ent	*get_ent_at_pos(t_vec3 pos, t_vec2 size, t_ent **ents, t_ent_type type);
-int		get_distance(t_ent a, t_ent b);
+int		get_distance(t_vec3 a, t_vec3 b);
 
 void	handle_entity_frames(t_md *md, t_ent *e, void *path, t_vec2 scale);
 void	init_player_frames(t_md *md, char *path, t_ent *e);
@@ -374,9 +385,16 @@ int		save_to_file(t_md *md);
 int		update_editor(t_md *md);
 char	map_keycode_to_char(int keycode);
 char	*store_map_name(t_md *md);
+void	insert_entity(t_vec3 pos, t_ent *to_insert, t_ent ***arr, int *len);
+void	update_key_entity(t_md *md, t_ent *e, int range, t_vec3 targ_pos);
+void	load_ents_editor(t_md *md, int i, t_vec3 pos);
+void	init_bgrnd(t_md *md, t_vec2 size);
+
+//FREE
 int		free_md(t_md *md);
 int		free_void(void *elem);
 int		free_void_array(void **elements, int i);
-
-
+int		free_particles(t_prt **prts);
+void	set_target_position(t_vec3 *p, t_vec2 *target_size, \
+	t_md *md, t_ent *target);
 #endif

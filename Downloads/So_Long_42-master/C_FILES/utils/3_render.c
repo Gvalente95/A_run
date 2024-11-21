@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 07:01:26 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 16:48:48 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 03:03:22 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,8 @@ void	render_player(t_md *md)
 		copy, plr->pos.x, plr->pos.y);
 }
 
-void	render_array(t_md *md, t_ent **e, int len, int show_portal)
+void	render_array(t_md *md, t_ent **e, int show_portal, int i)
 {
-	int	i;
-
-	(void)len;
-	i = 0;
 	while (e[i])
 	{
 		if (!show_portal && e[i]->type == portal)
@@ -103,12 +99,10 @@ void	render(t_md *md)
 {
 	t_vec2	tx_p;
 
-	mlx_put_image_to_window(md->mlx, md->win, \
-	md->bg_col, 0, 0);
 	if (md->bgrnd_img)
 		mlx_put_image_to_window(md, md->win, \
 			md->bgrnd_img, 0, 0);
-	render_array(md, md->images, md->images_len, 0);
+	render_array(md, md->images, 0, 0);
 	set_vec2(&tx_p, md->t_len, md->t_len);
 	render_text(md, get_vec2(md->plr.pos.x + md->plr.size.x / 2, \
 		md->plr.pos.y - 5), "%d", md->move_counter);

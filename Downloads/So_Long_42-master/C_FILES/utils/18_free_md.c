@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 04:32:24 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/20 20:28:47 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 13:22:55 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ int	free_md(t_md *md)
 	free_count += free_ents(md->images);
 	free_count += free_ents(md->all_images);
 	free_count += free_void_array(md->env_images, 0);
-	free_count += free_void_array((void **)md->ftstp_paths, 0);
 	free_count += free_void(md->addr);
 	free_count += free_void(md->bgrnd_img);
 	free_count += free_void(md->map.buffer);

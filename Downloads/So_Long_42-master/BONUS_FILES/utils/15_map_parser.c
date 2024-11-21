@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 02:21:27 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/20 19:09:32 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 16:20:38 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_ent	*parse_letter_b(t_md *md, t_vec3 pos, char c, int scale)
 		ent = init_entity(md, MOB_SPR_PATH, pos, get_vec3(scale * .8, mob, 8));
 	else if (c == 'P')
 		init_player(md, PLAYER_SPR_PATH, pos);
-	else if (c == 'F')
+	else if (c == 'K')
 	{
 		ent = init_entity(md, KEY_SPR_PATH, pos, get_vec3(scale * .5, key, 8));
 		md->key = ent;
@@ -41,7 +41,6 @@ t_ent	*parse_letter_b(t_md *md, t_vec3 pos, char c, int scale)
 	return (ent);
 }
 
-// VALUES: scale | type | z pos
 t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale)
 {
 	t_ent	*ent;
@@ -69,7 +68,7 @@ t_ent	*parse_letter(t_md *md, t_vec3 pos, char c, int scale)
 	return (parse_letter_b(md, pos, c, scale));
 }
 
-void	get_ents_from_map(t_md *md, int i, t_vec3 pos)
+void	load_ents(t_md *md, int i, t_vec3 pos)
 {
 	t_ent	*e;
 	int		len;
@@ -96,38 +95,4 @@ void	get_ents_from_map(t_md *md, int i, t_vec3 pos)
 		i++;
 	}
 	md->images[md->images_len] = NULL;
-}
-
-int	check_path_format(char *path)
-{
-	char	path_check[4];
-	int		i;
-	int		len;
-
-	len = 0;
-	i = ft_strlen(path) - 1;
-	while (len < 4)
-	{
-		path_check[len] = path[i];
-		len++;
-		i--;
-	}
-	return (ft_strncmp(path_check, "reb.", 4));
-}
-
-char	*store_map_name(t_md *md)
-{
-	char	*x_size;
-	char	*y_size;
-	char	*size;
-	char	*size_part_0;
-
-	x_size = ft_itoa(md->map.size.x);
-	y_size = ft_itoa(md->map.size.y);
-	size_part_0 = ft_strjoin(x_size, "x");
-	size = ft_strjoin(size_part_0, y_size);
-	free(x_size);
-	free(y_size);
-	free(size_part_0);
-	return (size);
 }

@@ -6,20 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 05:36:59 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 00:27:19 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 17:15:43 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../HEADERS/header.h"
-
-void	increment_frame(t_ent *e)
-{
-	e->cur_frame_index++;
-	if (e->cur_frame_index > e->frames_amount - 1 || \
-		!e->anim_frames[e->cur_frame_index])
-		e->cur_frame_index = 0;
-	e->cur_frame = e->anim_frames[e->cur_frame_index];
-}
 
 void	update_mob_entity(t_ent *e, t_md *md, t_ent *plr)
 {
@@ -57,6 +48,11 @@ void	update_entity_position(t_ent *e, t_md *md, int i)
 	{
 		if (e->type == mob)
 		{
+			if (md->plr.is_grounded == i && !md->key_prs[W_KEY])
+			{
+				hurt_entity(md, e, AU_AXE, AU_AXE_BREAK);
+				md->plr.movement.y = -100;
+			}
 			if (!md->coins_amount && move_to_simple(e, md->ext_p, 5))
 				e->is_active = 0;
 			else if (md->coins_amount)
@@ -65,31 +61,66 @@ void	update_entity_position(t_ent *e, t_md *md, int i)
 	}
 }
 
-void	update_env(t_md *md)
+void	update_key_entity(t_md *md, t_ent *e, int range, t_vec3 targ_pos)
+{
+	if (e->hp == 0)
+	{
+		e->flip_x = md->plr.flip_x;
+		targ_pos = get_vec3(md->plr.pos.x, md->plr.pos.y, 0);
+		if (!md->key)
+			md->key = e;
+	}
+	else if (e->hp < 0)
+	{
+		if (md->key_clicked == ENTER_KEY)
+		{
+			hurt_entity(md, md->images[-e->hp], AU_AXE_BREAK, AU_AXE_BREAK);
+			e->is_active = 0;
+			if (md->key == e)
+				md->key = NULL;
+		}
+		else if (abs(get_distance(md->plr.pos, md->images[-e->hp]->pos)) \
+			>= md->t_len * 2)
+			e->hp = 0;
+		else
+			targ_pos = get_vec3(md->images[-e->hp]->pos.x, \
+				md->images[-e->hp]->pos.y + md->t_len / 5, 0);
+	}
+	if (targ_pos.x != 0 && targ_pos.y != 0)
+		move_ent_towards(e, md, targ_pos, range);
+}
+
+void	update_door(t_md *md, t_ent *e, int i)
+{
+	if (!md->key || md->key->type != key)
+		return ;
+	if (md->key->hp == 0 && \
+			abs(get_distance(e->pos, md->plr.pos)) < md->t_len * 2)
+		md->key->hp = -i;
+}
+
+void	update_env(t_md *md, int i)
 {
 	t_ent	*e;
-	int		i;
 
-	i = 0;
 	while (md->images[i])
 	{
 		e = md->images[i];
 		if (e->hurt_timer)
 			e->hurt_timer--;
-		if ((e->type == mob || e->type == wall) && !e->hp && !e->hurt_timer)
+		if ((e->type == mob || e->type == wall || e->type == door) \
+			&& !e->hp && !e->hurt_timer)
 			e->is_active = 0;
 		e->prv_pos = e->pos;
-		if (e->type == mob && md->plr.is_grounded == i && !md->key_prs[W_KEY])
-		{
-			hurt_entity(md, e, AU_AXE, AU_AXE_BREAK);
-			md->plr.movement.y = -100;
-		}
-		if (!e->is_active)
+		if (e->is_active <= 0)
 		{
 			i++;
 			continue ;
 		}
-		update_entity_position(e, md, i);
+		if (e->is_active)
+			update_entity_position(e, md, i);
+		if (e->type == door)
+			update_door(md, e, i);
 		if (md->images[i] == e)
 			i++;
 	}

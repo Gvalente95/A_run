@@ -6,11 +6,20 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 16:08:31 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/21 00:37:28 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 17:15:13 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../HEADERS/header.h"
+
+void	increment_frame(t_ent *e)
+{
+	e->cur_frame_index++;
+	if (e->cur_frame_index > e->frames_amount - 1 || \
+		!e->anim_frames[e->cur_frame_index])
+		e->cur_frame_index = 0;
+	e->cur_frame = e->anim_frames[e->cur_frame_index];
+}
 
 void	update_player_frames(t_vec3 frm_mv, t_ent *e)
 {
@@ -37,7 +46,7 @@ void	update_player_frames(t_vec3 frm_mv, t_ent *e)
 		e->action = WALK;
 	}
 	else
-		e->cur_frame = e->fly_frm[e->cur_frame_index];
+		e->cur_frame = e->fly_frm[0];
 }
 
 int	update_player2(t_ent *e, t_vec3 frm_mv, t_vec2 speed, t_md *mlx)
@@ -65,7 +74,7 @@ int	update_player2(t_ent *e, t_vec3 frm_mv, t_vec2 speed, t_md *mlx)
 	return (1);
 }
 
-int	update_player(t_md *md, t_vec3 new_mv, t_vec2 speed, t_ent *plr)
+int	update_player(t_md *md, t_vec3 new_mv, t_ent *plr)
 {
 	if (md->key_prs[LEFT_KEY] || md->key_prs[A_KEY])
 		new_mv.x = -1;
@@ -73,34 +82,29 @@ int	update_player(t_md *md, t_vec3 new_mv, t_vec2 speed, t_ent *plr)
 		new_mv.x = 1;
 	if (md->key_prs[DOWN_KEY] || md->key_prs[S_KEY])
 		new_mv.y = 1;
-	else if ((md->key_prs[UP_KEY] || md->key_prs[W_KEY]) && \
-		plr->jet_sky_timer)
+	if ((md->key_prs[UP_KEY] || md->key_prs[W_KEY]) && plr->jet_sky_timer > 0)
 	{
-		plr->jet_sky_timer--;
-		new_mv.y = (-plr->jet_sky_timer / 75);
+		new_mv.y -= ((100 - plr->jet_sky_timer) / 20);
+		plr->jet_sky_timer -= 5;
 	}
-	if (plr->is_grounded)
-		plr->jet_sky_timer = 150;
+	else if (plr->is_grounded)
+		plr->jet_sky_timer = 100;
 	if (md->key_clicked == SPACE_KEY && plr->jumps)
 	{
 		play_random_sound(AU_FOOTSTEPS, 4, ".mp3");
 		plr->jumps--;
 		new_mv.y = -3;
-		md->key_clicked = 0;
 	}
 	if (plr->is_grounded)
 		plr->jumps = 1;
-	return (update_player2(plr, new_mv, speed, md));
+	return (update_player2(plr, new_mv, get_vec2(50, 3), md));
 }
 
 int	update(t_md *md)
 {
-	t_vec2	move_speed;
-
 	md->plr.prv_pos.x += (md->plr.pos.x - md->plr.prv_pos.x) * .1;
 	md->plr.prv_pos.y += (md->plr.pos.y - md->plr.prv_pos.y) * .1;
-	set_vec2(&move_speed, 50, 3);
-	update_env(md);
+	update_env(md, 0);
 	update_particles(md);
 	if (md->plr.hp <= 0)
 	{
@@ -109,7 +113,7 @@ int	update(t_md *md)
 			md->plr.hp = 5;
 	}
 	else
-		update_player(md, get_vec3(0, 0, 0), move_speed, &md->plr);
+		update_player(md, get_vec3(0, 0, 0), &md->plr);
 	if (md->plr.is_grounded && !md->ftstp_timer && \
 		(md->key_prs[A_KEY] || md->key_prs[D_KEY] || md->key_prs[LEFT_KEY] || \
 			md->key_prs[RIGHT_KEY]))
@@ -119,5 +123,7 @@ int	update(t_md *md)
 	}
 	if (md->ftstp_timer)
 		md->ftstp_timer--;
+	if (md->coin_au_timer)
+		md->coin_au_timer--;
 	return (1);
 }

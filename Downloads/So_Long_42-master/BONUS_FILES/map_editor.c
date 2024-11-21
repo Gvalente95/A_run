@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 20:00:20 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 17:04:00 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 16:25:04 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,34 @@ void	rescale_coin_images(t_md *md)
 	}
 }
 
+void	init_editor(t_md *md)
+{
+	int	win_width;
+	int	tile_width;
+	int	tile_height;
+	int	required_width;
+
+	win_width = WIN_W;
+	tile_width = (int)((float)WIN_W / md->map.size.x + 0.5);
+	tile_height = (int)((float)WIN_H / md->map.size.y + 0.5);
+	md->t_len = tile_height;
+	if (tile_width < tile_height)
+		md->t_len = tile_width;
+	required_width = md->t_len * md->map.size.x;
+	if (required_width != WIN_W)
+		win_width = required_width;
+	if (md->win)
+		mlx_destroy_window(md, md->win);
+	md->win = mlx_new_window(md->mlx, win_width, \
+	md->t_len * md->map.size.y, "g");
+	load_images(md);
+	init_bgrnd(md, md->map.size);
+	load_ents_editor(md, 0, get_vec3(0, 0, 0));
+	init_mouse(md);
+	md->map.coins_amount = md->coins_amount;
+	md->particles = NULL;
+}
+
 int	main(int argc, char **argv)
 {
 	t_md	md;
@@ -57,15 +85,14 @@ int	main(int argc, char **argv)
 	init_mlx(&md);
 	if (argc != 2)
 		argv[1] = ft_strdup("maps/default.ber");
-	load_map(argv[1], &md, NULL);
+	if (!load_map(argv[1], &md, NULL))
+		close_and_quit("Error\nmap not found", -1);
 	md.map.name = ft_strdup(argv[1]);
 	md.plr.fly_frm = NULL;
 	md.plr.idl_frm = NULL;
 	md.plr.wlk_frm = NULL;
-	init_game(&md);
-	load_images(&md);
-	if (md.images && md.images_len)
-		rescale_coin_images(&md);
+	md.plr.cur_frame = NULL;
+	init_editor(&md);
 	md.selected = copy_ent(md.all_images[0]);
 	mlx_hook(md.win, KEY_PRESS, 0, handle_key_press, &md);
 	mlx_hook(md.win, KEY_RELEASE, 0, handle_key_release, &md);

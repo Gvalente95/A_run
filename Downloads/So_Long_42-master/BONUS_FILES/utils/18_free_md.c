@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 04:32:24 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/20 23:27:11 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 14:57:04 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	free_void(void *elem)
 {
-	if (!elem)
+	if (elem == NULL)
 		return (0);
 	free(elem);
 	elem = NULL;
@@ -46,7 +46,6 @@ int	free_ent(t_ent *ent)
 	{
 		free_count += free_void(ent->anim_frames);
 		free_count += free_void((void *)(ent->frame_path));
-		free_count += free_void(ent->cur_frame);
 		free_count += free_void(ent->idl_frm);
 		free_count += free_void(ent->wlk_frm);
 		free_count += free_void(ent->fly_frm);
@@ -84,9 +83,8 @@ int	free_md(t_md *md)
 	free_count = 0;
 	free_count += free_ents(md->images);
 	free_count += free_ents(md->all_images);
-	free_count += free_ents(md->particles);
+	free_count += free_particles(md->particles);
 	free_count += free_void_array(md->env_images, 0);
-	free_count += free_void(md->addr);
 	free_count += free_void(md->bgrnd_img);
 	free_count += free_void(md->map.buffer);
 	free_count += free_void_array(md->plr.fly_frm, 0);

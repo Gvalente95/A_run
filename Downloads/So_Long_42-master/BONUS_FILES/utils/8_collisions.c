@@ -6,29 +6,50 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 04:38:21 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/20 20:48:15 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 18:40:19 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../HEADERS/header.h"
 
-void	handle_col(t_ent *e, int *col_dir)
+int	set_collisions_rules(t_ent *emitter, t_ent *receiver)
 {
-	int	displ_am;
+	t_ent_type	type;
+	t_ent_type	col_type;
 
-	displ_am = 10;
-	if (col_dir[up])
-		e->pos.y -= displ_am;
-	else if (col_dir[down])
-		e->pos.y += displ_am;
-	else if (col_dir[left])
-		e->pos.x -= displ_am;
-	else if (col_dir[right])
-		e->pos.x += displ_am;
-	if (col_dir[up] || col_dir[down])
-		e->movement.y = 0;
-	if (col_dir[left] || col_dir[right])
-		e->movement.x = 0;
+	if (!receiver->is_active || !emitter->is_active || !receiver->hp)
+		return (0);
+	type = emitter->type;
+	col_type = receiver->type;
+	if (type == particle)
+		return (col_type != particle);
+	if (type == player)
+		return (col_type == wall || col_type == particle || \
+				col_type == mob || col_type == door);
+	if (type == coin || type == key || type == axe)
+		return (col_type == coin || col_type == particle);
+	if (type == mob)
+		return (col_type == wall || col_type == particle || \
+				col_type == player || col_type == door);
+	return (0);
+}
+
+t_vec2	handle_prt_collisions(t_md *md, t_ent *p, t_ent *col)
+{
+	if (p->prt_type == target && p->movement.y)
+	{
+		if (col->type == mob && !col->hurt_timer && col->hp)
+		{
+			hurt_entity(md, col, AU_AXE, AU_AXE_BREAK);
+			p->hp = 0;
+		}
+		else if (col->type == coin || col->type == key || col->type == axe)
+		{
+			col->hp = 0;
+			play_random_sound(AU_COINS, 4, ".mp3");
+		}
+	}
+	return (get_vec2(0, 0));
 }
 
 t_vec2	calculate_displacement(t_ent *a, t_ent *b, t_vec2 displ)
@@ -94,29 +115,13 @@ t_vec2	get_collisions(t_md *md, t_ent *e, t_ent **col_ents, t_vec2 displ)
 	i = -1;
 	while (col_ents[++i] != NULL)
 	{
-		if (col_ents[i] == e || !col_ents[i]->is_active)
-			continue ;
-		if (col_ents[i]->type == mob && (e->type == mob || !md->coins_amount))
-			continue ;
-		if ((e->type == coin && col_ents[i]->type != coin) || \
-		(col_ents[i]->type != wall && col_ents[i]->type != tile && \
-		col_ents[i]->type != mob))
+		if (!set_collisions_rules(e, col_ents[i]))
 			continue ;
 		displacement = get_collision_displacement(e, col_ents[i], i, displ);
 		collisions.x += displacement.x;
 		collisions.y += displacement.y;
+		if (e->type == particle && (displacement.x || displacement.y))
+			handle_prt_collisions(md, e, col_ents[i]);
 	}
 	return (collisions);
-}
-
-void	set_vec_to_dir(t_dir dir, t_vec3 *vec, int mv_am)
-{
-	if (dir == up)
-		vec->y = -mv_am;
-	if (dir == down)
-		vec->y = mv_am;
-	if (dir == left)
-		vec->x = -mv_am;
-	if (dir == right)
-		vec->x = mv_am;
 }

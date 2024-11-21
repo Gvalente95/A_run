@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 21:37:46 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/20 21:48:23 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 14:59:45 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ int	update_and_render(t_md *md)
 {
 	if (!is_audio_playing(md->bgrnd_au))
 		md->bgrnd_au = play_sound("BONUS_FILES/audio_files/bgrnd.mp3", 1);
-	render(md);
 	if (md->key_clicked == M_KEY)
 		load_new_level(md);
 	update_mouse(md);
 	update(md);
+	render(md);
 	reset_mlx_values(md);
 	md->time++;
 	return (0);

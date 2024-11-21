@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 19:57:04 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 16:23:13 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	load_images(t_md *md)
 	md->all_images[3] = get_image_from_file(md, key, KEY_SPR_PATH);
 	md->all_images[4] = get_image_from_file(md, door, DOOR_SPR_PATH);
 	md->all_images[5] = get_image_from_file(md, portal, PORTAL_SPR_PATH);
-	md->all_images[6] = get_image_from_file(md, wall, TILES_SPR_PATH);
+	md->all_images[6] = get_image_from_file(md, wall, WALL_SPR_PATH);
 	md->all_images[7] = get_image_from_file(md, axe, AXE_SPR_PATH);
 	md->all_images[8] = NULL;
 	md->cur_category = 0;
