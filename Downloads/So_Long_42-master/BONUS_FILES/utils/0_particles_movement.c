@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 01:10:07 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 18:48:08 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 21:25:57 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	handle_prt_movement(t_md *md, t_prt *p, t_vec2 cols)
 {
 	t_ent	e;
 
+	(void)cols;
 	e = copy_prt_to_ent(p);
 	if (p->type == trail)
 	{
@@ -55,15 +56,7 @@ int	handle_prt_movement(t_md *md, t_prt *p, t_vec2 cols)
 		else if (e.movement.x < 0)
 			e.movement.x++;
 	}
-	cols = handle_movement(md, &e, get_vec2(1, 1), get_vec2(5, 5));
-	if (cols.y)
-	{
-		if (e.is_grounded)
-			e.movement.x *= 0.95;
-		e.movement.x *= 0.1;
-	}
-	else if (cols.x)
-		e.movement.x = -(e.movement.x / 3);
+	handle_movement(md, &e, get_vec2(1, 1), get_vec2(5, 5));
 	copy_ent_to_prt(p, e);
 	return (1);
 }

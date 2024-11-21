@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 05:47:08 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/19 17:04:32 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 21:31:46 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ int	delete_type(t_ent_type type, t_ent **ents, int *ents_len)
 
 	deleted_amount = 0;
 	i = -1;
+	if (!ents || ents_len <= 0)
+		return (0);
 	while (++i < *ents_len)
 	{
 		if (ents[i] != NULL && ents[i]->type == type)

@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:32:42 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/21 18:44:05 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 22:02:09 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 # define DOOR_SPR_PATH 			"PNG/DOOR/"
 # define PORTAL_SPR_PATH 		"PNG/PORTAL/"
 # define AXE_SPR_PATH 			"PNG/COLLECTIBLES/PICKAXE/"
+# define RECT_SQUARE			"PNG/SQUARE.png"
 
 # define WIN_W 				1400
 # define WIN_H 				1000
@@ -237,6 +238,7 @@ typedef struct s_md
 	t_ent		*selected;
 	t_ent		**all_images;
 	t_vec3		mouse_pos;
+	int			focused;
 	int			coin_au_timer;
 	void		*mlx;
 	void		*win;
@@ -362,6 +364,8 @@ void	stop_sound(pid_t pid);
 pid_t	play_random_sound(const char *path, int len, const char *format);
 int		is_audio_playing(pid_t pid);
 // HP
+char	*get_empty_map(t_vec2 map_size);
+
 // ENT TOOLS
 void	update_coin_entity(t_ent *e, t_md *md, int range);
 int		hurt_entity(t_md *md, t_ent *e, char *hit_path, char *kill_path);

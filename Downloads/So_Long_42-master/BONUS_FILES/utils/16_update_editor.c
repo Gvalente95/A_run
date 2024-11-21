@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 21:31:17 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 15:24:27 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 22:02:32 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,15 @@ void	insert_entity(t_vec3 pos, t_ent *to_insert, t_ent ***arr, int *len)
 
 void	handle_mouse_press(t_ent *ent_at_mouse, t_md *md, t_vec2 lk_size)
 {
-	if (md->mouse_clicked == MOUSE_PRESS || md->key_prs[SPACE_KEY])
+	(void)ent_at_mouse;
+	if (md->mouse_pressed == MOUSE_DPRESS)
+	{
+		if (md->key_prs[SHIFT_KEY])
+			delete_type(md->selected->type, md->images, &md->images_len);
+		else
+			del_at_pos(md->mouse_pos, lk_size, md->images, &md->images_len);
+	}
+	if (md->key_prs[SPACE_KEY])
 	{
 		if (ent_at_mouse)
 			del_at_pos(md->mouse_pos, lk_size, md->images, &md->images_len);
@@ -40,10 +48,10 @@ void	handle_mouse_press(t_ent *ent_at_mouse, t_md *md, t_vec2 lk_size)
 	}
 }
 
-void	handle_keys(t_md *md, t_vec2 lk_size)
+void	handle_keys(t_md *md)
 {
-	if (md->key_prs[X_KEY])
-		del_at_pos(md->mouse_pos, lk_size, md->images, &md->images_len);
+	if (md->key_prs[X_KEY] && md->key_prs[SHIFT_KEY])
+		delete_type(md->selected->type, md->images, &md->images_len);
 	else if (md->key_clicked == P_KEY)
 	{
 		md->index = (int)player;
@@ -76,11 +84,11 @@ int	handle_inputs(t_md *md, t_vec2 lk_size)
 	handle_mouse_press(ent_at_mouse, md, lk_size);
 	if (ent_at_mouse && !md->key_prs[X_KEY])
 	{
-		if (md->key_clicked == C_KEY || md->key_clicked == I_KEY)
+		if (md->mouse_clicked == MOUSE_PRESS || md->key_clicked == C_KEY)
 			md->selected = copy_ent(ent_at_mouse);
 		md->selected->pos.x += 20;
 	}
-	handle_keys(md, lk_size);
+	handle_keys(md);
 	if (md->key_clicked == ENTER_KEY && md->map.name)
 		relaunch_program(md->map.name);
 	return (ent_at_mouse != NULL);

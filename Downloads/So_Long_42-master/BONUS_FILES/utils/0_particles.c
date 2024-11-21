@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 23:32:40 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 18:44:16 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 21:29:36 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ int	activate_particle(t_md *md, t_prt *p, t_vec3 pos, t_prt_type type)
 	p->is_active = 1;
 	p->movement = get_vec2(0, 0);
 	p->pos = get_vec2(0, 0);
-	p->lifetime = 0;
 	dir = get_vec2((r_range(0, 1) * 2) - 1, (r_range(0, 1) * 2) - 1);
 	p->type = type;
 	p->pos = get_vec2(pos.x + dir.x * md->t_len / 2, \
@@ -49,7 +48,7 @@ int	activate_particle(t_md *md, t_prt *p, t_vec3 pos, t_prt_type type)
 	if (p->type == target)
 		p->pos = get_vec2(pos.x + r_range(-5, 5), pos.y + r_range(-5, 5));
 	p->dir = r_range(0, 4);
-	p->lifetime = 500;
+	p->lifetime = 60;
 	p->foll_ofs = get_vec2(r_range(-5, 5), r_range(-5, 5));
 	if (type == splat)
 	{
@@ -98,7 +97,7 @@ int	update_particle(t_md *md, t_prt *p, int index)
 	handle_prt_movement(md, p, get_vec2(0, 0));
 	if (p->lifetime && md->time % 5 == 0)
 		p->lifetime--;
-	if (p->lifetime <= 0 || (p->movement.x == 0 && p->movement.y == 0))
+	if (p->lifetime <= 0)
 	{
 		reset_particle(md, p, index);
 		return (0);

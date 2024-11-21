@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:20:42 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 16:22:24 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 19:48:58 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ t_ent	*init_map_entity(t_md *md, t_vec3 pos, t_ent_type type, t_ent *img)
 	e->idl_frm = NULL;
 	e->size = get_vec2(md->t_len, md->t_len);
 	e->pos = get_vec3(pos.x * md->t_len, pos.y * md->t_len, pos.z);
-	printf("x%dy%d TYPE%d size.x%d\n", e->pos.x, e->pos.y, e->type, e->size.x);
 	e->is_active = 1;
 	e->hp = 5;
 	e->hurt_timer = 0;

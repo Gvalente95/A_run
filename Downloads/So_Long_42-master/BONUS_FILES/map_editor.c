@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 20:00:20 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 16:25:04 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 22:02:07 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,23 +49,19 @@ void	rescale_coin_images(t_md *md)
 
 void	init_editor(t_md *md)
 {
-	int	win_width;
 	int	tile_width;
 	int	tile_height;
 	int	required_width;
 
-	win_width = WIN_W;
 	tile_width = (int)((float)WIN_W / md->map.size.x + 0.5);
 	tile_height = (int)((float)WIN_H / md->map.size.y + 0.5);
 	md->t_len = tile_height;
 	if (tile_width < tile_height)
 		md->t_len = tile_width;
 	required_width = md->t_len * md->map.size.x;
-	if (required_width != WIN_W)
-		win_width = required_width;
 	if (md->win)
 		mlx_destroy_window(md, md->win);
-	md->win = mlx_new_window(md->mlx, win_width, \
+	md->win = mlx_new_window(md->mlx, required_width, \
 	md->t_len * md->map.size.y, "g");
 	load_images(md);
 	init_bgrnd(md, md->map.size);
@@ -73,6 +69,34 @@ void	init_editor(t_md *md)
 	init_mouse(md);
 	md->map.coins_amount = md->coins_amount;
 	md->particles = NULL;
+}
+
+char	*get_file_with_empty_map(char *argv1, char *argv2)
+{
+	FILE	*file;
+	t_vec2	size;
+	char	*new_map;
+	char	*new_map_x_name;
+	char	*new_map_name;
+
+	size = get_vec2(ft_atoi(argv1), ft_atoi(argv2));
+	new_map = get_empty_map(size);
+	if (!new_map)
+		close_and_quit("Error\nFailed to genereate empty map", -1);
+	new_map_x_name = ft_strjoin(argv1, "x");
+	if (!new_map_x_name)
+		close_and_quit("Error\nFailed to allocate memory for empty map", -1);
+	new_map_name = ft_strjoin(new_map_x_name, argv2);
+	free(new_map_x_name);
+	if (!new_map_name)
+		close_and_quit("Error\nFailed to join map name", -1);
+	file = fopen(new_map_name, "w");
+	if (!file)
+		close_and_quit("Error\nFailed to open file for writing.", -1);
+	fprintf(file, "%s", new_map);
+	fclose(file);
+	free(new_map);
+	return (new_map_name);
 }
 
 int	main(int argc, char **argv)
@@ -83,8 +107,10 @@ int	main(int argc, char **argv)
 	md.save_mode = 0;
 	srand(time(0));
 	init_mlx(&md);
-	if (argc != 2)
+	if (argc <= 1 || argc > 3)
 		argv[1] = ft_strdup("maps/default.ber");
+	else if (argc == 3)
+		argv[1] = get_file_with_empty_map(argv[1], argv[2]);
 	if (!load_map(argv[1], &md, NULL))
 		close_and_quit("Error\nmap not found", -1);
 	md.map.name = ft_strdup(argv[1]);

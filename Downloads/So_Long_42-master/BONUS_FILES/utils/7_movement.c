@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:58:33 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 18:41:51 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 21:31:41 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,17 @@ t_vec2	handle_movement(t_md *md, t_ent *e, t_vec2 base_speed, t_vec2 displ)
 	t_vec2	col_dir;
 
 	col_dir = get_collisions(md, e, md->images, displ);
+	if (e->type == particle)
+	{
+		if (col_dir.x)
+			e->movement.x = -(e->movement.x / 3);
+		if (col_dir.y)
+		{
+			if (e->is_grounded)
+				e->movement.x *= 0.95;
+			e->movement.x *= 0.5;
+		}
+	}
 	if (col_dir.x != 0)
 		e->pos.x += col_dir.x;
 	if (col_dir.y != 0)

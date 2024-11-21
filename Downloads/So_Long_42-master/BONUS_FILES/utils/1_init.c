@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:16:57 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 17:18:18 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 21:53:05 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,8 @@ int	init_particles(t_md *md, int i, t_vec2 size, t_prt *p)
 		p = md->particles[i];
 		p->cur_frame = mlx_png_file_to_image(md, \
 paths[r_range(0, PRT_PNGS_LEN - 1)], &p->size.x, &p->size.y);
-		size = get_vec2(r_range(md->t_len / 15, md->t_len / 5), \
-			r_range(md->t_len / 15, md->t_len / 6));
+		size = get_vec2(r_range(md->t_len / 12, md->t_len / 4), \
+			r_range(md->t_len / 13, md->t_len / 4));
 		scaled = scale_img(md, p->cur_frame, &p->size, size);
 		free(p->cur_frame);
 		p->cur_frame = scaled;
