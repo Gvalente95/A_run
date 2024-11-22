@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 16:08:31 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/21 17:15:13 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 23:18:42 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ int	update_player(t_md *md, t_vec3 new_mv, t_ent *plr)
 		new_mv.y = 1;
 	if ((md->key_prs[UP_KEY] || md->key_prs[W_KEY]) && plr->jet_sky_timer > 0)
 	{
+		if (plr->jet_sky_timer == 30)
+			md->d_jump_audio_played = play_random_sound(AU_DJUMP, 3, ".mp3");
 		new_mv.y -= ((100 - plr->jet_sky_timer) / 20);
 		plr->jet_sky_timer -= 5;
 	}

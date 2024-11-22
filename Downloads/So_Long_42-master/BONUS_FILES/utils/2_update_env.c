@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 05:36:59 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 17:15:43 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 23:32:56 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	update_entity_position(t_ent *e, t_md *md, int i)
 	}
 }
 
-void	update_key_entity(t_md *md, t_ent *e, int range, t_vec3 targ_pos)
+t_vec3	update_key_entity(t_md *md, t_ent *e, t_vec3 targ_pos)
 {
 	if (e->hp == 0)
 	{
@@ -72,7 +72,8 @@ void	update_key_entity(t_md *md, t_ent *e, int range, t_vec3 targ_pos)
 	}
 	else if (e->hp < 0)
 	{
-		if (md->key_clicked == ENTER_KEY)
+		if (md->mouse_clicked == MOUSE_PRESS && \
+			get_distance(md->mouse_pos, e->pos) < md->t_len)
 		{
 			hurt_entity(md, md->images[-e->hp], AU_AXE_BREAK, AU_AXE_BREAK);
 			e->is_active = 0;
@@ -86,8 +87,7 @@ void	update_key_entity(t_md *md, t_ent *e, int range, t_vec3 targ_pos)
 			targ_pos = get_vec3(md->images[-e->hp]->pos.x, \
 				md->images[-e->hp]->pos.y + md->t_len / 5, 0);
 	}
-	if (targ_pos.x != 0 && targ_pos.y != 0)
-		move_ent_towards(e, md, targ_pos, range);
+	return (targ_pos);
 }
 
 void	update_door(t_md *md, t_ent *e, int i)

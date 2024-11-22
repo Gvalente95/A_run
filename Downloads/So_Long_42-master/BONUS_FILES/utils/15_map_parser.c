@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 02:21:27 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 16:20:38 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 22:28:02 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_ent	*parse_letter_b(t_md *md, t_vec3 pos, char c, int scale)
 	else if (c == 'K')
 	{
 		ent = init_entity(md, KEY_SPR_PATH, pos, get_vec3(scale * .5, key, 8));
+		ent->pos.z = -10;
 		md->key = ent;
 	}
 	else if (c == 'A')

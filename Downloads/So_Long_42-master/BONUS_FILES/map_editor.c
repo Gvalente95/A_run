@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 20:00:20 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 22:02:07 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/22 01:19:56 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,7 @@ void	rescale_coin_images(t_md *md)
 
 void	init_editor(t_md *md)
 {
-	int	tile_width;
-	int	tile_height;
-	int	required_width;
-
-	tile_width = (int)((float)WIN_W / md->map.size.x + 0.5);
-	tile_height = (int)((float)WIN_H / md->map.size.y + 0.5);
-	md->t_len = tile_height;
-	if (tile_width < tile_height)
-		md->t_len = tile_width;
-	required_width = md->t_len * md->map.size.x;
-	if (md->win)
-		mlx_destroy_window(md, md->win);
-	md->win = mlx_new_window(md->mlx, required_width, \
-	md->t_len * md->map.size.y, "g");
+	init_window(md);
 	load_images(md);
 	init_bgrnd(md, md->map.size);
 	load_ents_editor(md, 0, get_vec3(0, 0, 0));
@@ -106,7 +93,7 @@ int	main(int argc, char **argv)
 	md.win = NULL;
 	md.save_mode = 0;
 	srand(time(0));
-	init_mlx(&md);
+	init_mlx(&md, -1);
 	if (argc <= 1 || argc > 3)
 		argv[1] = ft_strdup("maps/default.ber");
 	else if (argc == 3)

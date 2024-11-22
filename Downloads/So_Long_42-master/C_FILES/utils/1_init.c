@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:16:57 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/20 20:28:44 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 23:33:45 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,8 @@ int	init_player(t_md *md, char *path, t_vec3 pos)
 	return (1);
 }
 
-int	init_mlx(t_md *md)
+int	init_mlx(t_md *md, int i)
 {
-	int	i;
-
 	i = -1;
 	while (++i < 512)
 		md->key_prs[i] = 0;

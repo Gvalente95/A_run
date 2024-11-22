@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 15:11:17 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 16:36:49 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/22 00:40:02 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,16 @@ void	update_axe_entity(t_ent *e, t_md *md, int range)
 
 void	update_collectible(t_ent *e, t_md *md, int range, int index)
 {
+	t_vec3	targ_pos;
+
 	(void)index;
 	update_circular_motion(e, md);
 	if (md->time % ANIM_REFRESH == 0)
 		increment_frame(e);
 	if (e->type == coin)
-		update_coin_entity(e, md, range);
+		update_coin_entity(e, md, md->t_len * 2);
 	if (e->type == axe)
-		update_axe_entity(e, md, 80);
+		update_axe_entity(e, md, md->t_len * 2);
 	if (e->type == key)
 	{
 		if (e->hp > 0 && move_ent_towards(e, md, md->plr.pos, range))
@@ -107,6 +109,10 @@ void	update_collectible(t_ent *e, t_md *md, int range, int index)
 			e->hp = 0;
 		}
 		else
-			update_key_entity(md, e, range, get_vec3(0, 0, 0));
+		{
+			targ_pos = update_key_entity(md, e, get_vec3(0, 0, 0));
+			if (targ_pos.x != 0 && targ_pos.y != 0)
+				move_ent_towards(e, md, targ_pos, range);
+		}
 	}
 }

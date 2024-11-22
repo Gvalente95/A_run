@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 04:32:24 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 14:57:04 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/22 02:54:32 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	free_void(void *elem)
 {
-	if (elem == NULL)
+	if (!elem)
 		return (0);
 	free(elem);
 	elem = NULL;
@@ -44,11 +44,11 @@ int	free_ent(t_ent *ent)
 	free_count = 0;
 	if (ent)
 	{
-		free_count += free_void(ent->anim_frames);
-		free_count += free_void((void *)(ent->frame_path));
-		free_count += free_void(ent->idl_frm);
-		free_count += free_void(ent->wlk_frm);
-		free_count += free_void(ent->fly_frm);
+		free_count += free_void_array(ent->anim_frames, 0);
+		free_count += free_void_array((void *)ent->frame_path, 0);
+		free_count += free_void_array(ent->idl_frm, 0);
+		free_count += free_void_array(ent->wlk_frm, 0);
+		free_count += free_void_array(ent->fly_frm, 0);
 		free(ent);
 		ent = NULL;
 		return (free_count + 1);
@@ -73,23 +73,27 @@ int	free_ents(t_ent **ents)
 	}
 	free(ents);
 	ents = NULL;
-	return (freed_count + 1);
+	ft_printf("%d entities and %d images \
+		successfully freed\n", i, freed_count);
+	return (freed_count + i + 1);
 }
 
 int	free_md(t_md *md)
 {
 	int	free_count;
 
+	ft_printf("images to free: %d\n", md->images_len);
 	free_count = 0;
 	free_count += free_ents(md->images);
 	free_count += free_ents(md->all_images);
-	free_count += free_particles(md->particles);
+	free_count += free_particles(md, md->particles);
 	free_count += free_void_array(md->env_images, 0);
 	free_count += free_void(md->bgrnd_img);
 	free_count += free_void(md->map.buffer);
 	free_count += free_void_array(md->plr.fly_frm, 0);
 	free_count += free_void_array(md->plr.wlk_frm, 0);
 	free_count += free_void_array(md->plr.idl_frm, 0);
+	mlx_destroy_window(md->mlx, md->win);
 	free_count += free_void(md->mlx);
 	ft_printf("Freed: %d elements\n", free_count);
 	return (free_count);

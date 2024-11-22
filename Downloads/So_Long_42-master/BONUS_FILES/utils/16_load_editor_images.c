@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 19:57:04 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 16:23:13 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/22 01:53:03 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_ent	*set_new_image(t_md *md, t_ent_type type, char *path, t_vec2 size)
 	if (!e)
 		return (NULL);
 	set_vec3(&e->pos, 0, 0, 0);
+	e->anim_frames = NULL;
 	e->cur_frame = mlx_png_file_to_image(md, path, &e->size.x, &e->size.y);
 	e->cur_frame = scale_img(md, e->cur_frame, &e->size, size);
 	e->type = type;

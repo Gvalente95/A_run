@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:58:33 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 21:31:41 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/22 00:46:54 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,14 @@ void	adjust_x_movement(t_ent *e, int base_speed_x)
 		(float)(base_speed_x * 14));
 	if (e->movement.x > 0)
 	{
-		e->movement.x--;
+		if (e->type != particle || e->is_grounded)
+			e->movement.x--;
 		e->pos.x += adjusted_speed;
 	}
 	else if (e->movement.x < 0)
 	{
-		e->movement.x++;
+		if (e->type != particle || e->is_grounded)
+			e->movement.x++;
 		e->pos.x -= adjusted_speed;
 	}
 }
@@ -65,12 +67,12 @@ t_vec2	handle_movement(t_md *md, t_ent *e, t_vec2 base_speed, t_vec2 displ)
 	if (e->type == particle)
 	{
 		if (col_dir.x)
-			e->movement.x = -(e->movement.x / 3);
+			e->movement.x = -(e->movement.x / 2);
 		if (col_dir.y)
 		{
+			e->movement.y = -(e->movement.y / 2);
 			if (e->is_grounded)
 				e->movement.x *= 0.95;
-			e->movement.x *= 0.5;
 		}
 	}
 	if (col_dir.x != 0)
@@ -95,7 +97,7 @@ int	move_to(t_ent *e, t_vec3 targ_pos, t_vec2 spd_lim, int aggro)
 	spd = (int)(spd_lim.x + (spd_lim.y - spd_lim.x) * (1 - dist / aggro));
 	if (dist > aggro)
 		return (0);
-	if (dist == 0)
+	if (dist < e->size.x / 2)
 		return (1);
 	e->pos.x += (int)((float)dpos.x / dist * spd);
 	e->base_pos.y += (int)((float)dpos.y / dist * spd);

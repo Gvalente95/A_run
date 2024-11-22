@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:49:05 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/21 22:02:14 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/22 01:27:24 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@
 # define U_KEY          32
 # define I_KEY          34
 # define O_KEY          31
+# define K_KEY			75
 # define P_KEY          35
 # define Z_KEY          6
 # define X_KEY          7

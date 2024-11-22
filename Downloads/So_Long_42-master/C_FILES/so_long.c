@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 21:37:46 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 21:02:48 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 23:19:36 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	main(int argc, char **argv)
 
 	md.win = NULL;
 	srand(time(0));
-	init_mlx(&md);
+	init_mlx(&md, -1);
 	if (argc != 2)
 		close_and_quit("Error\nMap not given as argument", -1);
 	load_valid_map(argv[1], &md, NULL, get_vec2(0, 0));

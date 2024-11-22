@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 07:01:26 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 15:10:07 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 23:32:16 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void	render(t_md *md)
 	while (++i < md->bg_env_len / 2)
 		mlx_put_image_to_window(md, md->win, md->bg_env[i]->cur_frame, \
 			md->bg_env[i]->pos.x, md->bg_env[i]->pos.y);
+	sort_ents_by_z(md->images, md->images_len);
 	render_array(md, md->images, 0, 0);
 	set_vec2(&tx_p, md->t_len, md->t_len);
 	render_text(md, tx_p, "Move_count %d", md->move_counter);

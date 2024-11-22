@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:32:42 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/21 16:17:57 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 23:19:40 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,7 +227,7 @@ typedef struct s_md
 void	init_game(t_md *md);
 t_ent	*init_entity(t_md *md, void *frames_path, t_vec3 pos, t_vec3 values);
 int		init_player(t_md *md, char *frames_path, t_vec3 pos);
-int		init_mlx(t_md *md);
+int		init_mlx(t_md *md, int i);
 // UPDATE
 int		update(t_md *md);
 // RENDER

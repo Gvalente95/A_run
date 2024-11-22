@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 20:39:27 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 19:33:28 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/22 00:37:35 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,22 +80,37 @@ void	init_bgrnd(t_md *md, t_vec2 size)
 	free(full_path);
 }
 
-void	init_game(t_md *md)
+void	init_window(t_md *md)
 {
-	int	win_width;
-	int	tile_width;
-	int	tile_height;
+	int		win_width;
+	int		win_height;
+	t_vec2	t_size;
 
-	tile_width = (int)((float)WIN_W / md->map.size.x + 0.5);
-	tile_height = (int)((float)WIN_H / md->map.size.y + 0.5);
-	md->t_len = tile_height;
-	if (tile_width < tile_height)
-		md->t_len = tile_width;
+	t_size.x = (int)((float)SCRN_WIDTH / md->map.size.x + 0.5);
+	t_size.y = (int)((float)SCRN_HEIGHT / md->map.size.y + 0.5);
+	if (t_size.x < t_size.y)
+		md->t_len = t_size.x;
+	else
+		md->t_len = t_size.y;
 	win_width = md->t_len * md->map.size.x;
+	win_height = md->t_len * md->map.size.y;
+	if (win_width > SCRN_WIDTH || win_height > SCRN_HEIGHT)
+	{
+		if (SCRN_WIDTH / md->map.size.x < SCRN_HEIGHT / md->map.size.y)
+			md->t_len = (SCRN_WIDTH / md->map.size.x);
+		else
+			md->t_len = (SCRN_HEIGHT / md->map.size.y);
+		win_width = md->t_len * md->map.size.x;
+		win_height = md->t_len * md->map.size.y;
+	}
 	if (md->win)
 		mlx_destroy_window(md, md->win);
-	md->win = mlx_new_window(md->mlx, win_width, \
-	md->t_len * md->map.size.y, "g");
+	md->win = mlx_new_window(md->mlx, win_width, win_height, "g");
+}
+
+void	init_game(t_md *md)
+{
+	init_window(md);
 	init_bgrnd(md, md->map.size);
 	load_ents(md, 0, get_vec3(0, 0, 0));
 	sort_ents_by_z(md->images, md->images_len - 1);

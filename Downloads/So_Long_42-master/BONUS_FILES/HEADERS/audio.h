@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 04:58:30 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 17:24:13 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 22:42:33 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # include "header.h"
 
 // AUDIO
+# define AU_JUMP "BONUS_FILES/audio_files/JUMP/"
+# define AU_DJUMP "BONUS_FILES/audio_files/DJUMP/"
+
 # define AU_LEVELUP "BONUS_FILES/audio_files/level_up.mp3"
 # define AU_COINS "BONUS_FILES/audio_files/fx/coins/"
 # define AU_FOOTSTEPS "BONUS_FILES/audio_files/footsteps/"

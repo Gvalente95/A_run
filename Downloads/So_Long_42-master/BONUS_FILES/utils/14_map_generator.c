@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:31:50 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/21 18:55:58 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/21 23:17:56 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,8 @@ int	contain(char c, char *arg)
 	return (amount);
 }
 
-char	set_char(t_map *map, int solvable)
+char	set_char(t_map *map, int solvable, int is_border)
 {
-	int		is_border;
-
 	is_border = (map->pos.x == 0 || map->pos.x == map->size.x - 1 \
 		|| map->pos.y == 0 || map->pos.y == map->size.y - 1);
 	if (is_border || r_range(0, 2) == 0 || \
@@ -56,6 +54,8 @@ char	set_char(t_map *map, int solvable)
 		return ('K');
 	else if (!contain('A', map->buffer) && r_range(0, 50) == 0)
 		return ('A');
+	else if (contain('D', map->buffer) < 10 && r_range(0, 10) == 0)
+		return ('D');
 	return ('0');
 }
 
@@ -70,7 +70,7 @@ char	*generate_map(t_map *map, int max_try, int solvable)
 		map->pos.x = 0;
 		while (map->pos.x < map->size.x)
 		{
-			map->buffer[map->pos.z++] = set_char(map, solvable);
+			map->buffer[map->pos.z++] = set_char(map, solvable, 0);
 			map->pos.x++;
 		}
 		map->buffer[map->pos.z++] = '\n';
