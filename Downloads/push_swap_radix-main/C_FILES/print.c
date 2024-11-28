@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:06:53 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/27 08:08:45 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/28 15:18:11 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	print_vals(t_data data, int wait_time, int i)
 	ft_printf("-     -\na     b\n");
 	ft_printf("%d    ", data.pile_a.size);
 	ft_printf("%d\n\n", data.pile_b.size);
-
 	usleep(wait_time);
 }
 
@@ -89,8 +88,7 @@ void	print_piles_state(t_data d)
 	h = d.pile_a.size + d.pile_b.size;
 	if (h > 20)
 		h = 20;
-	ft_printf("GIULIO'S PUSH_SWAP VISUALIZER");
-	ft_printf("					%s\n", d.algo_name);
+	ft_printf("\n%s\n", d.algo_name);
 	i = 0;
 	while (i++ < (d.pile_a.size + d.pile_b.size + 1) * 2 + 1)
 		ft_printf("_");
@@ -105,7 +103,7 @@ void	print_piles_state(t_data d)
 	}
 	while (i++ < (d.pile_a.size + d.pile_b.size + 1) * 2 + 1)
 		ft_printf("_");
-	ft_printf("\n");
+	ft_printf("\nGIULIO'S PUSH_SWAP VISUALIZER\n");
 	usleep(100000 - (h * 4500));
 	system("clear");
 }

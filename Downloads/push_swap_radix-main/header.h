@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 15:55:11 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/27 22:35:32 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/28 15:12:24 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct s_element
 {
 	int		val;
 	int		rank;
+	int		processed;
 }	t_element;
 
 typedef struct s_pile
@@ -52,24 +53,23 @@ int		swap(t_pile *pile);
 //		ALGORITHMS
 int		radix_sort(t_data *data, int max_len, int digit_pos, int processed);
 int		selection_sort(t_data *data, int operations, int direction, int i);
-void	merge_sort(t_data *data);
 int		mini_sort(t_data *d, int size, int i, int res);
-void	push_smallest_to_b(t_data *data, t_pile *pile);
-void	sort_five_in_a(t_data *data, t_pile *pile);
-void	sort_five_in_b(t_data *data, t_pile *pile);
-void	push_smallest_to_b(t_data *data, t_pile *pile);
-void	push_smallest_to_a(t_data *data, t_pile *pile);
-void	sort_three_in_a(t_data *data, t_pile *pile);
-void	sort_three_in_b(t_data *data, t_pile *pile);
+int		sort_five_in_a(t_data *data);
+int		sort_four_in_a(t_data *data);
+int		sort_three_in_a(t_data *data);
+int		sort_three_in_b(t_data *data);
+int		push_smallest_to_b(t_data *data);
+int		push_smallest_to_a(t_data *data);
 int		get_max_rank(t_pile pile);
 int		*min_value(t_pile pile, int *values);
+int		iterate_action(char *command, int len, t_data *data, t_pile *size);
 
 //		UTILS
 int		is_in_val(t_pile pile, int val);
 long	ft_atol(const char *str);
 int		is_sorted(t_data data);
 int		free_data(t_data *data);
-int		set_values_ranks(t_data *data, int i, int j, int cur_highest);
+int		set_values_ranks(t_pile *pile, int i, int j, int cur_highest);
 int		*max_value(t_pile pile, int *values);
 char	*get_next_line(int fd);
 void	print_ranks(t_data data, int wait_time, int i);
@@ -85,6 +85,6 @@ int		arg_doublons_checker(t_data *data, char **arguments, int len);
 int		is_contained(int value, int *values, int amount);
 void	init_data(t_data *data, int argc, char *argv[], int visualize);
 int		ft_strcmp(const char *s1, const char *s2);
-int 	ft_printf(const char *format, ...);
+int		ft_printf(const char *format, ...);
 
 #endif

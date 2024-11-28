@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:12:14 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/27 06:21:21 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/28 06:19:06 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,26 +50,11 @@ int	*min_value(t_pile pile, int *values)
 
 int	selection_sort(t_data *data, int operations, int direction, int i)
 {
-	int	min[2];
-
 	(void)i;
+	(void)direction;
 	operations = 0;
 	while (data->pile_a.size)
-	{
-		min_value(data->pile_a, min);
-		if (min[1] > data->pile_a.size - 1 / 2)
-			direction = -1;
-		else
-			direction = 1;
-		while (data->pile_a.elements[data->pile_a.size - 1].rank != min[0])
-		{
-			if (direction == -1)
-				handle_instruction("rra", data, 0);
-			else
-				handle_instruction("ra", data, 0);
-		}
-		operations += handle_instruction("pb", data, 0);
-	}
+		push_smallest_to_b(data);
 	while (data->pile_b.size)
 		operations += handle_instruction("pa", data, 0);
 	return (operations);

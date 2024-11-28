@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:50:16 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/27 08:09:35 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/28 03:22:02 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,21 +96,21 @@ void	print_ranks(t_data data, int wait_time, int i)
 	if (data.pile_b.size > data.pile_a.size)
 		max_len = data.pile_b.size;
 	i = 0;
-	ft_printf("_______\n\n");
+	printf("\n_______\n\n");
 	while (i < max_len)
 	{
 		if (data.pile_a.size > 0 && i < data.pile_a.size)
-			ft_printf("%d      ", data.pile_a.elements[i].rank);
+			printf("i%-3d r%-5d", i, data.pile_a.elements[i].rank);
 		else
-			ft_printf("       ");
+			printf("           ");
 		if (data.pile_b.size > 0 && i < data.pile_b.size)
-			ft_printf("%d      ", data.pile_b.elements[i].rank);
+			printf("i%-3d r%d", i, data.pile_b.elements[i].rank);
 		else
-			ft_printf("       ");
-		ft_printf("\n");
+			printf("           ");
+		printf("\n");
 		i++;
 	}
-	ft_printf("-     -\na     b\n");
-	ft_printf("%d    %d\n\n", data.pile_a.size, data.pile_b.size);
+	printf("-              -\na     b\n");
+	printf("%-10d%d\n\n", data.pile_a.size, data.pile_b.size);
 	usleep(wait_time);
 }

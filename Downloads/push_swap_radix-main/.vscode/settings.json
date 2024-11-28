@@ -14,6 +14,7 @@
 		"libft.h": "c",
 		"limits.h": "c",
 		"time.h": "c",
-		"ios": "c"
+		"ios": "c",
+		"__bit_reference": "c"
 	}
 }

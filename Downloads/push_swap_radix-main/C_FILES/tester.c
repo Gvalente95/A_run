@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 14:53:38 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/27 22:35:04 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/28 01:49:56 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	make_tests(t_data *d, int (*f)(t_data *, int, int, int), \
 	int am, char **args)
 {
 	init_data(d, am, args, d->visualize);
-	set_values_ranks(d, 0, 0, 0);
+	set_values_ranks(&d->pile_a, 0, 0, 0);
 	f(d, 0, 0, 0);
 	print_vals(*d, 5, 0);
 }

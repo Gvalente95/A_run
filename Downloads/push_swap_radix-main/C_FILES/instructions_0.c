@@ -6,21 +6,11 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 02:34:36 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/27 22:49:10 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/28 15:15:03 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header.h"
-
-int	ft_strcmp(const char *s1, const char *s2)
-{
-	while (*s1 && *s1 == *s2)
-	{
-		s1++;
-		s2++;
-	}
-	return ((unsigned char)*s1 - (unsigned char)*s2);
-}
 
 int	parse_instruction_2(char *cmd, t_data *data)
 {
@@ -62,6 +52,19 @@ int	parse_instruction_0(char *cmd, t_data *data)
 	return (res);
 }
 
+void	handle_visualizer(t_data *data)
+{
+	if (data->visualize == 1)
+		print_piles_state(*data);
+	if (data->visualize == 2)
+	{
+		system("clear");
+		print_ranks(*data, 0, 0);
+		while (getchar() != '\n')
+			continue ;
+	}
+}
+
 int	handle_instruction(char *cmd, t_data *data, int res)
 {
 	char	*prv;
@@ -70,7 +73,7 @@ int	handle_instruction(char *cmd, t_data *data, int res)
 	res = parse_instruction_0(cmd, data);
 	if (res <= 0)
 		return (res);
-	if (data->cmd_len > 0)
+	if (data->cmd_len > 1)
 	{
 		prv = data->cmd_buff[data->cmd_len - 1];
 		if (!ft_strcmp(prv, "ra") && !ft_strcmp(cmd, "rb"))
@@ -86,12 +89,7 @@ int	handle_instruction(char *cmd, t_data *data, int res)
 	}
 	else
 		data->cmd_buff[data->cmd_len++] = ft_strdup(cmd);
-	if (data->visualize)
-	print_piles_state(*data);
-		system("clear");
-	print_ranks(*data, 0, 0);
-	while (getchar() != '\n')
-		continue ;
+	handle_visualizer(data);
 	return (res);
 }
 

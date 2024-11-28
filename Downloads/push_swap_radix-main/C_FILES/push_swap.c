@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 15:55:42 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/27 06:45:03 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/28 01:49:32 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	main(int argc, char *argv[])
 		free_char_array(argv);
 	if (is_sorted(data))
 		return (free_data(&data));
-	set_values_ranks(&data, 0, 0, 0);
+	set_values_ranks(&data.pile_a, 0, 0, 0);
 	if (data.pile_a.size <= 70)
 		mini_sort(&data, 0, 0, 0);
 	else

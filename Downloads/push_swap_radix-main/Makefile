@@ -1,6 +1,6 @@
 SOURCES = C_FILES/instructions_0.c C_FILES/instructions_1.c C_FILES/radix.c C_FILES/utils.c \
 C_FILES/print.c C_FILES/parser.c C_FILES/selection_sort.c C_FILES/piles.c C_FILES/mini_sort.c \
-C_FILES/actions.c C_FILES/merge_sort.c
+C_FILES/actions.c
 
 MAIN_SRC = C_FILES/push_swap.c
 BONUS_SRC = C_FILES/_bonus.c C_FILES/get_next_line.c
