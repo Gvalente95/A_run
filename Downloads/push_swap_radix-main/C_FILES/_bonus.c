@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 21:01:28 by giuliovalen       #+#    #+#             */
-/*   Updated: 2024/11/28 15:14:28 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/30 01:09:00 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,19 @@ void	execute_instructions(t_data *data)
 int	main(int argc, char *argv[])
 {
 	t_data	data;
+	int		free_argv;
 
 	if (argc <= 1)
 		return (0);
+	free_argv = 0;
+	if (argc == 2)
+	{
+		argc = get_args(&argv);
+		free_argv = 1;
+	}
 	init_data(&data, argc, argv, 0);
+	if (free_argv)
+		free_char_array(argv);
 	execute_instructions(&data);
 	if (is_sorted(data) && data.pile_b.size == 0)
 		ft_putstr_fd("OK\n", 1);

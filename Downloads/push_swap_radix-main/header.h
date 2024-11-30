@@ -6,7 +6,7 @@
 /*   By: giuliovalente <giuliovalente@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 15:55:11 by gvalente          #+#    #+#             */
-/*   Updated: 2024/11/28 15:12:24 by giuliovalen      ###   ########.fr       */
+/*   Updated: 2024/11/29 21:50:45 by giuliovalen      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,7 @@ int		is_contained(int value, int *values, int amount);
 void	init_data(t_data *data, int argc, char *argv[], int visualize);
 int		ft_strcmp(const char *s1, const char *s2);
 int		ft_printf(const char *format, ...);
+int		get_args(char ***argv);
+int		free_char_array(char **array);
 
 #endif
